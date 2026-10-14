@@ -21,57 +21,99 @@ The README badges, issue template links and clone instructions assume the reposi
 
 All actions are pinned to commit SHAs with the version in a comment. Dependabot updates both.
 
-## Settings to configure on GitHub
+## Active settings
 
-### General
+These settings were read back from the GitHub API on 2026-10-14. Only values that were
+verified this way are listed here. Endpoints, relative to `repos/Luis-0508/ArchCompose`:
+
+- the repository itself (merge settings, `security_and_analysis`)
+- `rulesets/<id>` for "Protect main"
+- `actions/permissions`, `actions/permissions/workflow` and
+  `actions/permissions/fork-pr-contributor-approval` (`approval_policy`)
+- `private-vulnerability-reporting`, `vulnerability-alerts` and `automated-security-fixes`
+
+Re-check them and update this section when settings change.
+
+### Pull requests
 
 - Default branch: `main`.
-- Pull requests: allow squash merging (preferred); disable merge commits if a linear history
-  is wanted. Enable "Automatically delete head branches".
-- Do not enable auto-merge by default.
+- Squash merging, merge commits and rebase merging are all allowed.
+- Head branches are deleted automatically after merging.
+- Auto-merge is disabled.
+- "Always suggest updating pull request branches" is enabled.
 
-### Branch protection for `main`
+### Ruleset "Protect main"
 
-Use a branch ruleset (Settings → Rules → Rulesets) or classic branch protection:
+Active, targets the default branch, no bypass actors.
 
-- Require a pull request before merging, with at least one approval when there is more than
-  one maintainer. Require review from code owners.
-- Require status checks to pass, and require branches to be up to date. Required checks (job
-  names from `ci.yml`, available after the first CI run):
+- A pull request is required before merging, with 0 required approvals and no code owner
+  review requirement (see [Adding a second maintainer](#adding-a-second-maintainer)). Stale
+  approvals are dismissed on new pushes.
+- All review conversations must be resolved.
+- Required status checks, and the branch must be up to date with `main`:
   - `Frontend (ubuntu-latest)`
   - `Frontend (windows-latest)`
   - `Desktop backend (Windows)`
-- Require conversation resolution before merging.
-- Block force pushes and branch deletion.
+- Force pushes and branch deletion are blocked.
 
 ### Actions
 
-- Settings → Actions → General: allow GitHub Actions. Optionally restrict to actions from
-  GitHub, verified creators and `dtolnay/rust-toolchain` and `Swatinem/rust-cache`.
-- Workflow permissions: "Read repository contents" is enough. The workflows request the
-  permissions they need (`labeler.yml` asks for `issues: write` and `pull-requests: write`).
-- Require approval for workflows from first-time contributors.
+- All actions are allowed.
+- The default workflow token can only read repository contents and cannot approve pull
+  requests. Workflows request what they need (`labeler.yml` asks for `issues: write` and
+  `pull-requests: write`).
+- Workflows from first-time contributors need approval before they run (`approval_policy`:
+  `first_time_contributors`).
 
 ### Security
 
-- Enable private vulnerability reporting (Settings → Security). `SECURITY.md` and the issue
-  template link rely on it.
-- Enable Dependabot alerts and Dependabot security updates. Version updates are configured
-  by `.github/dependabot.yml`.
-- Enable secret scanning and push protection.
-- Optionally enable code scanning (CodeQL default setup) for JavaScript/TypeScript, Rust and
-  GitHub Actions.
+- Private vulnerability reporting is enabled. `SECURITY.md` and the issue template link rely
+  on it.
+- Dependabot alerts and Dependabot security updates are enabled. Version updates are
+  configured by `.github/dependabot.yml`.
+- Secret scanning and push protection are enabled.
 
 ### CodeRabbit
 
-- Install the CodeRabbit GitHub app for this repository if automated reviews are wanted.
-- Treat its findings as suggestions to verify, not instructions (see `AGENTS.md`). It is not
-  a required check.
+- The CodeRabbit GitHub app is active on this repository: it reviewed pull request #1 and
+  reports a `CodeRabbit` status check. It runs with its default configuration; there is no
+  `.coderabbit.yaml`.
+- The `CodeRabbit` check is not a required check. Treat its findings as suggestions to
+  verify, not instructions (see `AGENTS.md`).
 
 ### Labels
 
-The labeler workflow creates its labels on the first pull request. Dependabot adds its own
+The labeler workflow creates its labels on every pull request run. Dependabot adds its own
 `dependencies` and ecosystem labels.
+
+## Recommendations
+
+Not configured. Consider them when the project grows:
+
+- Allow only squash merging if a linear history is wanted.
+- Restrict allowed actions to actions from GitHub, verified creators,
+  `dtolnay/rust-toolchain` and `Swatinem/rust-cache`, or require SHA pinning for actions.
+- Enable code scanning (CodeQL default setup) for JavaScript/TypeScript, Rust and GitHub
+  Actions.
+
+## Adding a second maintainer
+
+Requiring an approval or a code owner review needs an eligible reviewer other than the pull
+request author. With a single maintainer, these requirements would still work for pull
+requests from other contributors, which the maintainer can approve, but they would block
+every pull request the maintainer opens, because no one else could approve it.
+
+When a second maintainer joins:
+
+1. Give them write (or maintain) access to the repository.
+2. Add them to `.github/CODEOWNERS` next to `@Luis-0508`, for example
+   `* @Luis-0508 @second-maintainer`, and merge that change. Code owners must have write
+   access, or GitHub ignores the entry.
+3. Only then edit the "Protect main" ruleset: set required approvals to 1 and enable "Require
+   review from Code Owners".
+4. Update [Active settings](#active-settings).
+
+Until then, `.github/CODEOWNERS` lists only `@Luis-0508`. Do not add placeholder owners.
 
 ## Publishing the repository
 

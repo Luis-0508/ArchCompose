@@ -1,6 +1,7 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { setHorizon, updateLayer } from "../../model/compose";
 import type { ComposeDoc, ComposeLayer, Project } from "../../model/types";
+import { useAdjustedPreview } from "../../state/adjustedPreviews";
 import { useAssetSource } from "../../state/assetCache";
 import { useAppStore } from "../../state/store";
 import { contentToScreen, screenToContent, type Camera, type Point } from "../../viewport/camera";
@@ -57,6 +58,7 @@ function trackDrag(
 function LayerImage({ project, layer }: { project: Project; layer: ComposeLayer }) {
   const source = useAssetSource(layer.assetId);
   const asset = project.assets[layer.assetId];
+  const adjusted = useAdjustedPreview(layer, asset);
   if (!asset || !layer.visible) return null;
   const style = {
     left: layer.x,
@@ -73,7 +75,13 @@ function LayerImage({ project, layer }: { project: Project; layer: ComposeLayer 
     );
   }
   return (
-    <img className={styles.layerImage} src={source.url} style={style} alt="" draggable={false} />
+    <img
+      className={styles.layerImage}
+      src={adjusted ?? source.url}
+      style={style}
+      alt=""
+      draggable={false}
+    />
   );
 }
 

@@ -5,7 +5,8 @@
  * one compose document (canvas size, layers bottom to top, the file each layer shows)
  * for a single render or export and keeps nothing. Undo therefore stays in the store.
  */
-import type { ComposeDoc, Project } from "../model/types";
+import { hasAdjustments } from "../model/compose";
+import type { ComposeDoc, LayerAdjustments, Project } from "../model/types";
 
 export type ExportFormat = "png" | "psd";
 
@@ -25,6 +26,7 @@ export interface CompositionLayer {
   scale: number;
   opacity: number;
   visible: boolean;
+  adjust?: LayerAdjustments;
 }
 
 /** Mirrors `ExportReport` in the backend. */
@@ -74,6 +76,7 @@ export function compositionSpec(
       scale: layer.scale,
       opacity: layer.opacity,
       visible: layer.visible,
+      ...(hasAdjustments(layer) ? { adjust: layer.adjust } : {}),
     });
   }
   return { ok: true, spec: { name: doc.name, width: doc.width, height: doc.height, layers } };

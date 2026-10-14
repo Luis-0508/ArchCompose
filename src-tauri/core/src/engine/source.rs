@@ -43,6 +43,13 @@ impl Depth {
             Depth::Sixteen => PixelFormat::RGBA16,
         }
     }
+    /// The sample type of an engine document at this depth.
+    pub fn doc_sample_type(self) -> photocraft_doc::SampleType {
+        match self {
+            Depth::Eight => photocraft_doc::SampleType::U8,
+            Depth::Sixteen => photocraft_doc::SampleType::U16,
+        }
+    }
     pub fn sample_type(self) -> SampleType {
         match self {
             Depth::Eight => SampleType::U8,
@@ -185,8 +192,7 @@ fn conversion_failed(name: &str) -> String {
 /// sRGB-tagged files are already in the working space; converting them would only add
 /// rounding.
 fn is_srgb(p: &Profile) -> bool {
-    let d = p.description.to_ascii_lowercase();
-    d.starts_with("srgb") && !d.contains("linear")
+    p.same_colors(builtin::srgb())
 }
 
 fn convert_in_place(t: &Transform, data: &mut [u8], depth: Depth) {

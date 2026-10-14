@@ -10,7 +10,14 @@ import {
   setGrid,
   updateFrame,
 } from "./boards";
-import { addLayer, createComposeDoc, reorderLayer, updateLayer } from "./compose";
+import {
+  addLayer,
+  createComposeDoc,
+  hasAdjustments,
+  reorderLayer,
+  setLayerAdjustments,
+  updateLayer,
+} from "./compose";
 import {
   addDrawing,
   addRevision,
@@ -73,6 +80,34 @@ describe("compose documents", () => {
     const p3 = reorderLayer(p2, doc.id, layerId!, -1);
     expect(p3.composeDocs[0]!.layers[0]!.id).toBe(layerId);
     expect(reorderLayer(p3, doc.id, layerId!, -1)).toEqual(p3);
+  });
+
+  it("stores clamped adjustments and drops neutral ones", () => {
+    const { project, doc } = projectWithComposeDoc();
+    const layerId = doc.layers[0]!.id;
+    const p1 = setLayerAdjustments(project, doc.id, layerId, { exposure: 9, saturation: -20 });
+    const adjusted = p1.composeDocs[0]!.layers[0]!;
+    expect(adjusted.adjust).toEqual({ exposure: 5, brightness: 0, contrast: 0, saturation: -20 });
+    expect(hasAdjustments(adjusted)).toBe(true);
+    const p2 = setLayerAdjustments(p1, doc.id, layerId, { contrast: Number.NaN, exposure: 0 });
+    expect(p2.composeDocs[0]!.layers[0]!.adjust).toEqual({
+      exposure: 0,
+      brightness: 0,
+      contrast: 0,
+      saturation: -20,
+    });
+    const reset = setLayerAdjustments(p2, doc.id, layerId, null);
+    expect(reset.composeDocs[0]!.layers[0]!).not.toHaveProperty("adjust");
+    expect(project.composeDocs[0]!.layers[0]!).not.toHaveProperty("adjust");
+  });
+
+  it("round-trips adjustments through the project file and rejects malformed ones", () => {
+    const { project, doc } = projectWithComposeDoc();
+    const adjusted = setLayerAdjustments(project, doc.id, doc.layers[0]!.id, { brightness: 30 });
+    const reopened = parseProject(serializeProject(adjusted));
+    expect(reopened.composeDocs[0]!.layers[0]!.adjust?.brightness).toBe(30);
+    const broken = serializeProject(adjusted).replace('"brightness": 30', '"brightness": "high"');
+    expect(() => parseProject(broken)).toThrow(/malformed adjustments/);
   });
 
   it("removes every reference when an asset is removed", () => {

@@ -9,12 +9,15 @@
 //!   into an 8-bit PNG preview.
 //! - [`export_png`] and [`export_psd`] render a compose document at full resolution.
 
+mod adjust;
 mod composition;
+mod preview;
 mod psd_file;
 mod source;
 
 use serde::Serialize;
 
+pub use adjust::Adjust;
 pub use composition::{CompositionSpec, ExportReport, LayerSpec, MAX_CANVAS_PIXELS};
 pub use source::MAX_SOURCE_PIXELS;
 
@@ -78,6 +81,38 @@ fn preview_png(bytes: &[u8], name: &str) -> Result<Vec<u8>, String> {
     };
     photocraft_codecs::encode(&image, Format::Png, &options)
         .map_err(|e| format!("“{name}” could not be prepared for display ({e})."))
+}
+
+/// Longest side of a layer preview. The canvas shows previews scaled to the layer's size.
+pub const PREVIEW_SIDE: u32 = 2048;
+
+/// A layer's image with its adjustments applied by the engine, reduced to at most
+/// [`PREVIEW_SIDE`] pixels on its longest side, as an 8-bit PNG for the canvas.
+pub fn layer_preview(path: &str, adjust: &Adjust) -> Result<Vec<u8>, String> {
+    use photocraft_codecs::{
+        ChannelLayout, EncodeOptions, Format, Image, PngCompression, SampleType,
+    };
+    let name = path.rsplit(['/', '\\']).next().unwrap_or(path);
+    adjust.validate(name)?;
+    let reduced = preview::reduced_source(path, name)?;
+    let rect = photocraft_doc::Rect::from_xywh(0, 0, reduced.width, reduced.height);
+    let size = photocraft_doc::Size::new(reduced.width, reduced.height);
+    let adjusted = adjust::apply(reduced.surface.clone(), adjust, size, reduced.depth);
+    let image = Image::from_raw(
+        reduced.width,
+        reduced.height,
+        ChannelLayout::Rgba,
+        reduced.depth.sample_type(),
+        adjusted.to_interleaved(rect),
+    )
+    .map_err(|e| format!("The preview of “{name}” could not be prepared ({e})."))?
+    .convert(ChannelLayout::Rgba, SampleType::U8);
+    let options = EncodeOptions {
+        png_compression: PngCompression::Fast,
+        ..EncodeOptions::default()
+    };
+    photocraft_codecs::encode(&image, Format::Png, &options)
+        .map_err(|e| format!("The preview of “{name}” could not be prepared ({e})."))
 }
 
 /// Renders `spec` and writes a PNG to `target`.

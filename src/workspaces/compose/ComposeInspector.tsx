@@ -1,7 +1,16 @@
 import { exportComposeDoc } from "../../app/commands";
 import { isAvailableIn } from "../../engine/capabilities";
-import { renameComposeDoc, setHorizon, updateLayer, type LayerPatch } from "../../model/compose";
-import type { ComposeDoc, ComposeLayer } from "../../model/types";
+import {
+  ADJUSTMENT_RANGES,
+  hasAdjustments,
+  NEUTRAL_ADJUSTMENTS,
+  renameComposeDoc,
+  setHorizon,
+  setLayerAdjustments,
+  updateLayer,
+  type LayerPatch,
+} from "../../model/compose";
+import type { ComposeDoc, ComposeLayer, LayerAdjustments } from "../../model/types";
 import { platform } from "../../platform";
 import { useAppStore } from "../../state/store";
 import { Button } from "../../ui/Button";
@@ -103,6 +112,70 @@ function LayerSection({ doc, layer }: { doc: ComposeDoc; layer: ComposeLayer }) 
       {locked ? (
         <p className={styles.rowMeta}>Locked layers cannot be moved on the canvas.</p>
       ) : null}
+    </Section>
+  );
+}
+
+const ADJUSTMENT_FIELDS: readonly {
+  key: keyof LayerAdjustments;
+  label: string;
+  step: number;
+  format: (v: number) => string;
+}[] = [
+  {
+    key: "exposure",
+    label: "Exposure",
+    step: 0.05,
+    format: (v) => `${v > 0 ? "+" : ""}${v.toFixed(2)} EV`,
+  },
+  { key: "brightness", label: "Brightness", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
+  { key: "contrast", label: "Contrast", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
+  { key: "saturation", label: "Saturation", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
+];
+
+function AdjustmentsSection({ doc, layer }: { doc: ComposeDoc; layer: ComposeLayer }) {
+  const apply = useAppStore((s) => s.apply);
+  const beginGesture = useAppStore((s) => s.beginGesture);
+  const applyTransient = useAppStore((s) => s.applyTransient);
+  const endGesture = useAppStore((s) => s.endGesture);
+  const available = isAvailableIn("compose.adjust", platform);
+  const values = layer.adjust ?? NEUTRAL_ADJUSTMENTS;
+  return (
+    <Section title="Adjustments">
+      {ADJUSTMENT_FIELDS.map(({ key, label, step, format }) => (
+        <SliderField
+          key={key}
+          label={label}
+          value={values[key]}
+          min={ADJUSTMENT_RANGES[key][0]}
+          max={ADJUSTMENT_RANGES[key][1]}
+          step={step}
+          format={format}
+          disabled={!available}
+          onStart={beginGesture}
+          onInput={(v) =>
+            applyTransient((p) => setLayerAdjustments(p, doc.id, layer.id, { [key]: v }))
+          }
+          onEnd={() => endGesture("Adjust layer")}
+        />
+      ))}
+      <div className={styles.buttonRow}>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={!available || !hasAdjustments(layer)}
+          onClick={() =>
+            apply("Reset adjustments", (p) => setLayerAdjustments(p, doc.id, layer.id, null))
+          }
+        >
+          Reset adjustments
+        </Button>
+      </div>
+      <p className={styles.rowMeta} style={{ whiteSpace: "normal" }}>
+        {available
+          ? "Applied by the image engine to this layer only. The image file is not changed."
+          : "Adjustments need the desktop app, which includes the image engine."}
+      </p>
     </Section>
   );
 }
@@ -210,12 +283,13 @@ export function ComposeInspector({
   return (
     <div className={styles.scroll}>
       {layer ? <LayerSection doc={doc} layer={layer} /> : null}
+      {layer ? <AdjustmentsSection doc={doc} layer={layer} /> : null}
       <DocumentSection doc={doc} />
       <ExportSection doc={doc} />
       <Section title="Not available yet" collapsible defaultOpen={!layer}>
         <PlannedList
           title="Needs the image engine or calibration"
-          ids={["compose.perspective", "compose.shadow", "compose.mask", "compose.adjust"]}
+          ids={["compose.perspective", "compose.shadow", "compose.mask"]}
         />
       </Section>
     </div>

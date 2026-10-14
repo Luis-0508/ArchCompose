@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addLayer, createComposeDoc, updateLayer } from "../model/compose";
+import { addLayer, createComposeDoc, setLayerAdjustments, updateLayer } from "../model/compose";
 import { addAsset, createProject } from "../model/project";
 import type { AssetRef, Project } from "../model/types";
 import { compositionSpec, describeExport } from "./composition";
@@ -55,6 +55,13 @@ describe("composition spec", () => {
     const psd = compositionSpec(hidden, doc, "psd");
     expect(png.ok && png.spec.layers.length).toBe(1);
     expect(psd.ok && psd.spec.layers.map((l) => l.visible)).toEqual([true, false]);
+  });
+
+  it("passes adjustments only for adjusted layers", () => {
+    const { project, docId, layerId } = setup();
+    const adjusted = setLayerAdjustments(project, docId, layerId, { exposure: 1 });
+    const result = compositionSpec(adjusted, adjusted.composeDocs[0]!, "png");
+    expect(result.ok && result.spec.layers.map((l) => l.adjust?.exposure)).toEqual([undefined, 1]);
   });
 
   it("explains layers without a file on disk", () => {

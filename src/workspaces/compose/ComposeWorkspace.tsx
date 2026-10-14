@@ -53,7 +53,6 @@ const PLANNED_TOOLS: readonly ChoiceOption<string>[] = (
     ["compose.mask", "mask"],
     ["compose.shadow", "shadow"],
     ["compose.segment", "segment"],
-    ["compose.adjust", "adjust"],
   ] as const
 ).map(([id, icon]) => ({
   value: id,

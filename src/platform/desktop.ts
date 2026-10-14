@@ -125,6 +125,11 @@ export const desktopPlatform: Platform = {
   engine: {
     formats: ENGINE_EXTENSIONS,
 
+    async layerPreview(path, adjust) {
+      const png = await call<ArrayBuffer>("engine_layer_preview", { path, adjust });
+      return new Blob([png], { type: "image/png" });
+    },
+
     async chooseExportTarget(format, suggestedName) {
       const filter = EXPORT_FILTERS[format];
       return save({

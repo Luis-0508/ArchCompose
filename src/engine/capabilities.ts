@@ -73,9 +73,10 @@ export const CAPABILITIES = {
   },
   "compose.adjust": {
     label: "Adjustments",
-    status: "planned",
+    status: "available",
     provider: "engine",
-    note: "Non-destructive colour and tone adjustments need the image engine.",
+    desktopOnly: true,
+    note: "Exposure, brightness, contrast and saturation per layer, applied non-destructively by the image engine in the canvas and in exports.",
   },
   "compose.export": {
     label: "Export image",

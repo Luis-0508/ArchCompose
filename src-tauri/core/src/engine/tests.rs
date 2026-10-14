@@ -42,6 +42,7 @@ fn layer(path: &str, x: f64, y: f64, scale: f64, opacity: f32) -> LayerSpec {
         scale,
         opacity,
         visible: true,
+        adjust: None,
     }
 }
 
@@ -444,4 +445,53 @@ fn every_photocraft_dependency_is_pinned_to_the_documented_revision() {
             "{line}"
         );
     }
+}
+
+#[test]
+fn adjustments_change_only_their_own_layer() {
+    let files = Files::default()
+        .with("base.png", solid_png(4, 4, [100, 100, 100, 255]))
+        .with("glass.png", solid_png(2, 4, [100, 100, 100, 128]));
+    let mut s = spec(
+        4,
+        4,
+        vec![
+            layer("base.png", 0.0, 0.0, 1.0, 1.0),
+            layer("glass.png", 0.0, 0.0, 1.0, 1.0),
+        ],
+    );
+    s.layers[1].adjust = Some(Adjust {
+        exposure: 1.0,
+        ..Adjust::default()
+    });
+    let (w, _, data) = render(&s, &files);
+    // Right half: only the unadjusted base.
+    assert_eq!(px(&data, w, 3, 1), [100, 100, 100, 255]);
+    // Left half: the brightened glass (~137) at 50 % over the base.
+    let left = px(&data, w, 0, 1);
+    assert!((116..=121).contains(&left[0]), "{left:?}");
+
+    // A PSD bakes the adjustment into the layer's pixels and keeps its transparency.
+    let (bytes, _) = composition::psd(&s, &files).unwrap();
+    let file = photocraft_psd::PsdFile::from_bytes(&bytes).unwrap();
+    let glass = file.layer(1).unwrap().rgba8().unwrap();
+    assert!(
+        (135..=139).contains(&glass.data[0]),
+        "{:?}",
+        &glass.data[..4]
+    );
+    assert_eq!(glass.data[3], 128);
+}
+
+#[test]
+fn rejects_adjustments_out_of_range() {
+    let files = Files::default().with("a.png", solid_png(2, 2, [1, 1, 1, 255]));
+    let mut s = spec(2, 2, vec![layer("a.png", 0.0, 0.0, 1.0, 1.0)]);
+    s.layers[0].adjust = Some(Adjust {
+        contrast: 500.0,
+        ..Adjust::default()
+    });
+    assert!(composition::png(&s, &files)
+        .unwrap_err()
+        .contains("adjustments"));
 }

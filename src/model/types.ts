@@ -33,6 +33,21 @@ export interface AssetRef {
 
 // ---------------------------------------------------------------- Compose
 
+/**
+ * Non-destructive tone and colour adjustments of a layer, in Photoshop's units as the
+ * image engine implements them. The source file is never changed.
+ */
+export interface LayerAdjustments {
+  /** Stops, -5 to 5. */
+  exposure: number;
+  /** -150 to 150. */
+  brightness: number;
+  /** -50 to 100. */
+  contrast: number;
+  /** -100 to 100. */
+  saturation: number;
+}
+
 export interface ComposeLayer {
   id: LayerId;
   name: string;
@@ -45,6 +60,8 @@ export interface ComposeLayer {
   opacity: number;
   visible: boolean;
   locked: boolean;
+  /** Absent when the layer has no adjustments. */
+  adjust?: LayerAdjustments;
 }
 
 export interface ComposeDoc {

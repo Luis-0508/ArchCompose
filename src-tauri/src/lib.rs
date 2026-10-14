@@ -43,6 +43,15 @@ async fn engine_decode_preview(path: String) -> Result<Response, String> {
         .map(Response::new)
 }
 
+/// A layer's image with its adjustments applied, reduced for the canvas, as PNG.
+#[tauri::command]
+async fn engine_layer_preview(path: String, adjust: engine::Adjust) -> Result<Response, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::layer_preview(&path, &adjust))
+        .await
+        .map_err(|e| format!("The preview was interrupted: {e}."))?
+        .map(Response::new)
+}
+
 #[tauri::command]
 async fn engine_export_png(
     spec: engine::CompositionSpec,
@@ -73,6 +82,7 @@ pub fn run() {
             write_project_file,
             engine_status,
             engine_decode_preview,
+            engine_layer_preview,
             engine_export_png,
             engine_export_psd
         ])

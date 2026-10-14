@@ -1,4 +1,4 @@
-import { removeLayer, reorderLayer, updateLayer } from "../../model/compose";
+import { hasAdjustments, removeLayer, reorderLayer, updateLayer } from "../../model/compose";
 import type { ComposeDoc } from "../../model/types";
 import { useAppStore } from "../../state/store";
 import { Button, IconButton } from "../../ui/Button";
@@ -58,6 +58,7 @@ export function LayersPanel({
                 <span className={`${styles.rowMeta} num`}>
                   Scale {Math.round(layer.scale * 100)}%
                   {layer.opacity < 1 ? `, ${Math.round(layer.opacity * 100)}% opacity` : ""}
+                  {hasAdjustments(layer) ? ", adjusted" : ""}
                   {layer.locked ? ", locked" : ""}
                 </span>
               </span>

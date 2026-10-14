@@ -77,6 +77,16 @@ export function parseProject(text: string): Project {
         typeof layer.x === "number" && typeof layer.scale === "number",
         "a layer has no transform",
       );
+      if (layer.adjust !== undefined) {
+        const adjust = layer.adjust;
+        expect(
+          isObject(adjust) &&
+            ["exposure", "brightness", "contrast", "saturation"].every(
+              (k) => typeof adjust[k] === "number" && Number.isFinite(adjust[k]),
+            ),
+          "a layer has malformed adjustments",
+        );
+      }
     }
   }
   for (const drawing of data.drawings as unknown[]) {

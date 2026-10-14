@@ -9,9 +9,10 @@
 
 use photocraft_algo::transform::{warp_surface_clipped, Homography, Interp};
 use photocraft_codecs::{ChannelLayout, EncodeOptions, Format, Image, PngCompression};
-use photocraft_doc::{ColorMode, Document, Layer, LayerContent, Rect, SampleType, Size, Surface};
+use photocraft_doc::{ColorMode, Document, Layer, LayerContent, Rect, Size, Surface};
 use serde::{Deserialize, Serialize};
 
+use super::adjust::{self, Adjust};
 use super::source::{self, Depth, RgbaPixels};
 
 /// Largest canvas side the engine renders.
@@ -46,6 +47,9 @@ pub struct LayerSpec {
     pub scale: f64,
     pub opacity: f32,
     pub visible: bool,
+    /// Tone and colour adjustments; absent when the layer has none.
+    #[serde(default)]
+    pub adjust: Option<Adjust>,
 }
 
 /// What an export produced, for the confirmation message.
@@ -90,6 +94,9 @@ impl CompositionSpec {
             if !(0.0..=1.0).contains(&l.opacity) {
                 return Err(format!("The layer “{}” has an invalid opacity.", l.name));
             }
+            if let Some(a) = &l.adjust {
+                a.validate(&l.name)?;
+            }
         }
         Ok(())
     }
@@ -129,11 +136,17 @@ pub fn build(
     for l in spec.layers.iter().filter(|l| l.visible || include_hidden) {
         let name = display_name(&l.path);
         let pixels = source::decode(&sources.read(&l.path)?, &name)?;
-        if pixels.depth == Depth::Sixteen {
+        let source_depth = pixels.depth;
+        if source_depth == Depth::Sixteen {
             depth = Depth::Sixteen;
         }
         let surface = place(&pixels, l, canvas)
             .map_err(|_| format!("“{name}” is too large to place at this scale."))?;
+        drop(pixels);
+        let surface = match &l.adjust {
+            Some(a) => adjust::apply(surface, a, Size::new(spec.width, spec.height), source_depth),
+            None => surface,
+        };
         placed.push((l, surface));
     }
 
@@ -141,7 +154,7 @@ pub fn build(
         spec.name.clone(),
         Size::new(spec.width, spec.height),
         ColorMode::Rgb,
-        depth.sample_type_doc(),
+        depth.doc_sample_type(),
     );
     for (l, surface) in placed {
         // Mixed 8- and 16-bit sources share the document's depth.
@@ -156,15 +169,6 @@ pub fn build(
         doc.layers.push(layer);
     }
     Ok(Built { doc, depth })
-}
-
-impl Depth {
-    fn sample_type_doc(self) -> SampleType {
-        match self {
-            Depth::Eight => SampleType::U8,
-            Depth::Sixteen => SampleType::U16,
-        }
-    }
 }
 
 fn display_name(path: &str) -> String {

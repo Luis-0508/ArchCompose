@@ -1,4 +1,5 @@
 import type { CompositionSpec, ExportFormat, ExportReport } from "../engine/composition";
+import type { LayerAdjustments } from "../model/types";
 
 /**
  * Everything the app needs from the host environment. The desktop build talks to
@@ -38,6 +39,8 @@ export interface EngineStatus {
 export interface ImageEngine {
   /** File extensions the engine decodes in addition to the web view's formats. */
   formats: readonly string[];
+  /** A reduced PNG of an image with adjustments applied, for the canvas. */
+  layerPreview(path: string, adjust: LayerAdjustments): Promise<Blob>;
   /** Asks where to save an export. Returns null when the user cancels. */
   chooseExportTarget(format: ExportFormat, suggestedName: string): Promise<string | null>;
   /** Renders the composition at full resolution and writes it to `path`. */

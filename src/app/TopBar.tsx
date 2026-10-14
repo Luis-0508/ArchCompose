@@ -3,6 +3,7 @@ import { IconButton } from "../ui/Button";
 import { Segmented, type ChoiceOption } from "../ui/Choice";
 import styles from "./App.module.css";
 import { newProject, openProject, saveProject } from "./commands";
+import { ProfileMenu } from "./ProfileMenu";
 import { shortcutLabel } from "./shortcuts";
 
 const WORKSPACE_OPTIONS: readonly ChoiceOption<WorkspaceId>[] = [
@@ -115,6 +116,7 @@ export function TopBar({
           onClick={onShowShortcuts}
         />
         <IconButton icon="info" label="About and licenses" onClick={onShowLicenses} />
+        <ProfileMenu />
       </div>
     </header>
   );

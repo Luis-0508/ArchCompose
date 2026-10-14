@@ -47,6 +47,10 @@ export interface LayerAdjustments {
   contrast: number;
   /** -100 to 100. */
   saturation: number;
+  /** Gaussian blur radius in document pixels, 0 to 100. */
+  blur: number;
+  /** Unsharp mask amount in percent at a 1 px radius, 0 to 500. */
+  sharpen: number;
 }
 
 export interface ComposeLayer {

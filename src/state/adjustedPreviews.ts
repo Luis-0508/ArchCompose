@@ -33,9 +33,12 @@ export function useAdjustedPreview(
   const engine = platform.engine;
   const path = asset?.path;
   const wanted = engine && path && hasAdjustments(layer) ? layer.adjust! : null;
+  // Filter radii are in document pixels, so the preview depends on the layer's scale.
+  const scale = wanted && (wanted.blur > 0 || wanted.sharpen > 0) ? layer.scale : 1;
   const key = wanted
     ? `${path}
-${JSON.stringify(wanted)}`
+${JSON.stringify(wanted)}
+${scale}`
     : null;
   // The latest rendered preview of this layer, shown while the next one renders.
   const [latest, setLatest] = useState<string | null>(null);
@@ -44,7 +47,7 @@ ${JSON.stringify(wanted)}`
     if (!key || !wanted || !engine || !path || cache.has(key)) return;
     let cancelled = false;
     const timer = window.setTimeout(() => {
-      engine.layerPreview(path, wanted).then(
+      engine.layerPreview(path, wanted, scale).then(
         (blob) => {
           const url = URL.createObjectURL(blob);
           remember(key, url);
@@ -57,7 +60,7 @@ ${JSON.stringify(wanted)}`
       cancelled = true;
       window.clearTimeout(timer);
     };
-    // `wanted` is captured through `key`.
+    // `wanted` and `scale` are captured through `key`.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, engine, path]);
 

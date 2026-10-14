@@ -144,7 +144,13 @@ pub fn build(
             .map_err(|_| format!("“{name}” is too large to place at this scale."))?;
         drop(pixels);
         let surface = match &l.adjust {
-            Some(a) => adjust::apply(surface, a, Size::new(spec.width, spec.height), source_depth),
+            Some(a) => adjust::apply(
+                surface,
+                a,
+                Size::new(spec.width, spec.height),
+                source_depth,
+                1.0,
+            )?,
             None => surface,
         };
         placed.push((l, surface));

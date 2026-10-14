@@ -131,6 +131,8 @@ const ADJUSTMENT_FIELDS: readonly {
   { key: "brightness", label: "Brightness", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
   { key: "contrast", label: "Contrast", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
   { key: "saturation", label: "Saturation", step: 1, format: (v) => `${v > 0 ? "+" : ""}${v}` },
+  { key: "blur", label: "Blur", step: 0.5, format: (v) => `${v.toFixed(1)} px` },
+  { key: "sharpen", label: "Sharpen", step: 5, format: (v) => `${v}%` },
 ];
 
 function AdjustmentsSection({ doc, layer }: { doc: ComposeDoc; layer: ComposeLayer }) {

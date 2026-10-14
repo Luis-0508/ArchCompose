@@ -495,3 +495,28 @@ fn rejects_adjustments_out_of_range() {
         .unwrap_err()
         .contains("adjustments"));
 }
+
+#[test]
+fn blur_spreads_a_layer_in_the_export() {
+    let files = Files::default()
+        .with("base.png", solid_png(8, 4, [0, 0, 0, 255]))
+        .with("panel.png", solid_png(4, 4, [255, 255, 255, 255]));
+    let mut s = spec(
+        8,
+        4,
+        vec![
+            layer("base.png", 0.0, 0.0, 1.0, 1.0),
+            layer("panel.png", 0.0, 0.0, 1.0, 1.0),
+        ],
+    );
+    let (w, _, sharp) = render(&s, &files);
+    assert_eq!(px(&sharp, w, 4, 1), [0, 0, 0, 255]);
+    s.layers[1].adjust = Some(Adjust {
+        blur: 1.5,
+        ..Adjust::default()
+    });
+    let (w, _, blurred) = render(&s, &files);
+    // The white panel now bleeds past its edge and is softer inside it.
+    assert!(px(&blurred, w, 4, 1)[0] > 20, "{:?}", px(&blurred, w, 4, 1));
+    assert!(px(&blurred, w, 3, 1)[0] < 255, "{:?}", px(&blurred, w, 3, 1));
+}

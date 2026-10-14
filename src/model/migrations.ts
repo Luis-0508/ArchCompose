@@ -7,6 +7,22 @@ function isObject(value: unknown): value is Json {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/** Version 2 adds blur and sharpening to layer adjustments. */
+function migrateAdjustments(docs: unknown): unknown {
+  if (!Array.isArray(docs)) return docs;
+  return docs.map((doc: unknown) => {
+    if (!isObject(doc) || !Array.isArray(doc.layers)) return doc;
+    return {
+      ...doc,
+      layers: doc.layers.map((layer: unknown) =>
+        isObject(layer) && isObject(layer.adjust)
+          ? { ...layer, adjust: { blur: 0, sharpen: 0, ...layer.adjust } }
+          : layer,
+      ),
+    };
+  });
+}
+
 /**
  * Version 1 drawings referenced an image file (`sourceAssetId`) without a sheet. Version 2
  * gives every drawing a paper sheet and editable elements. A drawing with a file gets an
@@ -18,6 +34,7 @@ function migrateV1toV2(data: Json): Json {
   return {
     ...data,
     schemaVersion: 2,
+    composeDocs: migrateAdjustments(data.composeDocs),
     drawings: drawings.map((drawing: unknown) => {
       if (!isObject(drawing)) return drawing;
       const { sourceAssetId, ...rest } = drawing;

@@ -252,7 +252,7 @@ describe("eraser", () => {
 });
 
 describe("schema migration", () => {
-  it("opens version 1 projects and turns drawing files into fitted underlays", () => {
+  it("opens version 1 projects, turning drawing files into underlays and extending adjustments", () => {
     const v1 = {
       schemaVersion: 1,
       id: "prj_1",
@@ -272,7 +272,29 @@ describe("schema migration", () => {
         },
       },
       assetOrder: ["ast_1"],
-      composeDocs: [],
+      composeDocs: [
+        {
+          id: "cmp_1",
+          name: "View",
+          width: 10,
+          height: 10,
+          horizonY: null,
+          layers: [
+            {
+              id: "lyr_1",
+              name: "Base",
+              assetId: "ast_1",
+              x: 0,
+              y: 0,
+              scale: 1,
+              opacity: 1,
+              visible: true,
+              locked: false,
+              adjust: { exposure: 1, brightness: 0, contrast: 0, saturation: 0 },
+            },
+          ],
+        },
+      ],
       drawings: [
         {
           id: "drw_1",
@@ -306,6 +328,15 @@ describe("schema migration", () => {
     expect("sourceAssetId" in withFile!).toBe(false);
     expect(empty!.underlay).toBeNull();
     expect(empty!.sheet.format).toEqual(formatFor("A3", "landscape"));
+    // Adjustments gain neutral blur and sharpening.
+    expect(project.composeDocs[0]!.layers[0]!.adjust).toEqual({
+      exposure: 1,
+      brightness: 0,
+      contrast: 0,
+      saturation: 0,
+      blur: 0,
+      sharpen: 0,
+    });
   });
 
   it("round-trips drawing content", () => {

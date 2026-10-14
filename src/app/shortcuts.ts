@@ -108,4 +108,20 @@ export const SHORTCUT_REFERENCE: readonly { group: string; items: readonly [stri
         ["Delete", "Remove layer"],
       ],
     },
+    {
+      group: "Drawings",
+      items: [
+        ["V", "Select and transform"],
+        ["H", "Hand"],
+        ["P", "Pen"],
+        ["E", "Eraser"],
+        ["L", "Line (Shift locks to 45°)"],
+        ["R", "Rectangle (Shift for a square)"],
+        ["C", "Circle"],
+        ["Y", "Polyline (Enter finishes)"],
+        ["T", "Text"],
+        ["Arrows", "Nudge selection by 1 mm (Shift for 10 mm)"],
+        ["Delete", "Delete selection"],
+      ],
+    },
   ];

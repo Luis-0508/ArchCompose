@@ -99,6 +99,24 @@ export const CAPABILITIES = {
     desktopOnly: true,
     note: "Opens the composite image of PSD and PSB files and exports views as layered PSD. Layers inside an imported PSD are not separated.",
   },
+  "drawings.sheet": {
+    label: "Drawing sheets",
+    status: "available",
+    provider: "archcompose",
+    note: "Blank or annotated sheets in A0 to A4 or a custom size, with grid, snapping, rulers, scale and editable pen, line, shape and text content.",
+  },
+  "drawings.export": {
+    label: "Export drawing sheets",
+    status: "planned",
+    provider: "engine",
+    note: "Rendering sheets to PNG or PDF at a chosen resolution with the image engine's vector renderer is planned. Text needs the engine's font handling first.",
+  },
+  "compose.brush": {
+    label: "Brush and eraser on images",
+    status: "planned",
+    provider: "engine",
+    note: "Painting and erasing image layers with the image engine's brush engine is planned.",
+  },
   "drawings.pdf": {
     label: "PDF and vector drawings",
     status: "planned",

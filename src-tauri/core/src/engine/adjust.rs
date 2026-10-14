@@ -146,7 +146,11 @@ pub fn apply(
     // PhotoCraft accepts blur radii from 0.1 px; smaller ones have no visible effect.
     let blur = adjust.blur * pixel_scale;
     if blur >= 0.1 {
-        surface = filter(&surface, &FilterParams::GaussianBlur { radius: blur }, canvas)?;
+        surface = filter(
+            &surface,
+            &FilterParams::GaussianBlur { radius: blur },
+            canvas,
+        )?;
     }
     if adjust.sharpen > 0.0 {
         let params = FilterParams::UnsharpMask {
@@ -210,14 +214,16 @@ mod tests {
             exposure: 1.0,
             ..Adjust::default()
         };
-        let out = first(&apply(
-            pixel([100, 100, 100, 128]),
-            &adjust,
-            Size::new(2, 1),
-            Depth::Eight,
-            1.0,
-        )
-        .unwrap());
+        let out = first(
+            &apply(
+                pixel([100, 100, 100, 128]),
+                &adjust,
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
         // +1 stop doubles linear light: sRGB 100 (linear 0.127) becomes about 0.254, sRGB ~137.
         assert!((135..=139).contains(&out[0]), "{out:?}");
         assert_eq!(out[0], out[1]);
@@ -230,14 +236,16 @@ mod tests {
             saturation: -100.0,
             ..Adjust::default()
         };
-        let out = first(&apply(
-            pixel([200, 50, 50, 255]),
-            &adjust,
-            Size::new(2, 1),
-            Depth::Eight,
-            1.0,
-        )
-        .unwrap());
+        let out = first(
+            &apply(
+                pixel([200, 50, 50, 255]),
+                &adjust,
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
         assert!(
             out[0].abs_diff(out[1]) <= 1 && out[1].abs_diff(out[2]) <= 1,
             "{out:?}"
@@ -246,29 +254,33 @@ mod tests {
 
     #[test]
     fn contrast_spreads_tones_and_brightness_lifts_them() {
-        let dark = first(&apply(
-            pixel([64, 64, 64, 255]),
-            &Adjust {
-                contrast: 60.0,
-                ..Adjust::default()
-            },
-            Size::new(2, 1),
-            Depth::Eight,
-            1.0,
-        )
-        .unwrap());
+        let dark = first(
+            &apply(
+                pixel([64, 64, 64, 255]),
+                &Adjust {
+                    contrast: 60.0,
+                    ..Adjust::default()
+                },
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
         assert!(dark[0] < 64, "{dark:?}");
-        let lifted = first(&apply(
-            pixel([64, 64, 64, 255]),
-            &Adjust {
-                brightness: 50.0,
-                ..Adjust::default()
-            },
-            Size::new(2, 1),
-            Depth::Eight,
-            1.0,
-        )
-        .unwrap());
+        let lifted = first(
+            &apply(
+                pixel([64, 64, 64, 255]),
+                &Adjust {
+                    brightness: 50.0,
+                    ..Adjust::default()
+                },
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
         assert!(lifted[0] > 64, "{lifted:?}");
     }
 

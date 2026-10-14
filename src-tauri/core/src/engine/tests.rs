@@ -518,5 +518,9 @@ fn blur_spreads_a_layer_in_the_export() {
     let (w, _, blurred) = render(&s, &files);
     // The white panel now bleeds past its edge and is softer inside it.
     assert!(px(&blurred, w, 4, 1)[0] > 20, "{:?}", px(&blurred, w, 4, 1));
-    assert!(px(&blurred, w, 3, 1)[0] < 255, "{:?}", px(&blurred, w, 3, 1));
+    assert!(
+        px(&blurred, w, 3, 1)[0] < 255,
+        "{:?}",
+        px(&blurred, w, 3, 1)
+    );
 }

@@ -33,8 +33,12 @@ See [UPSTREAM.md](UPSTREAM.md). Decided: PhotoCraft library crates linked into
   to sRGB.
 - Done: full-resolution PNG export (8 or 16 bit, with transparency) and layered PSD export of
   compose views, rendered by PhotoCraft's compositor.
-- Done: per-layer exposure, brightness, contrast and saturation, previewed by the engine.
-- Next: layer masks, then filters (blur, sharpen) per layer, then layered PSD import.
+- Done: per-layer exposure, brightness, contrast, saturation, vibrance and warmth, previewed
+  by the engine.
+- Done: per-layer Gaussian blur and unsharp-mask sharpening (`photocraft-algo`).
+- Next, in the order of [PHOTOCRAFT_TOOLS.md](PHOTOCRAFT_TOOLS.md): drawing sheet export
+  through `photocraft-vector`, rectangle, ellipse and lasso masks, brush and eraser on image
+  layers, then layered PSD import.
 
 ## Milestone 4: Compose depth
 
@@ -46,10 +50,13 @@ See [UPSTREAM.md](UPSTREAM.md). Decided: PhotoCraft library crates linked into
 
 ## Milestone 5: Drawings depth
 
+- Done: drawings are paper sheets (A0 to A4 or custom) with grid, snapping, rulers, scale
+  and real-world units, an optional image underlay, and editable pen, eraser, line,
+  rectangle, circle, polyline and text content with select, move and scale.
 - PDF and SVG import with vector preview.
 - Two-point scale calibration of raster drawings.
 - Revision comparison (overlay and side by side).
-- Annotations, labels and diagram overlays.
+- Rotation, dimension lines, hatches and fills; layers on sheets.
 
 ## Milestone 6: Boards to print
 

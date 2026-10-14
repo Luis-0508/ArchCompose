@@ -662,7 +662,9 @@ export function DrawingInspector({ drawing }: { drawing: Drawing | null }) {
       <Revisions drawing={drawing} />
 
       <Section title="Not available yet" collapsible defaultOpen={false}>
-        <PlannedList ids={["drawings.pdf", "drawings.compare", "boards.scaledPlacement"]} />
+        <PlannedList
+          ids={["drawings.export", "drawings.pdf", "drawings.compare", "boards.scaledPlacement"]}
+        />
       </Section>
 
       <div className={local.dangerZone}>

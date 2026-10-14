@@ -298,7 +298,7 @@ export function ComposeInspector({
       <Section title="Not available yet" collapsible defaultOpen={!layer}>
         <PlannedList
           title="Needs the image engine or calibration"
-          ids={["compose.perspective", "compose.shadow", "compose.mask"]}
+          ids={["compose.perspective", "compose.shadow", "compose.mask", "compose.brush"]}
         />
       </Section>
     </div>

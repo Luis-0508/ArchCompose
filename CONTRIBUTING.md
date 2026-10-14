@@ -15,9 +15,10 @@ natural for the contributor.
 - Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing structure, and
   [docs/UPSTREAM.md](docs/UPSTREAM.md) before touching anything engine-related.
 - For larger changes, open an issue first so the approach can be discussed.
-- PhotoCraft integration is planned but not started. Engine work goes only through
-  `src/engine/` and `src-tauri/core/src/engine.rs`, and only against APIs that have been
-  verified by compiling against them.
+- The image engine is built on PhotoCraft crates. Engine work goes only through
+  `src/engine/`, `src/platform/` and `src-tauri/core/src/engine/`, and only against APIs
+  that have been verified by compiling against them. After changing Rust or npm
+  dependencies, run `node scripts/third-party-licenses.mjs`.
 
 ## Setup
 

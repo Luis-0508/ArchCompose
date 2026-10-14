@@ -24,22 +24,24 @@ releasable, with tests, and with `engine/capabilities.ts` updated to match reali
 - Asset kind editing and search in the library.
 - Unsaved-changes and error messages reviewed with users.
 
-## Milestone 3: Engine spike (PhotoCraft)
+## Milestone 3: Image engine (PhotoCraft) (first increments done)
 
-See [UPSTREAM.md](UPSTREAM.md).
+See [UPSTREAM.md](UPSTREAM.md). Decided: PhotoCraft library crates linked into
+`src-tauri/core`, no `photocraft-engine` session and no CLI sidecar.
 
-- Spike: build `photocraft-psd` and `photocraft-codecs` inside `src-tauri/core`; measure
-  build time, binary size and MSRV impact.
-- If viable: PSD and TIFF import, full-resolution flattened export of compose views.
-- Decide between embedding `photocraft-engine` and a `photocraft-cli` sidecar for
-  non-destructive editing.
+- Done: import of TIFF, PSD/PSB (composite), OpenEXR, HDR, TGA and QOI with colour conversion
+  to sRGB.
+- Done: full-resolution PNG export (8 or 16 bit, with transparency) and layered PSD export of
+  compose views, rendered by PhotoCraft's compositor.
+- Done: per-layer exposure, brightness, contrast and saturation, previewed by the engine.
+- Next: layer masks, then filters (blur, sharpen) per layer, then layered PSD import.
 
 ## Milestone 4: Compose depth
 
 - Perspective calibration: ground plane and vanishing points from user-drawn lines.
 - Scale-aware placement of people and vegetation (eye-level and real height).
 - Contact and directional shadows (engine).
-- Masks and adjustments (engine).
+- Masks and selections (engine).
 - Curated asset libraries with real-world heights.
 
 ## Milestone 5: Drawings depth

@@ -2,7 +2,7 @@
 
 ArchCompose is a Tauri 2 desktop application. The interface is React and TypeScript,
 rendered by the system web view (WebView2 on Windows). The Rust backend owns file access
-and is the future home of the image engine.
+and the image engine, which is built on crates of PhotoCraft (see [UPSTREAM.md](UPSTREAM.md)).
 
 ```text
 ┌──────────────────────────── web view (TypeScript) ────────────────────────────┐
@@ -12,14 +12,16 @@ and is the future home of the image engine.
 │ state/store.ts (zustand) ── history ──► model/ (pure document model + tests)  │
 │        │                                                                      │
 │ app/commands.ts ─► platform/ (desktop │ browser)   engine/ (capabilities,     │
-│                       │                             preview decoding)         │
+│                       │                             preview, composition spec)│
 └───────────────────────┼───────────────────────────────────────────────────────┘
                         │ Tauri IPC (invoke)
 ┌───────────────────────▼──────────── Rust ─────────────────────────────────────┐
-│ src-tauri/src/lib.rs  commands: read_file, read_project_file,                 │
-│                       write_project_file, engine_status                       │
+│ src-tauri/src/lib.rs  commands: read_file, file_size, read_project_file,      │
+│                       write_project_file, engine_status,                      │
+│                       engine_decode_preview,                                  │
+│                       engine_layer_preview, engine_export_png/psd             │
 │ src-tauri/core        files.rs (validated, atomic file I/O)                   │
-│                       engine.rs (engine boundary; no engine linked yet)       │
+│                       engine/ (adapter over the PhotoCraft crates)            │
 └───────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -34,8 +36,8 @@ and is the future home of the image engine.
 | `src/ui/`         | The design system: buttons, fields, choice controls, panels, tooltips, overlays, icons.                                                | `state/` only for overlay components bound to the store.                       |
 | `src/viewport/`   | Camera math and the shared zoom/pan viewport with rulers.                                                                              | `state/`.                                                                      |
 | `src/platform/`   | Host abstraction. `desktop.ts` calls Tauri; `browser.ts` uses web APIs for development and tests.                                      | `engine/preview` (MIME types), `model/serialization` (extension).              |
-| `src/engine/`     | The engine boundary on the frontend: the capability registry and preview decoding through the web view.                                | Nothing app-specific.                                                          |
-| `src-tauri/core`  | Tauri-free backend logic, unit tested.                                                                                                 | `serde`.                                                                       |
+| `src/engine/`     | The engine boundary on the frontend: the capability registry, preview formats, and the composition spec sent to the engine.            | `model/` (types and pure helpers).                                             |
+| `src-tauri/core`  | Tauri-free backend logic, unit tested: file access and the engine adapter (`engine/`).                                                 | `serde`; PhotoCraft crates in `engine/` only.                                  |
 | `src-tauri/src`   | Window setup and IPC command wiring only.                                                                                              | `archcompose-core`, Tauri.                                                     |
 
 ## Key decisions
@@ -73,25 +75,38 @@ reporting. Content units are pixels in Compose and Drawings and millimetres in B
 board is laid out directly in millimetres, so 1 content unit is 1 mm. Screen-space overlays
 (selection, handles, guides) keep constant stroke widths at any zoom.
 
-**Preview, not engine.** The web view displays images and composes layers with CSS
-transforms. That is a preview of the document model, not an export pipeline, and the UI
-says so (title block "Renderer" cell, planned "Export image").
+**Preview in the web view, export in the engine.** The canvas displays images and composes
+layers with CSS transforms. Exports are rendered by the image engine at full resolution, and
+adjusted layers are previewed with engine-rendered images so the canvas and the export use
+the same adjustment code. The title block's "Renderer" cell says which is which.
 
 ## Engine boundary
 
-The frontend talks to an engine only through `src/engine/`; the backend wires one only in
-`src-tauri/core/src/engine.rs`, which today reports `engineLinked: false`. When PhotoCraft
-(or another engine) is integrated:
+The frontend reaches the engine only through `src/engine/` (what to ask for) and
+`src/platform/` (`platform.engine`, `null` in the browser build). The backend uses PhotoCraft
+crates only in `src-tauri/core/src/engine/`:
 
-1. Add the dependency to `src-tauri/core` only.
-2. Expose engine operations as new Tauri commands in `src-tauri/src/lib.rs` that call into
-   `archcompose_core::engine`.
-3. Add the matching calls to `src/platform/` (desktop) and switch the relevant entries in
-   `engine/capabilities.ts` to `available`.
-4. Keep ArchCompose's document model as the source of truth; translate to engine documents
-   at the boundary.
+| File             | Responsibility                                                                    |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `mod.rs`         | Public API, engine status, pinned upstream revision, export target checks         |
+| `source.rs`      | Decoding with limits, colour conversion to sRGB RGBA at 8 or 16 bits              |
+| `composition.rs` | `CompositionSpec` → transient PhotoCraft document → banded render, PNG/PSD export |
+| `adjust.rs`      | Per-layer adjustments as clipped adjustment layers, composited in isolation       |
+| `psd_file.rs`    | PSD/PSB composite import and layered PSD export                                   |
+| `preview.rs`     | Reduced, cached sources for interactive previews                                  |
 
-See [UPSTREAM.md](UPSTREAM.md) for what is known about PhotoCraft and the open questions.
+Rules:
+
+1. ArchCompose's document model is the source of truth. `engine/composition.ts` turns a
+   compose document into a `CompositionSpec` for one render; the backend builds an engine
+   document from it and drops it afterwards. There is one undo history, the store's.
+2. Engine work runs in `spawn_blocking` tasks; long renders never block the window.
+3. Engine features are marked `desktopOnly` in `engine/capabilities.ts`; `isAvailableIn`
+   disables their controls in the browser build with an explanation.
+4. Source files are only read. Exports are written atomically and refused when the target is
+   one of the source images.
+
+See [UPSTREAM.md](UPSTREAM.md) for the integrated crates, limits and open questions.
 
 ## Windows notes
 
@@ -106,10 +121,10 @@ See [UPSTREAM.md](UPSTREAM.md) for what is known about PhotoCraft and the open q
 
 ## Testing
 
-| Layer                                          | Tool                | Where                       |
-| ---------------------------------------------- | ------------------- | --------------------------- |
-| Model, camera math, store, capability registry | Vitest              | `src/**/*.test.ts`          |
-| UI flows in a browser at several window sizes  | Playwright          | `e2e/app.spec.ts`           |
-| Documentation screenshots                      | Playwright (opt-in) | `e2e/screenshots.spec.ts`   |
-| Backend file I/O and engine status             | `cargo test`        | `src-tauri/core`            |
-| Real desktop runtime (IPC, disk, WebView2)     | Playwright over CDP | `scripts/desktop-smoke.mjs` |
+| Layer                                                                                                                      | Tool                | Where                       |
+| -------------------------------------------------------------------------------------------------------------------------- | ------------------- | --------------------------- |
+| Model, camera math, store, capability registry                                                                             | Vitest              | `src/**/*.test.ts`          |
+| UI flows in a browser at several window sizes                                                                              | Playwright          | `e2e/app.spec.ts`           |
+| Documentation screenshots                                                                                                  | Playwright (opt-in) | `e2e/screenshots.spec.ts`   |
+| Backend file I/O and the engine adapter (real PhotoCraft crates: decode, placement, blending, adjustments, PNG/PSD export) | `cargo test`        | `src-tauri/core`            |
+| Real desktop runtime (IPC, disk, WebView2, engine import, export, adjustments, save/reopen)                                | Playwright over CDP | `scripts/desktop-smoke.mjs` |

@@ -23,20 +23,28 @@ ArchCompose brings the three things an architecture student or small office prep
 review into one desktop app: composed renders, the drawing set, and the presentation boards
 they end up on. Projects are plain files on your disk; nothing is uploaded anywhere.
 
-The app is built with Tauri 2, React and TypeScript, with a Rust backend for file access.
-Every edit is a pure function over the document model, which keeps undo, redo and testing
-simple.
-Image processing that needs a real engine (masks, shadows, export, PSD) is planned on top of
-[PhotoCraft](docs/UPSTREAM.md) and is not part of the app yet.
+The app is built with Tauri 2, React and TypeScript, with a Rust backend for file access and
+image processing. Every edit is a pure function over the document model, which keeps undo,
+redo and testing simple. Rendering, export, PSD files and adjustments use library crates of
+the open-source [PhotoCraft](docs/UPSTREAM.md) image engine behind ArchCompose's own
+interface.
 
-ArchCompose is at its first milestone: a working foundation, not a finished tool. Features
+ArchCompose is early: a working foundation, not a finished tool. Features
 that are not available yet are listed in the app as such, never as buttons that do nothing.
 
 ## Features
 
 **Compose.** Import a render, place cut-outs of people, trees and objects as layers, move and
 scale them on the canvas, set opacity, order, visibility and locks, and place a horizon guide
-at eye level.
+at eye level. Adjust exposure, brightness, contrast and saturation per layer without touching
+the image file.
+
+**Export.** Render a compose view at full resolution as PNG with transparency (16-bit when a
+source is 16-bit) or as a layered PSD, in the desktop app.
+
+**Image formats.** PNG, JPEG, WebP, AVIF, GIF, BMP and SVG everywhere; in the desktop app
+also TIFF, PSD and PSB (composite image), OpenEXR, Radiance HDR, TGA and QOI, converted to
+sRGB from their colour profiles.
 
 **Drawings.** Keep the drawing set: plans, sections, elevations, site plans and details, each
 with a sheet number (A-101, A-201 …), scale, level, attached drawing file and a revision log.
@@ -74,16 +82,18 @@ actions (press `?` in the app). Drop image files on the window to import them.
 - Compose, Drawings and Boards workspaces as described above.
 - New, open, save and save as, with atomic saves and missing-file handling.
 - Undo and redo for every edit, keyboard shortcuts, drag-and-drop import.
-- Preview rendering through the system web view (PNG, JPEG, WebP, AVIF, GIF, BMP, SVG).
+- Canvas preview through the system web view.
+- Desktop app, with the PhotoCraft crates: full-resolution PNG and layered PSD export,
+  import of TIFF, PSD/PSB composites, OpenEXR, HDR, TGA and QOI, and per-layer exposure,
+  brightness, contrast and saturation previewed by the engine.
 
 ### Planned with the PhotoCraft engine
 
-Not implemented. Nothing in ArchCompose calls PhotoCraft yet; see
-[docs/UPSTREAM.md](docs/UPSTREAM.md) for what is decided and what is still open.
+Not implemented yet; see [docs/UPSTREAM.md](docs/UPSTREAM.md).
 
-- Masks, contact and directional shadows, segmentation and non-destructive adjustments.
-- Full-resolution image export of compose views.
-- PSD import and export.
+- Layer masks and selections, filters such as blur and sharpen.
+- Importing the individual layers of a PSD (today its composite image is imported).
+- Contact and directional shadows, segmentation.
 
 ### Planned in ArchCompose itself
 
@@ -91,13 +101,16 @@ Not implemented. Nothing in ArchCompose calls PhotoCraft yet; see
 - PDF and vector drawing import, revision comparison.
 - True-scale placement of drawings on boards and print-ready PDF export.
 
-The canvas is a preview drawn by the system web view, not an export renderer. The order of
+The canvas is a preview drawn by the system web view; exports are rendered by the engine. The
+browser build (`npm run dev`) has no engine and shows engine features as unavailable. The
+order of
 this work is in [docs/ROADMAP.md](docs/ROADMAP.md); the app's own list of available and
 planned features lives in [`src/engine/capabilities.ts`](src/engine/capabilities.ts).
 
 ## Quick start
 
-Requirements: Node.js 22 or newer, Rust (stable), and on Windows the WebView2 runtime
+Requirements: Node.js 22 or newer, Rust 1.95 or newer, Git (Cargo fetches the pinned
+PhotoCraft crates), and on Windows the WebView2 runtime
 (preinstalled on Windows 11).
 
 On Windows, Rust needs a linker. Either install the Visual Studio Build Tools with the
@@ -172,15 +185,15 @@ src/
   ui/           Design system components
   viewport/     Camera math and the shared zoom/pan viewport
   platform/     Desktop (Tauri) and browser adapters
-  engine/       Engine boundary: capability registry and preview decoding
+  engine/       Engine boundary: capabilities, preview formats, composition spec
 src-tauri/
   src/          Window setup and IPC command wiring
-  core/         Tauri-free, unit-tested backend logic (file I/O, engine boundary)
+  core/         Tauri-free, unit-tested backend logic (file I/O, engine adapter)
 e2e/            Playwright tests against the browser build
 ```
 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): modules, rules and decisions
-- [docs/UPSTREAM.md](docs/UPSTREAM.md): PhotoCraft as the future image engine
+- [docs/UPSTREAM.md](docs/UPSTREAM.md): the PhotoCraft crates ArchCompose uses, and how
 - [docs/ROADMAP.md](docs/ROADMAP.md): milestones
 - [docs/GITHUB.md](docs/GITHUB.md): GitHub repository settings and automation
 - [AGENTS.md](AGENTS.md): conventions for contributors and coding agents
@@ -200,3 +213,9 @@ Please do not report security-sensitive issues publicly. See [SECURITY.md](SECUR
 ## License
 
 GNU Affero General Public License v3.0 only (AGPL-3.0-only). See [LICENSE](LICENSE).
+
+ArchCompose includes third-party components under their own licences, among them crates of
+PhotoCraft (MIT OR Apache-2.0, used under MIT). See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). ArchCompose is not affiliated with
+PhotoCraft or the ArtCraft Team.

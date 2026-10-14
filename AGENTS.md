@@ -17,9 +17,12 @@ Guidance for coding agents and contributors working on ArchCompose. Read
    buttons that do nothing.
 4. **Errors are shown, not swallowed.** Use `notify("error", message)` with a sentence
    that says what happened and what to do. Rust commands return such sentences as `Err`.
-5. **PhotoCraft stays behind the boundary.** Only `src-tauri/core/src/engine.rs` and
-   `src/engine/` may know about an image engine. Never write code against PhotoCraft APIs
-   that have not been verified by compiling against them.
+5. **PhotoCraft stays behind the boundary.** Only `src-tauri/core/src/engine/` may use
+   PhotoCraft crates; the frontend reaches the engine only through `src/engine/` and
+   `src/platform/`. ArchCompose's project stays authoritative: engine documents are built
+   per render and never kept, and undo stays in the store. Never write code against
+   PhotoCraft APIs that have not been verified by compiling against them. Keep every
+   `photocraft-*` dependency on the revision in `docs/UPSTREAM.md`.
 6. **File safety.** Never write project files except through `write_project_file`
    (atomic). Never modify or delete users' image files.
 7. **Platform differences live in `src/platform/`.** Workspaces never import Tauri.
@@ -106,6 +109,13 @@ Guidance for coding agents and contributors working on ArchCompose. Read
   `SECURITY.md` and the issue and pull request templates stay current.
 - GitHub-side settings (branch protection, CodeRabbit, security features) are documented in
   [docs/GITHUB.md](docs/GITHUB.md).
+
+## Third-party code
+
+- Do not copy PhotoCraft or ArtCraft logos, wordmarks, icons, splash screens or other brand
+  assets into ArchCompose. Keep legally required notices (`THIRD_PARTY_NOTICES.md`).
+- After changing Rust or npm dependencies, run `node scripts/third-party-licenses.mjs`;
+  CI checks that `THIRD_PARTY_LICENSES.md` is current.
 
 ## Before you finish
 

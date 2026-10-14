@@ -1,91 +1,132 @@
 # Upstream: PhotoCraft
 
-ArchCompose intends to use selected capabilities of
-[PhotoCraft](https://github.com/storytold/photocraft) as its image engine. This document
-records what we know about PhotoCraft, what is decided, and what is still open. Nothing in
-the ArchCompose code base calls PhotoCraft today.
+ArchCompose uses selected library crates of [PhotoCraft](https://github.com/storytold/photocraft)
+as its image engine. This document records what is integrated, how, and what is still open.
+Licensing and attribution are in [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
 
-## What PhotoCraft is (as reviewed on 2026-10-14)
+## Pinned revision
 
-Facts taken from PhotoCraft's README, `AGENTS.md` and `docs/architecture.md` at commit
-`ed7df56` (2026-10-14):
+|                  |                                                                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------- |
+| Commit           | `c699e3cda69f4852b43c0b191ab0091aaeff9d6a`                                                     |
+| Release          | 0.9.0, reviewed on 2026-10-14                                                                  |
+| Pinned in        | `src-tauri/core/Cargo.toml` (`git = …, rev = …` for every crate) and `src-tauri/Cargo.lock`    |
+| Also recorded in | `UPSTREAM_REVISION` in `src-tauri/core/src/engine/mod.rs`; a unit test fails if the two differ |
 
-- A layered photo editor written from scratch in pure Rust, dual-licensed **MIT or
-  Apache-2.0**. Version 0.8.2, Rust edition 2024, minimum Rust 1.95.
-- A Cargo workspace of about 25 library crates with build-time enforced layering
-  (`cargo xtask layers`). Relevant layers:
-  - L0 foundation: `geom`, `cms` (ICC colour management), `color`, `raster` (tiled
-    copy-on-write surfaces); standalone format crates `psd` and `codecs` with no
-    workspace dependencies.
-  - L1 `doc`: the document model (layers, masks, adjustments, effects, smart objects) as
-    pure data.
-  - L2 `ops` (history/undo), `algo` (adjustments, filters, selection), `paint`, `text`,
-    `vector`.
-  - L3 `compose` (CPU compositor, the reference), `gpu` (wgpu compositor), `format`
-    (native `.pcraft`).
-  - L4 `io` (document ⇄ PSD and flat formats), `plugins`.
-  - L5 `engine`: a `Session` plus a registry of roughly 700 commands; "every action is a
-    command" with a stable command id and serializable parameters.
-  - L6 `ui-egui` (its own GUI) and `automation` (MCP server).
-- Apps: `photocraft` (desktop, egui on wgpu), `photocraft-cli` (headless
-  `convert/info/run/batch/commands/mcp`), `photocraft-web` (WebAssembly).
-- Nothing below `ui-egui` depends on egui, winit or rfd.
-- The crates are **not published on crates.io** (checked 2026-10-14 for
-  `photocraft-psd`, `photocraft-engine`, `photocraft-doc`).
+PhotoCraft's crates are not published on crates.io, so they are Git dependencies. They are
+used unmodified.
 
-## Decisions
+## What PhotoCraft is
 
-1. **ArchCompose keeps its own document model.** ArchCompose documents describe
-   architectural intent: compose views with placed assets and a horizon, drawing sets
-   with sheet numbers and scales, boards with paper formats and grids. They reference
-   image files; they do not contain pixels. A PhotoCraft document, when used, is an
-   implementation detail of rendering and editing a raster asset or a compose view.
-2. **No PhotoCraft UI.** PhotoCraft's egui shell is not used. ArchCompose's interface stays
-   in React; the engine runs in the Rust backend.
-3. **One integration point.** All engine access goes through
-   `src-tauri/core/src/engine.rs` on the Rust side and `src/engine/` on the frontend side.
-   No other module may import PhotoCraft crates or reference PhotoCraft concepts.
-4. **Capabilities, not assumptions.** The UI asks `src/engine/capabilities.ts` whether a
-   feature is available. Enabling a feature backed by PhotoCraft means changing its status
-   there once the backend really provides it.
-5. **No speculative code.** No traits, types or commands imitate PhotoCraft APIs before an
-   integration spike has compiled against them.
+A layered photo editor in pure Rust (edition 2024, Rust ≥ 1.95), dual-licensed MIT OR
+Apache-2.0. It is a Cargo workspace of about 25 crates in build-time enforced layers: L0
+foundation (`geom`, `cms`, `color`, `raster`, standalone `psd` and `codecs`), L1 `doc` (the
+document model as data), L2 `ops`, `algo`, `paint`, `text`, `vector`, L3 `compose` (CPU
+compositor), `gpu`, `format`, L4 `io`, L5 `engine` (a `Session` and ~700 commands), L6
+`ui-egui` and `automation`. Its apps are an egui desktop app, a CLI and a WebAssembly build.
 
-## Candidate integration strategies
+## What ArchCompose uses
 
-| Option                               | What it means                                                                                                                       | For                                                                           | Against                                                                                                                     |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| A. Git dependency on selected crates | `src-tauri/core` depends on `photocraft-psd`, `photocraft-codecs`, later `photocraft-doc`/`compose`/`engine` via `git = …, rev = …` | In-process, typed, fast; PhotoCraft's layering makes leaf crates usable alone | Requires Rust 1.95 and edition 2024; pulls a large dependency tree (wgpu if `gpu`/`engine` are used); API stability unknown |
-| B. Sidecar process                   | Ship `photocraft-cli` as a Tauri sidecar and drive it with `run`/`batch` or its MCP/JSON channel                                    | Strong isolation, no build coupling, version pinning by binary                | Process start-up and file-based exchange per operation; harder interactive previews                                         |
-| C. Vendored subset                   | Copy selected crates into this repository                                                                                           | Full control                                                                  | Fork maintenance; loses upstream fixes. Last resort only                                                                    |
+| Crate                | Used for                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `photocraft-codecs`  | Decoding PNG, JPEG, TIFF, WebP, OpenEXR, Radiance HDR, TGA, QOI and more, with decode limits; encoding PNG |
+| `photocraft-psd`     | Reading the merged composite of PSD and PSB files; writing layered PSD files                               |
+| `photocraft-cms`     | Converting embedded RGB and CMYK ICC profiles and linear float images to sRGB                              |
+| `photocraft-doc`     | The transient engine document: raster layers, opacity, visibility, clipped adjustment layers               |
+| `photocraft-algo`    | Placing layers: projective resampling (`transform::warp_surface_clipped`) and image resizing               |
+| `photocraft-compose` | Compositing (`render_bands`, `flatten_to_surface`) and the adjustment implementations                      |
+| `photocraft-raster`  | Tiled surfaces (also pulled in by the crates above, with `geom`, `color` and `vector`)                     |
 
-**Current recommendation:** start with option A for the standalone L0 crates (`psd`,
-`codecs`) to gain PSD/TIFF import and full-resolution export, because they have no
-workspace dependencies. Evaluate `engine` (option A) versus the CLI sidecar (option B) for
-non-destructive editing once a spike shows the build size and API fit.
+Not used: `engine`, `ops`, `io`, `text`, `paint`, `format`, `gpu`, `plugins`, `ui-egui`,
+`automation`, and the apps. In particular ArchCompose does not link PhotoCraft's user
+interface or any crate that embeds fonts, icons or dictionaries.
+
+## How it is integrated
+
+```text
+ArchCompose project (frontend, authoritative)
+   │  compositionSpec(project, doc): canvas size, layers bottom→top,
+   │  file path, x, y, scale, opacity, visible, adjustments
+   ▼
+src/platform/desktop.ts ── Tauri IPC ──► src-tauri/src/lib.rs (spawn_blocking)
+                                            │
+                                            ▼
+                              src-tauri/core/src/engine/   (the adapter)
+                                source.rs       decode + colour conversion to sRGB RGBA 8/16-bit
+                                composition.rs  spec → photocraft_doc::Document → render
+                                adjust.rs       per-layer clipped adjustment layers
+                                psd_file.rs     PSD composite import, layered PSD export
+                                preview.rs      reduced sources for interactive previews
+```
+
+1. **ArchCompose's model stays the source of truth.** A compose document is translated into a
+   PhotoCraft `Document` for one render or export and then dropped. No engine document is
+   kept, so there is one history: ArchCompose's undo stack. Exports add no undo step.
+2. **Placement.** Each layer becomes a raster layer. A layer at 100 % on whole pixels is
+   copied exactly; anything else is resampled with PhotoCraft's bicubic warp, clipped to the
+   canvas, with premultiplied alpha.
+3. **Adjustments** (exposure, brightness, contrast, saturation) become PhotoCraft adjustment
+   layers clipped to the layer and composited in isolation, so they change only that layer.
+   The canvas preview of an adjusted layer is rendered by the same code (reduced to 2048 px),
+   so preview and export agree. Source files are never modified.
+4. **Formats the web view cannot show** (TIFF, PSD, PSB, OpenEXR, HDR, TGA, QOI) are decoded
+   by the engine and handed to the web view as an 8-bit PNG preview. Exports read the original
+   file again at full quality.
+5. **Export** renders band by band into a full-resolution buffer and writes PNG (8-bit, or
+   16-bit when any source is 16-bit or float) or a layered PSD (one layer per compose layer,
+   hidden layers included, adjustments baked in, plus the merged composite), atomically, and
+   never over one of the source images.
+
+## Safety limits
+
+PhotoCraft's parsers are written to reject malformed input without panicking and enforce
+their own limits, but ArchCompose does not rely on that alone:
+
+- Files larger than 512 MB are refused before reading (`files.rs`).
+- Decoding is limited to 268 megapixels and 65 536 px per side (`source.rs`); PhotoCraft
+  checks declared sizes before allocating.
+- Canvases are limited to 268 megapixels and 32 768 px per side; large buffers are allocated
+  fallibly, so running out of memory is reported instead of aborting.
+- Every engine call runs on a blocking worker thread; the window stays responsive.
+- Errors are sentences naming the file, shown to the user.
+
+## Colour
+
+Everything is composited in sRGB. Embedded RGB and CMYK profiles are converted to sRGB
+(relative colorimetric; CMYK with black point compensation); CMYK without a profile uses
+PhotoCraft's built-in coated CMYK profile. Float images (OpenEXR, HDR) are treated as
+scene-linear and encoded to sRGB; values above white are clipped, without tone mapping. Gray
+ICC profiles are not applied. Exports are untagged sRGB.
+
+## Decisions on the original open questions
+
+- **Crates or CLI sidecar?** Crates (option A). The L0–L3 crates compile cleanly as Git
+  dependencies, are pure Rust (no C toolchain), pull no GPU or UI code, and give in-process,
+  typed access with streaming render. A `photocraft-cli` sidecar would add a second binary,
+  process start-up per operation and file-based exchange without a benefit for this scope.
+- **`engine` crate?** Not used. Its `Session` keeps its own document and history, which would
+  duplicate ArchCompose's undo. The lower crates provide what ArchCompose needs without it.
+- **Build size and MSRV.** No `gpu`/`wgpu`. ArchCompose's Rust crates moved to
+  `rust-version = "1.95"` (they stay on edition 2021; dependencies on edition 2024 are fine).
+- **Bit depth.** 8- and 16-bit sources are kept at their depth through the composite and
+  export; previews in the web view are 8-bit.
 
 ## Open questions
 
-- Is the `engine` crate's `Session`/command API intended to be embedded by other
-  applications, and how stable are command ids and parameter schemas?
-- Can `engine` be built without the `gpu` crate (CPU compositor only) to keep the desktop
-  build small? Does it need a wgpu device from the host?
-- How are colour management and bit depth exposed to an embedding host (ArchCompose
-  previews in the web view are 8-bit sRGB)?
-- How should compose-view layers (assets placed with position and scale) map onto
-  PhotoCraft layers, and who owns undo for engine-backed edits?
-- MSRV: ArchCompose currently builds with Rust ≥ 1.80; adopting PhotoCraft raises it to
-  1.95 and may require moving the backend crates to edition 2024.
+- Layered PSD import (separate layers, masks, blend modes) needs `photocraft-io`, which links
+  `photocraft-text` and with it bundled fonts and a word list. Importing PSD layers also needs
+  a way to reference a layer inside a file from an ArchCompose layer.
+- Masks and selections need painting or selection tools in ArchCompose's own interface; the
+  engine side (`LayerMask`, `photocraft-algo::selection`) exists.
+- Filters (blur, sharpen) from `photocraft-algo` fit the same per-layer pattern as adjustments.
+- Wide-gamut and HDR output (tagged exports, tone mapping) are not designed yet.
 
-## Licensing and attribution
+## Updating the pin
 
-PhotoCraft's code is MIT or Apache-2.0. Both are compatible with ArchCompose's AGPL-3.0-only
-licence: PhotoCraft code may be linked or vendored into ArchCompose, and the combined work is
-distributed under the AGPL. When code is linked or vendored, its `NOTICE` and the relevant entries of `ATTRIBUTION.md` must be
-carried into ArchCompose's distribution. The ArtCraft name, wordmark and logos are
-trademarks and are not covered by the licence; ArchCompose must not use them.
-
-## Updating this document
-
-Re-check the facts above against PhotoCraft's `AGENTS.md` and `docs/architecture.md`
-before starting integration work, and record the commit you reviewed.
+1. Change `rev` for every `photocraft-*` dependency in `src-tauri/core/Cargo.toml` and
+   `UPSTREAM_REVISION`/`UPSTREAM_VERSION` in `src-tauri/core/src/engine/mod.rs`.
+2. Read the upstream changelog and `AGENTS.md` for API changes; build and run
+   `cargo test --workspace`, which exercises the adapter against the real crates.
+3. Re-audit `NOTICE` and `ATTRIBUTION.md` at the new revision against the linked crates and
+   update `THIRD_PARTY_NOTICES.md`; run `node scripts/third-party-licenses.mjs`.
+4. Run the desktop smoke test (`npm run smoke:desktop`).

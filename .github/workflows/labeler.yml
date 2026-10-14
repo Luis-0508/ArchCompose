@@ -1,0 +1,52 @@
+name: Pull request labels
+
+# pull_request_target runs with a write token, also for pull requests from forks. This
+# workflow never checks out or runs pull request code; it only reads the changed paths.
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ensure repository labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ensure_label() {
+            gh label create "$1" --color "$2" --description "$3" --force
+          }
+
+          ensure_label "frontend" "1D76DB" "React and TypeScript frontend changes"
+          ensure_label "desktop" "5319E7" "Tauri shell and Rust backend changes"
+          ensure_label "model" "006B75" "Document model changes"
+          ensure_label "engine" "E8C547" "Image engine boundary and PhotoCraft integration"
+          ensure_label "design-system" "D4C5F9" "Design tokens and shared UI components"
+          ensure_label "tests" "C5DEF5" "Automated tests or test tooling"
+          ensure_label "documentation" "0075CA" "Documentation changes"
+          ensure_label "assets" "A371F7" "Images, icons, screenshots or other project assets"
+          ensure_label "dependencies" "0366D6" "Dependency manifest, lockfile, or Dependabot changes"
+          ensure_label "tooling" "BFD4F2" "Formatting, linting and editor configuration"
+          ensure_label "ci" "000000" "GitHub Actions or repository automation changes"
+          ensure_label "bug" "D73A4A" "Something is not working as intended"
+          ensure_label "enhancement" "84B6EB" "Feature request or improvement"
+
+      - name: Apply labels from changed files
+        uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
+        with:
+          sync-labels: false

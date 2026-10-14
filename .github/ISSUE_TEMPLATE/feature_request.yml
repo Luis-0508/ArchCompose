@@ -1,0 +1,46 @@
+name: Feature request
+description: Propose an improvement or new capability
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check docs/ROADMAP.md first: many image engine features (masks, shadows, export, PSD)
+        are already planned around the PhotoCraft integration.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem or limitation should this solve? Describe the architectural workflow.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Compose
+        - Drawings
+        - Boards
+        - Project files
+        - Image engine (PhotoCraft)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the desired behavior, not just an implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context

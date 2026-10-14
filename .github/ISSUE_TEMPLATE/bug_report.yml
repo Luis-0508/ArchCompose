@@ -1,0 +1,66 @@
+name: Bug report
+description: Report reproducible incorrect behavior
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ArchCompose. Features listed under "Not available yet" in the
+        app (for example masks, shadows, image export or PSD) are planned, not broken.
+        Please do not attach project files or images you are not allowed to share.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Compose
+        - Drawings
+        - Boards
+        - Project files (open, save, missing files)
+        - Canvas (zoom, pan, rulers)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable reproduction.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: How do you run ArchCompose?
+      options:
+        - Installed desktop app
+        - Desktop app from source (npm run tauri dev)
+        - Browser development build (npm run dev)
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system and version, ArchCompose version or commit, and other relevant details.
+      placeholder: Windows 11 24H2, ArchCompose 0.1.0 (commit abc1234)
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Screenshots, error notices shown in the app, or console output.

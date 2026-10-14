@@ -1,8 +1,9 @@
+import { writeFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 import { chooseImages } from "./fixtures";
 
 /**
- * Renders the documentation screenshots in docs/screenshots. Skipped unless
+ * Renders the documentation screenshots in docs/screenshots as WebP. Skipped unless
  * SCREENSHOTS=1, because it overwrites tracked files:
  *
  *   SCREENSHOTS=1 npx playwright test screenshots
@@ -10,6 +11,22 @@ import { chooseImages } from "./fixtures";
 test.skip(!process.env.SCREENSHOTS, "Set SCREENSHOTS=1 to regenerate documentation screenshots.");
 
 const OUT = "docs/screenshots";
+
+/** Captures the page and encodes it as WebP with the browser's own encoder. */
+async function capture(page: Page, name: string) {
+  const png = (await page.screenshot()).toString("base64");
+  const webp = await page.evaluate(async (data) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${data}`;
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    canvas.getContext("2d")!.drawImage(image, 0, 0);
+    return canvas.toDataURL("image/webp", 0.9).split(",")[1];
+  }, png);
+  writeFileSync(`${OUT}/${name}.webp`, Buffer.from(webp, "base64"));
+}
 
 async function populate(page: Page) {
   await page.goto("/");
@@ -56,7 +73,7 @@ test("documentation screenshots", async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 960 });
   await populate(page);
   await page.mouse.move(800, 500);
-  await page.screenshot({ path: `${OUT}/compose.png` });
+  await capture(page, "compose");
 
   await page.keyboard.press("Control+2");
   await chooseImages(
@@ -68,7 +85,7 @@ test("documentation screenshots", async ({ page }) => {
   await page.getByLabel("Level").first().press("Enter");
   await page.getByLabel("Revision description").fill("Issued for design review");
   await page.getByRole("button", { name: "Add revision" }).click();
-  await page.screenshot({ path: `${OUT}/drawings.png` });
+  await capture(page, "drawings");
 
   await page.keyboard.press("Control+3");
   await page.getByRole("button", { name: "New A1 board" }).click();
@@ -103,10 +120,10 @@ test("documentation screenshots", async ({ page }) => {
   await page.getByLabel("Rows").first().fill("2");
   await page.getByLabel("Rows").first().press("Enter");
   await expect(page.getByTestId("board-issues")).toBeVisible();
-  await page.screenshot({ path: `${OUT}/boards.png` });
+  await capture(page, "boards");
 
   await page.setViewportSize({ width: 1100, height: 700 });
   await page.keyboard.press("Control+1");
   await page.waitForTimeout(200);
-  await page.screenshot({ path: `${OUT}/compose-small-window.png` });
+  await capture(page, "compose-small-window");
 });

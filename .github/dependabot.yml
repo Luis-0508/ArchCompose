@@ -1,0 +1,38 @@
+# Dependabot checks every ecosystem every calendar day, including weekends, and keeps up to
+# 100 update pull requests open per ecosystem so updates stay visible. Add one update block
+# per package ecosystem as soon as it is introduced.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: cron
+      cronjob: "0 6 * * *"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 100
+    commit-message:
+      prefix: ci
+
+  # Frontend and tooling: package.json and package-lock.json in the repository root.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: cron
+      cronjob: "0 6 * * *"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 100
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+
+  # Desktop backend: the Cargo workspace in src-tauri (archcompose and archcompose-core).
+  - package-ecosystem: cargo
+    directory: /src-tauri
+    schedule:
+      interval: cron
+      cronjob: "0 6 * * *"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 100
+    commit-message:
+      prefix: deps

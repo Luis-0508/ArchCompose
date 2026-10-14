@@ -1,11 +1,31 @@
+# Dependencies and build output
 node_modules
 dist
 *.local
 .vite
 src-tauri/target
 src-tauri/gen/schemas
+coverage/
+
+# Test output
 playwright-report
 test-results
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Editors and agents
+.idea/
+.vscode/
+*.swp
+*.swo
+.claude/
+
+# OS
 .DS_Store
 Thumbs.db
-.claude/

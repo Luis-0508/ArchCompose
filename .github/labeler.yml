@@ -1,0 +1,82 @@
+# Labels applied to pull requests from the changed paths. Keep the label list in
+# .github/workflows/labeler.yml in sync when adding or renaming labels.
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/**"
+          - "index.html"
+          - "vite.config.ts"
+          - "tsconfig*.json"
+
+desktop:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src-tauri/**"
+          - "src/platform/desktop.ts"
+
+model:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/model/**"
+
+engine:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/engine/**"
+          - "src-tauri/core/src/engine.rs"
+          - "docs/UPSTREAM.md"
+
+design-system:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/ui/**"
+          - "src/styles/**"
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.test.ts"
+          - "e2e/**"
+          - "playwright.config.ts"
+          - "scripts/desktop-smoke.mjs"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**"
+
+assets:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "public/**"
+          - "docs/screenshots/**"
+          - "src-tauri/icons/**"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "package-lock.json"
+          - "src-tauri/Cargo.toml"
+          - "src-tauri/core/Cargo.toml"
+          - "src-tauri/Cargo.lock"
+          - ".github/dependabot.yml"
+
+tooling:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "eslint.config.js"
+          - ".prettierrc.json"
+          - ".prettierignore"
+          - ".editorconfig"
+          - ".gitattributes"
+          - ".gitignore"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/labeler.yml"
+          - ".github/dependabot.yml"

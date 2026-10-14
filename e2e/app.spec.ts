@@ -16,6 +16,28 @@ test("starts in Compose with a clear empty state and an honest renderer status",
   await expect(perspective).toHaveAttribute("aria-disabled", "true");
 });
 
+test("shows engine features as unavailable in the browser build", async ({ page }) => {
+  await chooseImages(page, () => page.getByRole("button", { name: "Import render" }).click(), [
+    { name: "courtyard-dusk.png", kind: "render" },
+  ]);
+  await expect(page.getByRole("button", { name: "Export PNG" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Export layered PSD" })).toBeDisabled();
+  await expect(page.getByText("Exporting needs the desktop app")).toBeVisible();
+  await page.getByRole("option", { name: /Base render/ }).click();
+  await expect(page.getByRole("slider", { name: "Exposure" })).toBeDisabled();
+  await expect(page.getByText("Adjustments need the desktop app")).toBeVisible();
+});
+
+test("lists third-party licenses", async ({ page }) => {
+  await page.getByRole("button", { name: "About and licenses" }).click();
+  const dialog = page.getByRole("dialog", { name: "About and licenses" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("GNU Affero General Public License");
+  await expect(dialog.getByRole("cell", { name: "photocraft-compose", exact: true })).toBeVisible();
+  await dialog.getByRole("button", { name: "Close" }).click();
+  await expect(dialog).toBeHidden();
+});
+
 test("switches workspaces by click and keyboard", async ({ page }) => {
   await page.getByRole("radio", { name: "Drawings" }).click();
   await expect(page.getByRole("heading", { name: "Build the drawing set" })).toBeVisible();

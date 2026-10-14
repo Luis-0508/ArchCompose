@@ -1,14 +1,23 @@
 [package]
 name = "archcompose-core"
 version = "0.1.0"
-description = "ArchCompose backend logic without the window runtime: file access and the engine boundary."
+description = "ArchCompose backend logic without the window runtime: file access and the image engine adapter."
 license = "AGPL-3.0-only"
 edition = "2021"
-rust-version = "1.80"
+rust-version = "1.95"
 publish = false
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
+# PhotoCraft image engine (MIT OR Apache-2.0), pinned to one upstream commit. Only
+# `src/engine/` may use these crates. See docs/UPSTREAM.md and THIRD_PARTY_NOTICES.md.
+photocraft-algo = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-cms = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-codecs = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-compose = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-doc = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-psd = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
+photocraft-raster = { git = "https://github.com/storytold/photocraft", rev = "c699e3cda69f4852b43c0b191ab0091aaeff9d6a" }
 
 [dev-dependencies]
 serde_json = "1"

@@ -5,6 +5,10 @@ import { defineConfig, devices } from "@playwright/test";
  * The browser platform adapter replaces Tauri's file dialogs with file inputs, so
  * every workflow except native dialogs and disk paths is covered here.
  */
+// E2E_PORT runs the tests on another port when 1420 is in use (another checkout's dev server).
+const port = Number(process.env.E2E_PORT ?? 1420);
+const baseURL = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: true,
@@ -12,7 +16,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://localhost:1420",
+    baseURL,
     trace: "retain-on-failure",
     viewport: { width: 1440, height: 900 },
   },
@@ -23,8 +27,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:1420",
+    command: port === 1420 ? "npm run dev" : `npx vite --port ${port} --strictPort`,
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },

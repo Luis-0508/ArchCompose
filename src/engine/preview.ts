@@ -1,9 +1,9 @@
 /**
  * Preview image handling backed by the system web view.
  *
- * This is deliberately not an image engine: it only decodes files the web view
- * can already display and reads their pixel size. Pixel editing, export and PSD
- * belong to a future engine adapter (see docs/ARCHITECTURE.md, "Engine boundary").
+ * The web view decodes the formats it can display and reads their pixel size. The
+ * desktop app's image engine reads further formats (TIFF, PSD, OpenEXR, …) and hands
+ * the web view a PNG of them; see docs/ARCHITECTURE.md, "Engine boundary".
  */
 
 const MIME_BY_EXTENSION: Record<string, string> = {
@@ -17,10 +17,36 @@ const MIME_BY_EXTENSION: Record<string, string> = {
   svg: "image/svg+xml",
 };
 
-/** Formats an architect is likely to try that the preview renderer cannot read. */
-const ENGINE_ONLY_EXTENSIONS = new Set(["psd", "psb", "tif", "tiff", "exr", "hdr", "pdf", "dwg"]);
+/** Formats the desktop image engine reads, with the MIME type of the original file. */
+const ENGINE_MIME_BY_EXTENSION: Record<string, string> = {
+  tif: "image/tiff",
+  tiff: "image/tiff",
+  psd: "image/vnd.adobe.photoshop",
+  psb: "image/vnd.adobe.photoshop",
+  exr: "image/x-exr",
+  hdr: "image/vnd.radiance",
+  tga: "image/x-tga",
+  qoi: "image/qoi",
+};
+
+/** Formats an architect is likely to try that neither the web view nor the engine reads. */
+const UNSUPPORTED_EXTENSIONS = new Set(["pdf", "dwg"]);
 
 export const PREVIEW_EXTENSIONS = Object.keys(MIME_BY_EXTENSION);
+export const ENGINE_EXTENSIONS = Object.keys(ENGINE_MIME_BY_EXTENSION);
+
+/** Whether the desktop image engine, not the web view, decodes this file. */
+export function isEngineFormat(name: string): boolean {
+  return Object.hasOwn(ENGINE_MIME_BY_EXTENSION, extensionOf(name));
+}
+
+/** MIME type of an engine-decoded file as recorded in the project. */
+export function engineMimeFor(name: string): string {
+  const ext = extensionOf(name);
+  return Object.hasOwn(ENGINE_MIME_BY_EXTENSION, ext)
+    ? ENGINE_MIME_BY_EXTENSION[ext]!
+    : "application/octet-stream";
+}
 
 export class UnsupportedImageError extends Error {
   constructor(message: string) {
@@ -39,7 +65,12 @@ export function previewMimeFor(name: string): string {
   const ext = extensionOf(name);
   const mime = MIME_BY_EXTENSION[ext];
   if (mime) return mime;
-  if (ENGINE_ONLY_EXTENSIONS.has(ext)) {
+  if (Object.hasOwn(ENGINE_MIME_BY_EXTENSION, ext)) {
+    throw new UnsupportedImageError(
+      `${ext.toUpperCase()} files need the desktop app, which reads them with its image engine. Export the file as PNG or JPEG to use it here.`,
+    );
+  }
+  if (UNSUPPORTED_EXTENSIONS.has(ext)) {
     throw new UnsupportedImageError(
       `${ext.toUpperCase()} files are not supported yet. Export the file as PNG or JPEG to use it now.`,
     );

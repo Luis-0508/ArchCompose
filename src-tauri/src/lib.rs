@@ -1,6 +1,7 @@
 //! ArchCompose desktop backend: window setup and the commands the frontend calls.
-//! The document model lives in the frontend; the backend owns file access and,
-//! later, the image engine (see `archcompose_core::engine`).
+//! The document model lives in the frontend; the backend owns file access and the
+//! image engine (see `archcompose_core::engine`). Image work runs on blocking worker
+//! threads so the window stays responsive.
 
 use archcompose_core::{engine, files};
 use tauri::ipc::Response;
@@ -33,6 +34,44 @@ fn engine_status() -> engine::EngineStatus {
     engine::status()
 }
 
+/// Decodes a file the web view cannot display and returns an 8-bit PNG of it.
+#[tauri::command]
+async fn engine_decode_preview(path: String) -> Result<Response, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::decode_preview(&path))
+        .await
+        .map_err(|e| format!("Reading the image was interrupted: {e}."))?
+        .map(Response::new)
+}
+
+/// A layer's image with its adjustments applied, reduced for the canvas, as PNG.
+#[tauri::command]
+async fn engine_layer_preview(path: String, adjust: engine::Adjust) -> Result<Response, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::layer_preview(&path, &adjust))
+        .await
+        .map_err(|e| format!("The preview was interrupted: {e}."))?
+        .map(Response::new)
+}
+
+#[tauri::command]
+async fn engine_export_png(
+    spec: engine::CompositionSpec,
+    path: String,
+) -> Result<engine::ExportReport, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::export_png(&spec, &path))
+        .await
+        .map_err(|e| format!("The export was interrupted: {e}."))?
+}
+
+#[tauri::command]
+async fn engine_export_psd(
+    spec: engine::CompositionSpec,
+    path: String,
+) -> Result<engine::ExportReport, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::export_psd(&spec, &path))
+        .await
+        .map_err(|e| format!("The export was interrupted: {e}."))?
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -41,7 +80,11 @@ pub fn run() {
             read_file,
             read_project_file,
             write_project_file,
-            engine_status
+            engine_status,
+            engine_decode_preview,
+            engine_layer_preview,
+            engine_export_png,
+            engine_export_psd
         ])
         .run(tauri::generate_context!())
         .expect("ArchCompose failed to start the window");

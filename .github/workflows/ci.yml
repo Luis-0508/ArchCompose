@@ -33,6 +33,9 @@ jobs:
       - run: npm ci
       - name: Format
         run: npm run format:check
+      - name: Third-party licenses are up to date
+        if: runner.os == 'Windows'
+        run: node scripts/third-party-licenses.mjs --check
       - name: Lint
         run: npm run lint
       - name: Type check

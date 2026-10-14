@@ -1,6 +1,14 @@
 import { createId } from "./ids";
 import { replaceById } from "./project";
-import type { AssetRef, ComposeDoc, ComposeDocId, ComposeLayer, LayerId, Project } from "./types";
+import type {
+  AssetRef,
+  ComposeDoc,
+  ComposeDocId,
+  ComposeLayer,
+  LayerAdjustments,
+  LayerId,
+  Project,
+} from "./types";
 
 export const MIN_LAYER_SCALE = 0.01;
 export const MAX_LAYER_SCALE = 20;
@@ -78,7 +86,57 @@ export function addLayer(
   ];
 }
 
-export type LayerPatch = Partial<Omit<ComposeLayer, "id" | "assetId">>;
+export type LayerPatch = Partial<Omit<ComposeLayer, "id" | "assetId" | "adjust">>;
+
+export const NEUTRAL_ADJUSTMENTS: LayerAdjustments = {
+  exposure: 0,
+  brightness: 0,
+  contrast: 0,
+  saturation: 0,
+};
+
+/** Allowed range of each adjustment; mirrored by the engine adapter. */
+export const ADJUSTMENT_RANGES: Record<keyof LayerAdjustments, readonly [number, number]> = {
+  exposure: [-5, 5],
+  brightness: [-150, 150],
+  contrast: [-50, 100],
+  saturation: [-100, 100],
+};
+
+export function hasAdjustments(layer: ComposeLayer): boolean {
+  const a = layer.adjust;
+  return (
+    !!a && (Object.keys(NEUTRAL_ADJUSTMENTS) as (keyof LayerAdjustments)[]).some((k) => a[k] !== 0)
+  );
+}
+
+/**
+ * Changes a layer's adjustments. Values are clamped to their ranges; a layer whose
+ * adjustments are all neutral stores none.
+ */
+export function setLayerAdjustments(
+  project: Project,
+  docId: ComposeDocId,
+  layerId: LayerId,
+  patch: Partial<LayerAdjustments> | null,
+): Project {
+  return updateComposeDoc(project, docId, (d) => ({
+    ...d,
+    layers: replaceById(d.layers, layerId, (l) => {
+      const next: LayerAdjustments = { ...NEUTRAL_ADJUSTMENTS, ...(patch ? l.adjust : null) };
+      for (const [key, value] of Object.entries(patch ?? {}) as [
+        keyof LayerAdjustments,
+        number,
+      ][]) {
+        const [min, max] = ADJUSTMENT_RANGES[key];
+        next[key] = Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : 0;
+      }
+      const rest: ComposeLayer = { ...l };
+      delete rest.adjust;
+      return hasAdjustments({ ...rest, adjust: next }) ? { ...rest, adjust: next } : rest;
+    }),
+  }));
+}
 
 export function updateLayer(
   project: Project,

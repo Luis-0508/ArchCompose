@@ -3,6 +3,7 @@ import { importRenderAsComposeDoc, openProject, placeAssetInCompose } from "../.
 import { useShortcuts } from "../../app/shortcuts";
 import { capability } from "../../engine/capabilities";
 import { removeLayer, updateLayer } from "../../model/compose";
+import { platform } from "../../platform";
 import { selectComposeDoc, useAppStore, type ComposeTool } from "../../state/store";
 import { Button } from "../../ui/Button";
 import { Tabs, ToolRail, type ChoiceOption } from "../../ui/Choice";
@@ -52,7 +53,6 @@ const PLANNED_TOOLS: readonly ChoiceOption<string>[] = (
     ["compose.mask", "mask"],
     ["compose.shadow", "shadow"],
     ["compose.segment", "segment"],
-    ["compose.adjust", "adjust"],
   ] as const
 ).map(([id, icon]) => ({
   value: id,
@@ -102,7 +102,8 @@ function ComposeEmpty() {
           </Button>
         </div>
         <p className={local.heroFoot}>
-          PNG, JPEG, WebP or AVIF. You can also drop a file anywhere on the window.
+          {platform.engine ? "PNG, JPEG, TIFF, PSD, OpenEXR or WebP." : "PNG, JPEG, WebP or AVIF."}{" "}
+          You can also drop a file anywhere on the window.
         </p>
       </div>
     </div>

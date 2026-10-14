@@ -1,7 +1,13 @@
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
 import { open, save } from "@tauri-apps/plugin-dialog";
-import { PREVIEW_EXTENSIONS, previewMimeFor } from "../engine/preview";
+import type { ExportFormat, ExportReport } from "../engine/composition";
+import {
+  ENGINE_EXTENSIONS,
+  isEngineFormat,
+  PREVIEW_EXTENSIONS,
+  previewMimeFor,
+} from "../engine/preview";
 import { PROJECT_FILE_EXTENSION } from "../model/serialization";
 import { PlatformError, type EngineStatus, type PickedFile, type Platform } from "./types";
 
@@ -18,7 +24,12 @@ async function call<T>(command: string, args?: Record<string, unknown>): Promise
   }
 }
 
+/** Reads a file for display. Formats the web view cannot show are decoded by the engine. */
 async function readBlob(path: string, name: string): Promise<Blob> {
+  if (isEngineFormat(name)) {
+    const png = await call<ArrayBuffer>("engine_decode_preview", { path });
+    return new Blob([png], { type: "image/png" });
+  }
   const mime = previewMimeFor(name);
   const bytes = await call<ArrayBuffer>("read_file", { path });
   return new Blob([bytes], { type: mime });
@@ -26,12 +37,20 @@ async function readBlob(path: string, name: string): Promise<Blob> {
 
 async function readPaths(paths: string[]): Promise<PickedFile[]> {
   return Promise.all(
-    paths.map(async (path) => {
+    paths.map(async (path): Promise<PickedFile> => {
       const name = baseName(path);
-      return { name, path, blob: await readBlob(path, name) };
+      const blob = await readBlob(path, name);
+      if (!isEngineFormat(name)) return { name, path, blob };
+      const byteSize = await call<number>("file_size", { path });
+      return { name, path, blob, decodedBy: "engine", byteSize };
     }),
   );
 }
+
+const EXPORT_FILTERS: Record<ExportFormat, { name: string; extensions: string[] }> = {
+  png: { name: "PNG image", extensions: ["png"] },
+  psd: { name: "Photoshop document", extensions: ["psd"] },
+};
 
 export const desktopPlatform: Platform = {
   kind: "desktop",
@@ -41,7 +60,7 @@ export const desktopPlatform: Platform = {
       multiple: true,
       directory: false,
       title: "Import images",
-      filters: [{ name: "Images", extensions: PREVIEW_EXTENSIONS }],
+      filters: [{ name: "Images", extensions: [...PREVIEW_EXTENSIONS, ...ENGINE_EXTENSIONS] }],
     });
     if (!selection) return [];
     return readPaths(Array.isArray(selection) ? selection : [selection]);
@@ -101,5 +120,27 @@ export const desktopPlatform: Platform = {
 
   engineStatus() {
     return call<EngineStatus>("engine_status");
+  },
+
+  engine: {
+    formats: ENGINE_EXTENSIONS,
+
+    async layerPreview(path, adjust) {
+      const png = await call<ArrayBuffer>("engine_layer_preview", { path, adjust });
+      return new Blob([png], { type: "image/png" });
+    },
+
+    async chooseExportTarget(format, suggestedName) {
+      const filter = EXPORT_FILTERS[format];
+      return save({
+        title: format === "png" ? "Export image" : "Export PSD",
+        defaultPath: `${suggestedName}.${format}`,
+        filters: [filter],
+      });
+    },
+
+    exportComposition(spec, format, path) {
+      return call<ExportReport>(`engine_export_${format}`, { spec, path });
+    },
   },
 };

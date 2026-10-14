@@ -3,7 +3,8 @@
  * preview engine, the asset cache and the document store. UI components call
  * these instead of touching the platform directly.
  */
-import { previewMimeFor, probeImage } from "../engine/preview";
+import { compositionSpec, describeExport, type ExportFormat } from "../engine/composition";
+import { engineMimeFor, previewMimeFor, probeImage } from "../engine/preview";
 import { addLayer, createComposeDoc } from "../model/compose";
 import { addDrawing } from "../model/drawings";
 import { addAsset, createProject, type NewAsset } from "../model/project";
@@ -29,8 +30,8 @@ async function confirmDiscard(action: string): Promise<boolean> {
 }
 
 /**
- * Decodes files with the preview engine and adds them to the project library in a
- * single undo step. Files that cannot be read are reported and skipped.
+ * Decodes files for preview and adds them to the project library in a single undo
+ * step. Files that cannot be read are reported and skipped.
  */
 export async function importFiles(files: PickedFile[], kind: AssetKind): Promise<AssetRef[]> {
   if (files.length === 0) return [];
@@ -42,13 +43,23 @@ export async function importFiles(files: PickedFile[], kind: AssetKind): Promise
     for (const file of files) {
       let url: string | null = null;
       try {
-        const mime = previewMimeFor(file.name);
-        const blob = file.blob.type === mime ? file.blob : new Blob([file.blob], { type: mime });
+        // Engine-decoded files arrive as a PNG preview; the asset records the original type.
+        const byEngine = file.decodedBy === "engine";
+        const displayMime = byEngine ? "image/png" : previewMimeFor(file.name);
+        const blob =
+          file.blob.type === displayMime ? file.blob : new Blob([file.blob], { type: displayMime });
         url = URL.createObjectURL(blob);
         const size = await probeImage(url, file.name);
         prepared.push({
           url,
-          asset: { name: file.name, kind, path: file.path, mime, byteSize: blob.size, ...size },
+          asset: {
+            name: file.name,
+            kind,
+            path: file.path,
+            mime: byEngine ? engineMimeFor(file.name) : displayMime,
+            byteSize: file.byteSize ?? blob.size,
+            ...size,
+          },
         });
       } catch (error) {
         if (url) URL.revokeObjectURL(url);
@@ -248,5 +259,39 @@ export async function saveProject(saveAs = false): Promise<boolean> {
   } catch (error) {
     store().notify("error", `The project was not saved. ${messageOf(error)}`);
     return false;
+  }
+}
+
+/**
+ * Renders a compose document with the image engine and saves it as PNG or layered
+ * PSD. Exporting does not change the project, so it adds no undo step.
+ */
+export async function exportComposeDoc(docId: ComposeDocId, format: ExportFormat): Promise<void> {
+  const engine = platform.engine;
+  if (!engine) {
+    store().notify(
+      "error",
+      "Exporting images needs the desktop app, which includes the image engine.",
+    );
+    return;
+  }
+  const project = store().history.present;
+  const doc = project.composeDocs.find((d) => d.id === docId);
+  if (!doc) return;
+  const built = compositionSpec(project, doc, format);
+  if (!built.ok) {
+    store().notify("error", built.error);
+    return;
+  }
+  try {
+    const path = await engine.chooseExportTarget(format, doc.name.replace(/[\\/:*?"<>|]/g, "-"));
+    if (!path) return;
+    store().setBusy(format === "png" ? "Rendering image" : "Writing PSD");
+    const report = await engine.exportComposition(built.spec, format, path);
+    store().notify("success", describeExport(report, format));
+  } catch (error) {
+    store().notify("error", `The export failed. ${messageOf(error)}`);
+  } finally {
+    store().setBusy(null);
   }
 }

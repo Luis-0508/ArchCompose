@@ -92,7 +92,9 @@ export function Viewport({
   const [pointer, setPointer] = useState<Point | null>(null);
   const pan = useRef<{ x: number; y: number; camera: Camera } | null>(null);
 
-  // Keep the store informed about viewport and content size.
+  // Keep the store informed about viewport and content size. Opening a project clears the
+  // stored views, so a view that disappears is measured again even if nothing else changed.
+  const hasView = view !== undefined;
   useLayoutEffect(() => {
     const node = stage.current;
     if (!node) return;
@@ -106,7 +108,7 @@ export function Viewport({
     const observer = new ResizeObserver(measure);
     observer.observe(node);
     return () => observer.disconnect();
-  }, [viewKey, content.width, content.height, syncView]);
+  }, [viewKey, content.width, content.height, syncView, hasView]);
 
   const camera = view?.camera;
 

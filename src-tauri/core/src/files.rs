@@ -46,6 +46,27 @@ fn checked_file(path: &str, limit: u64) -> Result<PathBuf, String> {
     Ok(path)
 }
 
+/// Whether two paths name the same file. Used to refuse exports that would overwrite a
+/// source image. Paths that cannot be resolved are compared as written, ignoring case on
+/// Windows.
+pub fn same_file(a: &str, b: &str) -> bool {
+    let resolve = |p: &str| fs::canonicalize(p).unwrap_or_else(|_| PathBuf::from(p));
+    let (a, b) = (resolve(a), resolve(b));
+    if cfg!(windows) {
+        a.to_string_lossy().to_lowercase() == b.to_string_lossy().to_lowercase()
+    } else {
+        a == b
+    }
+}
+
+/// Size of an image file in bytes, with the same checks as [`read_bytes`].
+pub fn image_size(path: &str) -> Result<u64, String> {
+    let path = checked_file(path, MAX_IMAGE_BYTES)?;
+    fs::metadata(&path)
+        .map(|m| m.len())
+        .map_err(|e| format!("“{}” could not be read: {e}.", file_name(&path)))
+}
+
 pub fn read_bytes(path: &str) -> Result<Vec<u8>, String> {
     let path = checked_file(path, MAX_IMAGE_BYTES)?;
     fs::read(&path).map_err(|e| format!("“{}” could not be read: {e}.", file_name(&path)))
@@ -62,6 +83,11 @@ pub fn read_project(path: &str) -> Result<String, String> {
 /// Writes `contents` next to `path` under a temporary name, flushes it to disk and
 /// then renames it over the target, which is atomic on the same volume.
 pub fn write_atomic(path: &str, contents: &str) -> Result<(), String> {
+    write_atomic_bytes(path, contents.as_bytes())
+}
+
+/// [`write_atomic`] for binary data such as exported images.
+pub fn write_atomic_bytes(path: &str, contents: &[u8]) -> Result<(), String> {
     if path.trim().is_empty() {
         return Err("No file path was given.".into());
     }
@@ -81,7 +107,7 @@ pub fn write_atomic(path: &str, contents: &str) -> Result<(), String> {
     let temp = dir.join(format!(".{name}.{}.tmp", std::process::id()));
     let result = (|| -> std::io::Result<()> {
         let mut file = fs::File::create(&temp)?;
-        file.write_all(contents.as_bytes())?;
+        file.write_all(contents)?;
         file.sync_all()?;
         drop(file);
         fs::rename(&temp, &target)
@@ -108,6 +134,19 @@ mod tests {
         assert_eq!(read_project(p).unwrap(), "{\"v\":2}");
         let leftovers: Vec<_> = fs::read_dir(dir.path()).unwrap().collect();
         assert_eq!(leftovers.len(), 1, "temporary files must not remain");
+    }
+
+    #[test]
+    fn writes_binary_data_and_detects_the_same_file() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("export.png");
+        let p = path.to_str().unwrap();
+        write_atomic_bytes(p, &[0, 159, 146, 150]).unwrap();
+        assert_eq!(read_bytes(p).unwrap(), vec![0, 159, 146, 150]);
+        assert_eq!(image_size(p).unwrap(), 4);
+        assert!(same_file(p, p));
+        let other = dir.path().join("other.png");
+        assert!(!same_file(p, other.to_str().unwrap()));
     }
 
     #[test]

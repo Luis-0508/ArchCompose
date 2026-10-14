@@ -17,6 +17,8 @@ export interface Capability {
   provider: CapabilityProvider;
   /** One sentence for tooltips: what it does, or why it is not available yet. */
   note: string;
+  /** Set when the capability needs the desktop app's image engine. */
+  desktopOnly?: true;
 }
 
 export const CAPABILITIES = {
@@ -26,11 +28,18 @@ export const CAPABILITIES = {
     provider: "preview",
     note: "PNG, JPEG, WebP, AVIF, GIF, BMP and SVG are decoded by the system web view for preview.",
   },
+  "image.engineFormats": {
+    label: "Import TIFF, PSD and OpenEXR",
+    status: "available",
+    provider: "engine",
+    desktopOnly: true,
+    note: "TIFF, PSD, PSB, OpenEXR, Radiance HDR, TGA and QOI are read by the image engine and converted to sRGB. HDR values above white are clipped.",
+  },
   "compose.arrange": {
     label: "Place and arrange layers",
     status: "available",
     provider: "archcompose",
-    note: "Move, scale, reorder, hide and fade placed images. Shown with a preview renderer.",
+    note: "Move, scale, reorder, hide and fade placed images. The canvas is a web view preview; exports are rendered by the image engine.",
   },
   "compose.horizon": {
     label: "Horizon guide",
@@ -64,21 +73,24 @@ export const CAPABILITIES = {
   },
   "compose.adjust": {
     label: "Adjustments",
-    status: "planned",
+    status: "available",
     provider: "engine",
-    note: "Non-destructive colour and tone adjustments need the image engine.",
+    desktopOnly: true,
+    note: "Exposure, brightness, contrast and saturation per layer, applied non-destructively by the image engine in the canvas and in exports.",
   },
   "compose.export": {
     label: "Export image",
-    status: "planned",
+    status: "available",
     provider: "engine",
-    note: "Full-resolution export needs the image engine. The preview is not export quality.",
+    desktopOnly: true,
+    note: "Renders the view at full resolution with the image engine and saves a PNG with transparency, 16-bit when a source is 16-bit.",
   },
   "file.psd": {
     label: "PSD import and export",
-    status: "planned",
+    status: "available",
     provider: "engine",
-    note: "Layered PSD files need the image engine.",
+    desktopOnly: true,
+    note: "Opens the composite image of PSD and PSB files and exports views as layered PSD. Layers inside an imported PSD are not separated.",
   },
   "drawings.pdf": {
     label: "PDF and vector drawings",
@@ -114,4 +126,10 @@ export function capability(id: CapabilityId): Capability {
 
 export function isAvailable(id: CapabilityId): boolean {
   return CAPABILITIES[id].status === "available";
+}
+
+/** Whether a capability works in this build: desktop-only ones need the image engine. */
+export function isAvailableIn(id: CapabilityId, host: { engine: unknown }): boolean {
+  const cap: Capability = CAPABILITIES[id];
+  return cap.status === "available" && (!cap.desktopOnly || host.engine !== null);
 }

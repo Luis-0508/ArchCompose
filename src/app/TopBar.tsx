@@ -23,7 +23,13 @@ export function BrandMark() {
   );
 }
 
-export function TopBar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
+export function TopBar({
+  onShowShortcuts,
+  onShowLicenses,
+}: {
+  onShowShortcuts: () => void;
+  onShowLicenses: () => void;
+}) {
   const workspace = useAppStore((s) => s.workspace);
   const setWorkspace = useAppStore((s) => s.setWorkspace);
   const undoEntry = useAppStore((s) => s.history.past.at(-1));
@@ -109,6 +115,7 @@ export function TopBar({ onShowShortcuts }: { onShowShortcuts: () => void }) {
           shortcut="?"
           onClick={onShowShortcuts}
         />
+        <IconButton icon="info" label="About and licenses" onClick={onShowLicenses} />
         <ProfileMenu />
       </div>
     </header>

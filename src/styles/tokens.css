@@ -1,0 +1,101 @@
+/*
+ * ArchCompose design tokens.
+ *
+ * Graphite chrome, vellum text, and one accent: canary trace yellow, the colour of
+ * the sketch paper architects layer over drawings. Redline is reserved for errors,
+ * cyanotype for references and links. Paper and ink are used only on sheets.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --c-well: #1f2124;
+  --c-well-dot: #2c2f33;
+  --c-app: #26292c;
+  --c-panel: #2d3034;
+  --c-raised: #363a3f;
+  --c-raised-hover: #3e4248;
+  --c-line: #3b3f45;
+  --c-line-strong: #4b5057;
+
+  /* Text */
+  --c-text: #e7e4da;
+  --c-text-muted: #a4a8ae;
+  --c-text-faint: #737880;
+
+  /* Signals */
+  --c-accent: #e8c547;
+  --c-accent-hover: #f0d264;
+  --c-accent-ink: #26292c;
+  --c-accent-soft: rgb(232 197 71 / 14%);
+  --c-accent-line: rgb(232 197 71 / 55%);
+  --c-error: #e5625e;
+  --c-error-soft: rgb(229 98 94 / 14%);
+  --c-warning: #e0a050;
+  --c-info: #79a8d0;
+  --c-info-soft: rgb(121 168 208 / 14%);
+  --c-success: #9cc59a;
+
+  /* Sheets */
+  --c-paper: #f7f6f2;
+  --c-paper-line: #d9d6cc;
+  --c-ink: #1d1f22;
+  --c-ink-muted: #5d6067;
+
+  /* Type: one family, the width axis carries hierarchy */
+  --font: "Archivo Variable", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --fs-2xs: 10px;
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 15px;
+  --fs-xl: 20px;
+  --fs-2xl: 30px;
+  --stretch-condensed: 87%;
+  --stretch-normal: 100%;
+  --stretch-wide: 112%;
+  --stretch-expanded: 125%;
+
+  /* Space: 4 px base */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+
+  /* Radii follow hierarchy: docked chrome is square, controls are slightly eased,
+     floating surfaces are rounder. */
+  --r-control: 4px;
+  --r-float: 8px;
+
+  --h-control: 28px;
+  --h-control-sm: 24px;
+  --h-topbar: 44px;
+  --h-titleblock: 34px;
+  --w-rail: 44px;
+  --w-left: 264px;
+  --w-right: 288px;
+
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 38%), 0 0 0 1px var(--c-line-strong);
+  --focus-ring: 0 0 0 2px var(--c-app), 0 0 0 4px var(--c-accent);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 90ms;
+  --t-med: 160ms;
+}
+
+@media (max-width: 1280px) {
+  :root {
+    --w-left: 236px;
+    --w-right: 256px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 0ms;
+    --t-med: 0ms;
+  }
+}

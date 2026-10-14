@@ -1,0 +1,117 @@
+/**
+ * The single list of user-facing capabilities and whether they work today.
+ *
+ * UI code asks this registry instead of hard-coding "coming soon" labels, so the
+ * state of every planned feature is visible and changeable in one place. When an
+ * engine (for example PhotoCraft, see docs/UPSTREAM.md) starts providing a
+ * capability, its status changes here and nowhere else.
+ */
+export type CapabilityStatus = "available" | "planned";
+
+/** Who provides, or is expected to provide, the capability. */
+export type CapabilityProvider = "archcompose" | "preview" | "engine";
+
+export interface Capability {
+  label: string;
+  status: CapabilityStatus;
+  provider: CapabilityProvider;
+  /** One sentence for tooltips: what it does, or why it is not available yet. */
+  note: string;
+}
+
+export const CAPABILITIES = {
+  "image.import": {
+    label: "Import images",
+    status: "available",
+    provider: "preview",
+    note: "PNG, JPEG, WebP, AVIF, GIF, BMP and SVG are decoded by the system web view for preview.",
+  },
+  "compose.arrange": {
+    label: "Place and arrange layers",
+    status: "available",
+    provider: "archcompose",
+    note: "Move, scale, reorder, hide and fade placed images. Shown with a preview renderer.",
+  },
+  "compose.horizon": {
+    label: "Horizon guide",
+    status: "available",
+    provider: "archcompose",
+    note: "A manual guide line for judging eye level. It does not calibrate perspective.",
+  },
+  "compose.perspective": {
+    label: "Perspective calibration",
+    status: "planned",
+    provider: "archcompose",
+    note: "Ground plane and vanishing point calibration for scale-aware placement.",
+  },
+  "compose.mask": {
+    label: "Masks",
+    status: "planned",
+    provider: "engine",
+    note: "Raster and vector masks need the image engine.",
+  },
+  "compose.shadow": {
+    label: "Contact shadows",
+    status: "planned",
+    provider: "engine",
+    note: "Contact and directional shadows need the image engine and a calibrated ground plane.",
+  },
+  "compose.segment": {
+    label: "Segmentation",
+    status: "planned",
+    provider: "engine",
+    note: "Automatic selection of sky, glazing and vegetation is not available.",
+  },
+  "compose.adjust": {
+    label: "Adjustments",
+    status: "planned",
+    provider: "engine",
+    note: "Non-destructive colour and tone adjustments need the image engine.",
+  },
+  "compose.export": {
+    label: "Export image",
+    status: "planned",
+    provider: "engine",
+    note: "Full-resolution export needs the image engine. The preview is not export quality.",
+  },
+  "file.psd": {
+    label: "PSD import and export",
+    status: "planned",
+    provider: "engine",
+    note: "Layered PSD files need the image engine.",
+  },
+  "drawings.pdf": {
+    label: "PDF and vector drawings",
+    status: "planned",
+    provider: "archcompose",
+    note: "Drawings are previewed as raster or SVG images. PDF import is planned.",
+  },
+  "drawings.compare": {
+    label: "Compare revisions",
+    status: "planned",
+    provider: "archcompose",
+    note: "Overlaying two revisions of a drawing is planned.",
+  },
+  "boards.scaledPlacement": {
+    label: "Place drawings at scale",
+    status: "planned",
+    provider: "archcompose",
+    note: "Drawings are fitted to their frame. True-scale placement needs calibrated drawings.",
+  },
+  "boards.pdf": {
+    label: "Export print PDF",
+    status: "planned",
+    provider: "archcompose",
+    note: "Print-ready PDF export is planned. The submission check already works.",
+  },
+} as const satisfies Record<string, Capability>;
+
+export type CapabilityId = keyof typeof CAPABILITIES;
+
+export function capability(id: CapabilityId): Capability {
+  return CAPABILITIES[id];
+}
+
+export function isAvailable(id: CapabilityId): boolean {
+  return CAPABILITIES[id].status === "available";
+}

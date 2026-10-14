@@ -1,0 +1,52 @@
+.library {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3);
+  flex: none;
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0 var(--s-2);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.item {
+  position: relative;
+}
+
+.itemActions {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  translate: 0 -50%;
+  display: flex;
+  background: var(--c-panel);
+  border-radius: var(--r-control);
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.item:hover .itemActions,
+.item:focus-within .itemActions {
+  opacity: 1;
+}
+
+.none {
+  margin: 0;
+  padding: var(--s-3);
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+}

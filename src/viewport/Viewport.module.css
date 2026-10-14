@@ -1,0 +1,74 @@
+.frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--ruler) minmax(0, 1fr);
+  grid-template-rows: var(--ruler) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.rulerCorner {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  background: var(--c-panel);
+  border-right: 1px solid var(--c-line-strong);
+  border-bottom: 1px solid var(--c-line-strong);
+  color: var(--c-text-faint);
+  font-size: var(--fs-2xs);
+  font-stretch: var(--stretch-condensed);
+}
+
+.rulerTop {
+  grid-area: 1 / 2;
+  width: 100%;
+  height: var(--ruler);
+  display: block;
+}
+
+.rulerLeft {
+  grid-area: 2 / 1;
+  width: var(--ruler);
+  height: 100%;
+  display: block;
+}
+
+.stage {
+  grid-area: 2 / 2;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  outline: none;
+}
+
+.stage:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--c-accent);
+}
+
+/* A fine dot grid on the pasteboard, like a cutting mat seen from afar. */
+.well {
+  background-color: var(--c-well);
+  background-image: radial-gradient(var(--c-well-dot) 1px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+
+.desk {
+  background-color: #34373b;
+  background-image: radial-gradient(#3d4146 1px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}

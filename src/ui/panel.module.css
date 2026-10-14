@@ -1,0 +1,162 @@
+.section {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  height: 36px;
+  padding: 0 var(--s-2) 0 var(--s-3);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 620;
+  font-stretch: var(--stretch-wide);
+  color: var(--c-text);
+}
+
+.sectionToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: -4px;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: var(--r-control);
+  background: none;
+  color: var(--c-text-muted);
+}
+.sectionToggle:hover {
+  color: var(--c-text);
+}
+
+.sectionActions {
+  display: flex;
+  gap: 2px;
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: 2px var(--s-3) var(--s-4);
+}
+
+.sectionBodyFlush {
+  padding-bottom: var(--s-2);
+}
+
+/* ---------------------------------------------------------------- empty states */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+  max-width: 360px;
+}
+
+.emptyCompact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: var(--s-4) var(--s-3);
+  color: var(--c-text-muted);
+}
+
+.emptyIcon {
+  color: var(--c-text-faint);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.emptyBody {
+  font-size: var(--fs-sm);
+  color: var(--c-text-muted);
+  line-height: 1.5;
+}
+.emptyBody p {
+  margin: 0;
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-1);
+}
+
+/* ---------------------------------------------------------------- planned */
+
+.planned {
+  padding: var(--s-3);
+  border: 1px dashed var(--c-line-strong);
+  border-radius: var(--r-control);
+}
+
+.plannedTitle {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
+
+.plannedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plannedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.plannedLabel {
+  font-size: var(--fs-sm);
+  color: var(--c-text-muted);
+}
+
+.plannedNote {
+  font-size: var(--fs-xs);
+  color: var(--c-text-faint);
+  line-height: 1.4;
+}
+
+/* ---------------------------------------------------------------- facts */
+
+.facts {
+  display: grid;
+  margin: 0;
+  gap: 5px;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: var(--s-2);
+  font-size: var(--fs-sm);
+}
+.fact dt {
+  color: var(--c-text-muted);
+}
+.fact dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

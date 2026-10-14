@@ -1,0 +1,15 @@
+[package]
+name = "archcompose-core"
+version = "0.1.0"
+description = "ArchCompose backend logic without the window runtime: file access and the engine boundary."
+license = "AGPL-3.0-only"
+edition = "2021"
+rust-version = "1.80"
+publish = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"
+tempfile = "3"

@@ -1,0 +1,238 @@
+.layout {
+  display: grid;
+  height: 100%;
+  min-height: 0;
+}
+
+.rail {
+  background: var(--c-app);
+  border-right: 1px solid var(--c-line);
+  overflow-y: auto;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--c-panel);
+  overflow: hidden;
+}
+.left {
+  border-right: 1px solid var(--c-line);
+}
+.right {
+  border-left: 1px solid var(--c-line);
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.context {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 40px;
+  padding: 0 var(--s-2) 0 var(--s-3);
+  background: var(--c-app);
+  border-bottom: 1px solid var(--c-line);
+  flex: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.document {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------- shared panel parts */
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  height: 40px;
+  padding: 0 var(--s-2) 0 var(--s-3);
+  border-bottom: 1px solid var(--c-line);
+  flex: none;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: 640;
+  font-stretch: var(--stretch-wide);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contextGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+
+.contextLabel {
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.contextSpacer {
+  flex: 1;
+}
+
+.contextRule {
+  width: 1px;
+  height: 18px;
+  background: var(--c-line-strong);
+  flex: none;
+}
+
+.zoomReadout {
+  min-width: 54px;
+  height: var(--h-control);
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--r-control);
+  background: transparent;
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--c-text);
+}
+.zoomReadout:hover:not(:disabled) {
+  background: var(--c-raised);
+}
+
+/* A navigable list row: library assets, layers, drawings, boards. */
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  min-height: 34px;
+  padding: 3px var(--s-2) 3px var(--s-3);
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--c-text);
+}
+.row:hover {
+  background: rgb(255 255 255 / 3.5%);
+}
+.row[aria-selected="true"],
+.row[aria-current="true"] {
+  background: var(--c-accent-soft);
+}
+.row[aria-selected="true"]::before,
+.row[aria-current="true"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--c-accent);
+}
+.row:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--c-accent);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.rowTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowActions {
+  display: flex;
+  gap: 0;
+  flex: none;
+}
+
+.thumb {
+  width: 40px;
+  height: 28px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--c-well);
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--c-line);
+}
+
+.thumbMissing {
+  display: grid;
+  place-items: center;
+  color: var(--c-error);
+}
+
+.listGroupLabel {
+  margin: 0;
+  padding: var(--s-3) var(--s-3) var(--s-1);
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.centered {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: var(--s-8);
+  overflow: auto;
+}
+
+.inspectorEmpty {
+  padding: var(--s-3);
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3) var(--s-2);
+}
+
+.fieldRow {
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-end;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}

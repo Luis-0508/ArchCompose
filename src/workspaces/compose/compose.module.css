@@ -1,0 +1,234 @@
+.leftBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.docSelect {
+  height: var(--h-control-sm);
+  max-width: 200px;
+  padding: 0 var(--s-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-control);
+  background: var(--c-well);
+  font-size: var(--fs-sm);
+  margin-left: var(--s-2);
+  margin-right: var(--s-2);
+}
+
+@media (max-width: 1360px) {
+  .hint {
+    display: none;
+  }
+}
+
+.hint {
+  min-width: 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- canvas */
+
+.canvas {
+  position: relative;
+  overflow: hidden;
+  background-color: #e9e7e1;
+  background-image:
+    linear-gradient(45deg, #d6d3cb 25%, transparent 25%),
+    linear-gradient(-45deg, #d6d3cb 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d6d3cb 75%),
+    linear-gradient(-45deg, transparent 75%, #d6d3cb 75%);
+  background-size: 32px 32px;
+  background-position:
+    0 0,
+    0 16px,
+    16px -16px,
+    -16px 0;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 40%),
+    0 18px 40px rgb(0 0 0 / 35%);
+}
+
+.layerImage {
+  position: absolute;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+  image-rendering: auto;
+}
+
+.missingLayer {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(
+    45deg,
+    rgb(229 98 94 / 18%) 0 12px,
+    rgb(229 98 94 / 6%) 12px 24px
+  );
+  outline: 2px dashed var(--c-error);
+  outline-offset: -2px;
+  color: #6a1d1b;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.selection {
+  position: absolute;
+  outline: 1.5px solid var(--c-accent);
+  outline-offset: 0;
+}
+
+.handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--c-app);
+  border: 1.5px solid var(--c-accent);
+  pointer-events: auto;
+}
+.nw {
+  left: -5px;
+  top: -5px;
+  cursor: nwse-resize;
+}
+.ne {
+  right: -5px;
+  top: -5px;
+  cursor: nesw-resize;
+}
+.sw {
+  left: -5px;
+  bottom: -5px;
+  cursor: nesw-resize;
+}
+.se {
+  right: -5px;
+  bottom: -5px;
+  cursor: nwse-resize;
+}
+
+.horizon {
+  position: absolute;
+  height: 0;
+  border-top: 1px dashed var(--c-info);
+}
+
+.horizonLabel {
+  position: absolute;
+  left: 6px;
+  bottom: 3px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: var(--c-info);
+  color: #10202e;
+  font-size: var(--fs-2xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- layers */
+
+.layers {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.layerList {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: var(--s-1) 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.layerRow .rowActionsHidden {
+  opacity: 0;
+}
+
+.hidden {
+  color: var(--c-text-faint);
+}
+.hidden img {
+  opacity: 0.4;
+}
+
+.layerFooter {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: var(--s-1) var(--s-2);
+  border-top: 1px solid var(--c-line);
+  flex: none;
+}
+
+/* ---------------------------------------------------------------- empty hero */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 460px;
+}
+
+.heroDrawing {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  margin-bottom: var(--s-6);
+  stroke: var(--c-line-strong);
+  stroke-width: 1;
+  fill: none;
+}
+
+.heroHorizon {
+  stroke: var(--c-info);
+  stroke-dasharray: 4 3;
+}
+
+.heroFigure {
+  stroke: var(--c-text-muted);
+  stroke-width: 1.5;
+}
+
+.heroVanish {
+  fill: var(--c-accent);
+  stroke: none;
+}
+
+.heroTitle {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-2xl);
+  font-weight: 680;
+  font-stretch: var(--stretch-expanded);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+
+.heroBody {
+  margin: 0 0 var(--s-5);
+  color: var(--c-text-muted);
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+.heroActions {
+  display: flex;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+
+.heroFoot {
+  margin: 0;
+  color: var(--c-text-faint);
+  font-size: var(--fs-xs);
+}

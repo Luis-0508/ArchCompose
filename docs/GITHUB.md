@@ -23,10 +23,16 @@ All actions are pinned to commit SHAs with the version in a comment. Dependabot 
 
 ## Active settings
 
-These settings were read back from the GitHub API on 2026-10-14 (`gh api
-repos/Luis-0508/ArchCompose`, `.../rulesets`, `.../actions/permissions`). Only values that
-were verified this way are listed here. Re-check them and update this section when settings
-change.
+These settings were read back from the GitHub API on 2026-10-14. Only values that were
+verified this way are listed here. Endpoints, relative to `repos/Luis-0508/ArchCompose`:
+
+- the repository itself (merge settings, `security_and_analysis`)
+- `rulesets/<id>` for "Protect main"
+- `actions/permissions`, `actions/permissions/workflow` and
+  `actions/permissions/fork-pr-contributor-approval` (`approval_policy`)
+- `private-vulnerability-reporting`, `vulnerability-alerts` and `automated-security-fixes`
+
+Re-check them and update this section when settings change.
 
 ### Pull requests
 
@@ -56,7 +62,8 @@ Active, targets the default branch, no bypass actors.
 - The default workflow token can only read repository contents and cannot approve pull
   requests. Workflows request what they need (`labeler.yml` asks for `issues: write` and
   `pull-requests: write`).
-- Workflows from first-time contributors need approval before they run.
+- Workflows from first-time contributors need approval before they run (`approval_policy`:
+  `first_time_contributors`).
 
 ### Security
 
@@ -91,9 +98,12 @@ Not configured. Consider them when the project grows:
 
 ## Adding a second maintainer
 
-Requiring an approval or a code owner review only works when someone other than the pull
-request author can give it. With a single maintainer, both requirements would block every
-pull request. When a second maintainer joins:
+Requiring an approval or a code owner review needs an eligible reviewer other than the pull
+request author. With a single maintainer, these requirements would still work for pull
+requests from other contributors, which the maintainer can approve, but they would block
+every pull request the maintainer opens, because no one else could approve it.
+
+When a second maintainer joins:
 
 1. Give them write (or maintain) access to the repository.
 2. Add them to `.github/CODEOWNERS` next to `@Luis-0508`, for example

@@ -43,22 +43,41 @@
   paint-order: stroke;
 }
 
-/* ---------------------------------------------------------------- trigger */
+/* ---------------------------------------------------------------- chip */
 
-.trigger {
-  display: inline-grid;
-  place-items: center;
-  width: calc(var(--h-control) + 8px);
+.chipWrap {
+  position: relative;
+  display: inline-flex;
+  margin-left: var(--s-2);
+  margin-right: var(--s-1);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   height: var(--h-control);
-  margin-left: var(--s-1);
-  padding: 0;
-  border: 0;
-  border-radius: var(--r-control);
-  background: transparent;
+  max-width: 200px;
+  padding: 0 var(--s-3) 0 3px;
+  border: 1px solid var(--c-line-strong);
+  border-radius: 999px;
+  background: var(--c-panel);
+  color: var(--c-text);
   transition: background-color var(--t-fast);
 }
-.trigger:hover {
+.chip:hover {
   background: var(--c-raised);
+}
+.chipFlair {
+  border-color: var(--c-heart);
+}
+
+.chipName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  font-weight: 560;
 }
 
 /* ---------------------------------------------------------------- dialog */

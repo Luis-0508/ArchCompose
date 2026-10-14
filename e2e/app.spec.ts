@@ -142,7 +142,7 @@ test("creates local profiles and gives Finja a heart", async ({ page }) => {
   await dialog.getByRole("button", { name: "Close" }).click();
   const trigger = page.getByRole("button", { name: "Profile: Finja" });
   await expect(trigger.getByTestId("heart-badge")).toBeVisible();
-  await expect(trigger.getByTestId("heart-frame")).toBeVisible();
+  await expect(page.getByTestId("chip-heart-frame")).toBeVisible();
 
   await page.reload();
   await expect(page.getByRole("button", { name: "Profile: Finja" })).toBeVisible();

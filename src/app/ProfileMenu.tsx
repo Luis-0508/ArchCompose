@@ -1,4 +1,12 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type RefObject,
+} from "react";
 import {
   MAX_NAME_LENGTH,
   hasHeartFlair,
@@ -14,39 +22,91 @@ import controls from "../ui/controls.module.css";
 import styles from "./ProfileMenu.module.css";
 
 const HEART = "M10 17S3 12.6 3 7.8a3.8 3.8 0 0 1 7-2.2 3.8 3.8 0 0 1 7 2.2C17 12.6 10 17 10 17Z";
-const FRAME_HEARTS = 10;
+const HEART_SPACING = 9;
+const HEART_SIZE = 6;
 
-/** A ring of small hearts around the avatar. */
-function HeartFrame({ size }: { size: number }) {
-  const box = size + 14;
-  const radius = size / 2 + 3.5;
-  const heart = 6;
+/** Evenly spaced points on a stadium (a pill; a circle when square), centred on 0,0. */
+function stadiumPoints(width: number, height: number): [number, number][] {
+  const r = Math.min(width, height) / 2;
+  const straight = Math.max(width, height) - 2 * r;
+  const perimeter = 2 * straight + 2 * Math.PI * r;
+  const count = Math.max(8, Math.round(perimeter / HEART_SPACING));
+  const arc = Math.PI * r;
+  return Array.from({ length: count }, (_, i) => {
+    let d = (i / count) * perimeter;
+    if (d < straight) return [-straight / 2 + d, -r];
+    d -= straight;
+    if (d < arc) {
+      const a = -Math.PI / 2 + d / r;
+      return [straight / 2 + Math.cos(a) * r, Math.sin(a) * r];
+    }
+    d -= arc;
+    if (d < straight) return [straight / 2 - d, r];
+    d -= straight;
+    const a = Math.PI / 2 + d / r;
+    return [-straight / 2 + Math.cos(a) * r, Math.sin(a) * r];
+  });
+}
+
+/** A frame of small hearts around a round or pill-shaped element of the given size. */
+function HeartFrame({
+  width,
+  height,
+  testId = "heart-frame",
+}: {
+  width: number;
+  height: number;
+  testId?: string;
+}) {
+  const w = width + 7;
+  const h = height + 7;
+  const boxW = w + HEART_SIZE + 2;
+  const boxH = h + HEART_SIZE + 2;
   return (
     <svg
       className={styles.frame}
-      width={box}
-      height={box}
-      viewBox={`${-box / 2} ${-box / 2} ${box} ${box}`}
+      width={boxW}
+      height={boxH}
+      viewBox={`${-boxW / 2} ${-boxH / 2} ${boxW} ${boxH}`}
       aria-hidden
-      data-testid="heart-frame"
+      data-testid={testId}
     >
-      {Array.from({ length: FRAME_HEARTS }, (_, i) => {
-        const angle = (i / FRAME_HEARTS) * Math.PI * 2;
-        const x = Math.sin(angle) * radius;
-        const y = -Math.cos(angle) * radius;
-        return (
-          <path
-            key={i}
-            d={HEART}
-            transform={`translate(${x} ${y}) scale(${heart / 20}) translate(-10 -10)`}
-          />
-        );
-      })}
+      {stadiumPoints(w, h).map(([x, y], i) => (
+        <path
+          key={i}
+          d={HEART}
+          transform={`translate(${x} ${y}) scale(${HEART_SIZE / 20}) translate(-10 -10)`}
+        />
+      ))}
     </svg>
   );
 }
 
-export function Avatar({ name, size = 24 }: { name: string; size?: number }) {
+/** Follows an element's border-box size. */
+function useSize(ref: RefObject<HTMLElement | null>) {
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const measure = () => setSize({ width: node.offsetWidth, height: node.offsetHeight });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [ref]);
+  return size;
+}
+
+/** The avatar. `framed` draws the heart frame around the avatar itself. */
+export function Avatar({
+  name,
+  size = 24,
+  framed = true,
+}: {
+  name: string;
+  size?: number;
+  framed?: boolean;
+}) {
   const flair = hasHeartFlair(name);
   return (
     <span
@@ -54,7 +114,7 @@ export function Avatar({ name, size = 24 }: { name: string; size?: number }) {
       style={{ width: size, height: size, fontSize: Math.round(size * 0.42) }}
       aria-hidden
     >
-      {flair ? <HeartFrame size={size} /> : null}
+      {flair && framed ? <HeartFrame width={size} height={size} /> : null}
       <span className={styles.initials}>{initials(name)}</span>
       {flair ? (
         <svg className={styles.heart} viewBox="0 0 20 20" data-testid="heart-badge">
@@ -169,6 +229,32 @@ function ProfilesDialog({ open, onClose }: { open: boolean; onClose: () => void 
   );
 }
 
+/** The active profile in the top bar: avatar and name in one pill. */
+function ProfileChip({ name, onClick }: { name: string; onClick: () => void }) {
+  // Tooltip owns the button's ref, so the wrapper is measured instead.
+  const ref = useRef<HTMLSpanElement>(null);
+  const size = useSize(ref);
+  const flair = hasHeartFlair(name);
+  return (
+    <span ref={ref} className={styles.chipWrap}>
+      {flair && size ? (
+        <HeartFrame width={size.width} height={size.height} testId="chip-heart-frame" />
+      ) : null}
+      <Tooltip label="Manage profiles">
+        <button
+          type="button"
+          className={`${styles.chip} ${flair ? styles.chipFlair : ""}`}
+          aria-label={`Profile: ${name}`}
+          onClick={onClick}
+        >
+          <Avatar name={name} size={22} framed={false} />
+          <span className={styles.chipName}>{name}</span>
+        </button>
+      </Tooltip>
+    </span>
+  );
+}
+
 export function ProfileMenu() {
   const active = useProfiles(selectActiveProfile);
   const [open, setOpen] = useState(false);
@@ -176,16 +262,7 @@ export function ProfileMenu() {
   return (
     <>
       {active ? (
-        <Tooltip label={`Profile: ${active.name}`} note="Manage profiles">
-          <button
-            type="button"
-            className={styles.trigger}
-            aria-label={`Profile: ${active.name}`}
-            onClick={() => setOpen(true)}
-          >
-            <Avatar name={active.name} />
-          </button>
-        </Tooltip>
+        <ProfileChip name={active.name} onClick={() => setOpen(true)} />
       ) : (
         <IconButton icon="user" label="Create profile" onClick={() => setOpen(true)} />
       )}

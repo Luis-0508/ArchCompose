@@ -125,3 +125,25 @@ for (const size of [
     }
   });
 }
+
+test("creates local profiles and gives Finja a heart", async ({ page }) => {
+  await page.getByRole("button", { name: "Create profile" }).click();
+  const dialog = page.getByRole("dialog", { name: "Profiles" });
+  await dialog.getByLabel("Name").fill("Ada");
+  await dialog.getByRole("button", { name: "Create profile" }).click();
+  await expect(dialog.getByRole("button", { name: /^Ada/ })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+  await expect(dialog.getByTestId("heart-badge")).toHaveCount(0);
+
+  await dialog.getByLabel("Name").fill("Finja");
+  await dialog.getByRole("button", { name: "Create profile" }).click();
+  await dialog.getByRole("button", { name: "Close" }).click();
+  const trigger = page.getByRole("button", { name: "Profile: Finja" });
+  await expect(trigger.getByTestId("heart-badge")).toBeVisible();
+  await expect(trigger.getByTestId("heart-frame")).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Profile: Finja" })).toBeVisible();
+});

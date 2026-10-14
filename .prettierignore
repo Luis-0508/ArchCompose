@@ -6,3 +6,5 @@ playwright-report
 test-results
 package-lock.json
 docs/screenshots
+THIRD_PARTY_LICENSES.md
+src/app/thirdPartyComponents.json

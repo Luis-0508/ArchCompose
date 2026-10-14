@@ -295,3 +295,52 @@
   font-stretch: var(--stretch-condensed);
   color: var(--c-text-muted);
 }
+
+/* ---------------------------------------------------------------- licenses */
+
+.licenses {
+  display: grid;
+  gap: var(--s-5);
+  max-height: min(70vh, 640px);
+  overflow: auto;
+  padding: var(--s-5);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.licenses h3 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-md);
+  font-weight: 620;
+}
+.licenses p {
+  margin: 0 0 var(--s-2);
+  color: var(--c-text-muted);
+}
+.licenseUrl {
+  color: var(--c-text);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.licenseText {
+  margin: 0 0 var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-control);
+  background: var(--c-well);
+  font: inherit;
+  white-space: pre-wrap;
+}
+.licenseTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.licenseTable th,
+.licenseTable td {
+  padding: 3px var(--s-2) 3px 0;
+  border-bottom: 1px solid var(--c-line);
+  text-align: left;
+  vertical-align: top;
+}
+.licenseTable th {
+  font-weight: 620;
+  color: var(--c-text-muted);
+}

@@ -14,6 +14,7 @@ import {
   saveProject,
 } from "./commands";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { LicensesDialog } from "./LicensesDialog";
 import { useShortcuts } from "./shortcuts";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { TitleBlock } from "./TitleBlock";
@@ -83,6 +84,7 @@ function useCloseGuard() {
 export function App() {
   const workspace = useAppStore((s) => s.workspace);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [licensesOpen, setLicensesOpen] = useState(false);
   useGlobalShortcuts(() => setShortcutsOpen(true));
   useCloseGuard();
   useEffect(() => platform.onFileDrop((files) => void handleDroppedFiles(files)), []);
@@ -90,7 +92,10 @@ export function App() {
   const Workspace = WORKSPACES[workspace];
   return (
     <div className={styles.app}>
-      <TopBar onShowShortcuts={() => setShortcutsOpen(true)} />
+      <TopBar
+        onShowShortcuts={() => setShortcutsOpen(true)}
+        onShowLicenses={() => setLicensesOpen(true)}
+      />
       <main
         className={styles.main}
         id={`workspace-${workspace}`}
@@ -102,6 +107,7 @@ export function App() {
       </main>
       <TitleBlock />
       <ShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      <LicensesDialog open={licensesOpen} onClose={() => setLicensesOpen(false)} />
       <ConfirmDialog />
       <Toasts />
       <BusyIndicator />

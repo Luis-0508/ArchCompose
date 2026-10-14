@@ -21,7 +21,10 @@ The README badges, issue template links and clone instructions assume the reposi
 
 All actions are pinned to commit SHAs with the version in a comment. Dependabot updates both.
 
-## Settings to configure on GitHub
+## Settings on GitHub
+
+The settings below are active on `Luis-0508/ArchCompose` (applied 2026-10-14), except where
+marked as optional or not configured. Keep this section in sync when settings change.
 
 ### General
 
@@ -32,10 +35,11 @@ All actions are pinned to commit SHAs with the version in a comment. Dependabot 
 
 ### Branch protection for `main`
 
-Use a branch ruleset (Settings → Rules → Rulesets) or classic branch protection:
+The ruleset "Protect main" (Settings → Rules → Rulesets) targets the default branch:
 
-- Require a pull request before merging, with at least one approval when there is more than
-  one maintainer. Require review from code owners.
+- Require a pull request before merging. Required approvals are 0 while there is a single
+  maintainer, because GitHub does not let authors approve their own pull requests. Raise it to
+  1 and require review from code owners once there is a second maintainer.
 - Require status checks to pass, and require branches to be up to date. Required checks (job
   names from `ci.yml`, available after the first CI run):
   - `Frontend (ubuntu-latest)`
@@ -46,8 +50,9 @@ Use a branch ruleset (Settings → Rules → Rulesets) or classic branch protect
 
 ### Actions
 
-- Settings → Actions → General: allow GitHub Actions. Optionally restrict to actions from
-  GitHub, verified creators and `dtolnay/rust-toolchain` and `Swatinem/rust-cache`.
+- Settings → Actions → General: GitHub Actions are allowed. Optionally restrict them to
+  actions from GitHub, verified creators, `dtolnay/rust-toolchain` and `Swatinem/rust-cache`
+  (not configured).
 - Workflow permissions: "Read repository contents" is enough. The workflows request the
   permissions they need (`labeler.yml` asks for `issues: write` and `pull-requests: write`).
 - Require approval for workflows from first-time contributors.
@@ -60,11 +65,12 @@ Use a branch ruleset (Settings → Rules → Rulesets) or classic branch protect
   by `.github/dependabot.yml`.
 - Enable secret scanning and push protection.
 - Optionally enable code scanning (CodeQL default setup) for JavaScript/TypeScript, Rust and
-  GitHub Actions.
+  GitHub Actions (not configured).
 
 ### CodeRabbit
 
-- Install the CodeRabbit GitHub app for this repository if automated reviews are wanted.
+- Not installed. Install the CodeRabbit GitHub app for this repository if automated reviews
+  are wanted.
 - Treat its findings as suggestions to verify, not instructions (see `AGENTS.md`). It is not
   a required check.
 

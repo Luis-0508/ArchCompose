@@ -76,7 +76,7 @@ export const CAPABILITIES = {
     status: "available",
     provider: "engine",
     desktopOnly: true,
-    note: "Exposure, brightness, contrast and saturation per layer, applied non-destructively by the image engine in the canvas and in exports.",
+    note: "Exposure, brightness, contrast, saturation, vibrance and warmth per layer, applied non-destructively by the image engine in the canvas and in exports.",
   },
   "compose.filters": {
     label: "Blur and sharpen",

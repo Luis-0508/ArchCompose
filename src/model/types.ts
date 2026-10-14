@@ -47,6 +47,10 @@ export interface LayerAdjustments {
   contrast: number;
   /** -100 to 100. */
   saturation: number;
+  /** -100 to 100. Raises the saturation of muted colours more than of saturated ones. */
+  vibrance: number;
+  /** -100 to 100. Positive warms (Warming Filter 85), negative cools (Cooling Filter 80). */
+  warmth: number;
   /** Gaussian blur radius in document pixels, 0 to 100. */
   blur: number;
   /** Unsharp mask amount in percent at a 1 px radius, 0 to 500. */

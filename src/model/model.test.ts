@@ -88,6 +88,8 @@ describe("compose documents", () => {
     const p1 = setLayerAdjustments(project, doc.id, layerId, {
       exposure: 9,
       saturation: -20,
+      vibrance: 0,
+      warmth: 0,
       blur: 300,
     });
     const adjusted = p1.composeDocs[0]!.layers[0]!;
@@ -96,6 +98,8 @@ describe("compose documents", () => {
       brightness: 0,
       contrast: 0,
       saturation: -20,
+      vibrance: 0,
+      warmth: 0,
       blur: 100,
       sharpen: 0,
     });
@@ -111,6 +115,8 @@ describe("compose documents", () => {
       brightness: 0,
       contrast: 0,
       saturation: -20,
+      vibrance: 0,
+      warmth: 0,
       blur: 0,
       sharpen: 80,
     });

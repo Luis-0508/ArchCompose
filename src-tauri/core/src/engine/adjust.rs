@@ -25,6 +25,13 @@ pub struct Adjust {
     pub contrast: f32,
     /// -100..=100.
     pub saturation: f32,
+    /// -100..=100.
+    #[serde(default)]
+    pub vibrance: f32,
+    /// -100..=100: positive warms with Photoshop's Warming Filter (85), negative cools with
+    /// the Cooling Filter (80); the magnitude is the filter density in percent.
+    #[serde(default)]
+    pub warmth: f32,
     /// Gaussian blur radius (standard deviation) in canvas pixels, 0..=100.
     #[serde(default)]
     pub blur: f32,
@@ -43,6 +50,8 @@ impl Adjust {
             && ok(self.brightness, -150.0, 150.0)
             && ok(self.contrast, -50.0, 100.0)
             && ok(self.saturation, -100.0, 100.0)
+            && ok(self.vibrance, -100.0, 100.0)
+            && ok(self.warmth, -100.0, 100.0)
             && ok(self.blur, 0.0, 100.0)
             && ok(self.sharpen, 0.0, 500.0)
         {
@@ -71,6 +80,25 @@ impl Adjust {
                 brightness: self.brightness,
                 contrast: self.contrast,
                 legacy: false,
+            });
+        }
+        if self.vibrance != 0.0 {
+            out.push(Adjustment::Vibrance {
+                vibrance: self.vibrance,
+                saturation: 0.0,
+            });
+        }
+        if self.warmth != 0.0 {
+            // Photoshop's preset colours, as PhotoCraft's Photo Filter presets define them.
+            let rgb: [u8; 3] = if self.warmth > 0.0 {
+                [236, 138, 0]
+            } else {
+                [0, 109, 255]
+            };
+            out.push(Adjustment::PhotoFilter {
+                color: rgb.map(|v| f32::from(v) / 255.0),
+                density: self.warmth.abs() / 100.0,
+                preserve_luminosity: true,
             });
         }
         if self.saturation != 0.0 {
@@ -278,6 +306,56 @@ mod tests {
         // At a quarter of the size, the same canvas radius is half a pixel: a smaller spread.
         let small = row(&apply(edge(), &adjust, Size::new(16, 1), Depth::Eight, 0.25).unwrap());
         assert!(small[6] < out[6], "{small:?} vs {out:?}");
+    }
+
+    #[test]
+    fn warmth_shifts_colour_towards_orange_or_blue() {
+        let warm = first(
+            &apply(
+                pixel([128, 128, 128, 255]),
+                &Adjust {
+                    warmth: 60.0,
+                    ..Adjust::default()
+                },
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
+        assert!(warm[0] > warm[2] + 10, "{warm:?}");
+        let cool = first(
+            &apply(
+                pixel([128, 128, 128, 255]),
+                &Adjust {
+                    warmth: -60.0,
+                    ..Adjust::default()
+                },
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
+        assert!(cool[2] > cool[0] + 10, "{cool:?}");
+    }
+
+    #[test]
+    fn vibrance_boosts_muted_colours() {
+        let out = first(
+            &apply(
+                pixel([140, 120, 110, 255]),
+                &Adjust {
+                    vibrance: 100.0,
+                    ..Adjust::default()
+                },
+                Size::new(2, 1),
+                Depth::Eight,
+                1.0,
+            )
+            .unwrap(),
+        );
+        assert!(out[0] - out[2] > 30, "{out:?}");
     }
 
     #[test]

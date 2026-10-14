@@ -7,7 +7,7 @@ function isObject(value: unknown): value is Json {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-/** Version 2 adds blur and sharpening to layer adjustments. */
+/** Version 2 adds vibrance, warmth, blur and sharpening to layer adjustments. */
 function migrateAdjustments(docs: unknown): unknown {
   if (!Array.isArray(docs)) return docs;
   return docs.map((doc: unknown) => {
@@ -16,7 +16,7 @@ function migrateAdjustments(docs: unknown): unknown {
       ...doc,
       layers: doc.layers.map((layer: unknown) =>
         isObject(layer) && isObject(layer.adjust)
-          ? { ...layer, adjust: { blur: 0, sharpen: 0, ...layer.adjust } }
+          ? { ...layer, adjust: { vibrance: 0, warmth: 0, blur: 0, sharpen: 0, ...layer.adjust } }
           : layer,
       ),
     };

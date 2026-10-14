@@ -128,9 +128,16 @@ export function parseProject(text: string): Project {
         const adjust = layer.adjust;
         expect(
           isObject(adjust) &&
-            ["exposure", "brightness", "contrast", "saturation", "blur", "sharpen"].every(
-              (k) => typeof adjust[k] === "number" && Number.isFinite(adjust[k]),
-            ),
+            [
+              "exposure",
+              "brightness",
+              "contrast",
+              "saturation",
+              "vibrance",
+              "warmth",
+              "blur",
+              "sharpen",
+            ].every((k) => typeof adjust[k] === "number" && Number.isFinite(adjust[k])),
           "a layer has malformed adjustments",
         );
       }

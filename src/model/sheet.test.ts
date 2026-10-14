@@ -334,6 +334,8 @@ describe("schema migration", () => {
       brightness: 0,
       contrast: 0,
       saturation: 0,
+      vibrance: 0,
+      warmth: 0,
       blur: 0,
       sharpen: 0,
     });

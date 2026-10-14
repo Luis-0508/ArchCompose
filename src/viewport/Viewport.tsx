@@ -37,6 +37,8 @@ interface ViewportProps {
   onToolPointerDown?: (pointer: ViewportPointer) => void;
   onBackgroundClick?: () => void;
   surface?: "well" | "desk";
+  /** Rulers along the top and left edge; on by default. */
+  rulers?: boolean;
 }
 
 /** True while the space bar is held outside of text inputs (temporary hand tool). */
@@ -81,6 +83,7 @@ export function Viewport({
   onToolPointerDown,
   onBackgroundClick,
   surface = "well",
+  rulers = true,
 }: ViewportProps) {
   const stage = useRef<HTMLDivElement>(null);
   const view = useAppStore((s) => s.views[viewKey]) as ViewState | undefined;
@@ -198,8 +201,11 @@ export function Viewport({
         : (cursor ?? "default");
 
   return (
-    <div className={styles.frame} style={{ "--ruler": `${RULER_SIZE}px` } as CSSProperties}>
-      {camera ? <Rulers camera={camera} unit={unit} pointer={pointer} /> : null}
+    <div
+      className={styles.frame}
+      style={{ "--ruler": `${rulers ? RULER_SIZE : 0}px` } as CSSProperties}
+    >
+      {camera && rulers ? <Rulers camera={camera} unit={unit} pointer={pointer} /> : null}
       <div
         ref={stage}
         className={`${styles.stage} ${surface === "desk" ? styles.desk : styles.well}`}

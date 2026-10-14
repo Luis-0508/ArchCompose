@@ -1,4 +1,5 @@
 import { effectiveDpi, frameRect, framesOverlap, gridIsUsable } from "./boards";
+import { emptyDrawingContent } from "./sheet";
 import type { AssetId, Board, FrameId, Project } from "./types";
 
 export type IssueSeverity = "error" | "warning" | "info";
@@ -75,11 +76,18 @@ export function validateBoard(
           frameId: frame.id,
           message: "Linked drawing no longer exists.",
         });
-      } else if (!drawing.sourceAssetId) {
+      } else if (emptyDrawingContent(drawing)) {
         issues.push({
           severity: "warning",
           frameId: frame.id,
-          message: `${drawing.number} has no drawing file attached.`,
+          message: `${drawing.number} is an empty sheet.`,
+        });
+      } else if (drawing.underlay && !context.isAssetAvailable(drawing.underlay.assetId)) {
+        const name = project.assets[drawing.underlay.assetId]?.name ?? "The underlay image";
+        issues.push({
+          severity: "error",
+          frameId: frame.id,
+          message: `“${name}” on ${drawing.number} cannot be loaded. Relink or re-import the file.`,
         });
       }
     }

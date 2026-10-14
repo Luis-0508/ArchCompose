@@ -1,37 +1,94 @@
 import { useState } from "react";
 import { createDrawingFromAsset, pickAndImport } from "../../app/commands";
+import { useShortcuts } from "../../app/shortcuts";
 import { addDrawing, DRAWING_KINDS, groupDrawings } from "../../model/drawings";
+import { removeElements, translateElement, updateElements } from "../../model/sheet";
 import type { Drawing, DrawingKind } from "../../model/types";
-import { useAssetSource } from "../../state/assetCache";
-import { selectDrawing, useAppStore } from "../../state/store";
+import { selectDrawing, useAppStore, type DrawingTool } from "../../state/store";
 import { Button, IconButton } from "../../ui/Button";
+import { ToolRail, type ChoiceOption } from "../../ui/Choice";
 import { EmptyState } from "../../ui/Panel";
-import { Viewport } from "../../viewport/Viewport";
 import { ViewControls } from "../shared/ViewControls";
 import { WorkspaceLayout } from "../WorkspaceLayout";
 import styles from "../workspace.module.css";
-import { DrawingInspector, attachDrawingFile } from "./DrawingInspector";
+import { DrawingInspector } from "./DrawingInspector";
+import { drawingViewKey, SheetCanvas } from "./SheetCanvas";
 import local from "./drawings.module.css";
 
-export const drawingViewKey = (d: Drawing) => `drawing:${d.id}`;
+export { drawingViewKey };
+
+const TOOLS: readonly ChoiceOption<DrawingTool>[] = [
+  {
+    value: "select",
+    label: "Select and transform",
+    icon: "select",
+    shortcut: "V",
+    note: "Drag to move, drag a corner to scale. Shift-click adds to the selection.",
+  },
+  { value: "hand", label: "Hand", icon: "hand", shortcut: "H", note: "Or hold Space." },
+  { value: "pen", label: "Pen", icon: "pen", shortcut: "P", note: "Draw freehand strokes." },
+  {
+    value: "eraser",
+    label: "Eraser",
+    icon: "eraser",
+    shortcut: "E",
+    note: "Cuts strokes and shapes where you drag. Text is removed with the select tool.",
+  },
+  { value: "line", label: "Line", icon: "line", shortcut: "L", note: "Shift locks to 45°." },
+  {
+    value: "rect",
+    label: "Rectangle",
+    icon: "rect",
+    shortcut: "R",
+    note: "Shift draws a square.",
+  },
+  {
+    value: "circle",
+    label: "Circle",
+    icon: "circle",
+    shortcut: "C",
+    note: "Drag from the centre.",
+  },
+  {
+    value: "polyline",
+    label: "Polyline",
+    icon: "polyline",
+    shortcut: "Y",
+    note: "Click points. Double-click or Enter finishes, click the first point to close.",
+  },
+  { value: "text", label: "Text", icon: "text", shortcut: "T", note: "Click to place text." },
+];
+
+const TOOL_HINT: Record<DrawingTool, string> = {
+  select: "Click to select, drag to move, drag a corner to scale. Double-click text to edit it.",
+  hand: "Drag to pan the sheet.",
+  pen: "Drag to draw.",
+  eraser: "Drag across strokes to erase them.",
+  line: "Drag to draw a line. Shift locks the angle to 45°.",
+  rect: "Drag to draw a rectangle. Shift draws a square.",
+  circle: "Drag from the centre to draw a circle.",
+  polyline:
+    "Click to add points. Double-click or Enter to finish, Backspace removes a point, Escape cancels.",
+  text: "Click on the sheet to type. Enter places the text, Shift+Enter starts a new line.",
+};
+
+function newBlankDrawing(kind: DrawingKind) {
+  const { apply, select } = useAppStore.getState();
+  let id = "";
+  apply("New drawing", (p) => {
+    const [next, drawing] = addDrawing(p, kind);
+    id = drawing.id;
+    return next;
+  });
+  select({ drawingId: id, elementIds: [] });
+}
 
 function DrawingSet() {
   const drawings = useAppStore((s) => s.history.present.drawings);
   const selectedId = useAppStore((s) => s.selection.drawingId);
   const select = useAppStore((s) => s.select);
-  const apply = useAppStore((s) => s.apply);
   const [kind, setKind] = useState<DrawingKind>("plan");
   const groups = groupDrawings(drawings);
-
-  const add = () => {
-    let id = "";
-    apply("New drawing", (p) => {
-      const [next, drawing] = addDrawing(p, kind);
-      id = drawing.id;
-      return next;
-    });
-    select({ drawingId: id });
-  };
 
   return (
     <>
@@ -64,10 +121,10 @@ function DrawingSet() {
                   <span className={styles.rowMain}>
                     <span className={styles.rowTitle}>{d.title}</span>
                     <span className={`${styles.rowMeta} num`}>
-                      1:{d.scale}
+                      {d.sheet.format.preset === "custom" ? "Custom" : d.sheet.format.preset}, 1:
+                      {d.scale}
                       {d.level ? `, ${d.level}` : ""}
                       {d.revisions.length ? `, rev ${d.revisions.at(-1)!.code}` : ""}
-                      {d.sourceAssetId ? "" : ", no file"}
                     </span>
                   </span>
                 </button>
@@ -89,7 +146,7 @@ function DrawingSet() {
             </option>
           ))}
         </select>
-        <Button size="sm" icon="plus" onClick={add}>
+        <Button size="sm" icon="plus" onClick={() => newBlankDrawing(kind)}>
           Add drawing
         </Button>
       </div>
@@ -102,61 +159,7 @@ async function importDrawings() {
   for (const ref of refs) createDrawingFromAsset(ref);
 }
 
-function DrawingSheet({ drawing }: { drawing: Drawing }) {
-  const asset = useAppStore((s) =>
-    drawing.sourceAssetId ? s.history.present.assets[drawing.sourceAssetId] : undefined,
-  );
-  const source = useAssetSource(asset?.id);
-
-  if (!asset) {
-    return (
-      <div className={styles.centered}>
-        <EmptyState
-          icon="file"
-          title={`${drawing.number} has no drawing file`}
-          actions={
-            <Button
-              variant="primary"
-              icon="import"
-              onClick={() => void attachDrawingFile(drawing.id)}
-            >
-              Attach drawing file
-            </Button>
-          }
-        >
-          <p>
-            Attach an exported plan, section or elevation as PNG, JPEG or SVG. PDF import is
-            planned.
-          </p>
-        </EmptyState>
-      </div>
-    );
-  }
-
-  return (
-    <Viewport
-      viewKey={drawingViewKey(drawing)}
-      content={{ width: asset.width, height: asset.height }}
-      unit="px"
-      label={`Drawing ${drawing.number}`}
-      surface="desk"
-    >
-      <div className={local.sheet} style={{ width: asset.width, height: asset.height }}>
-        {source?.status === "ready" ? (
-          <img src={source.url} alt="" draggable={false} className={local.sheetImage} />
-        ) : (
-          <div className={local.sheetMissing}>
-            {source?.status === "loading" ? "Loading" : `Missing file: ${asset.name}`}
-          </div>
-        )}
-      </div>
-    </Viewport>
-  );
-}
-
 function DrawingsEmpty() {
-  const apply = useAppStore((s) => s.apply);
-  const select = useAppStore((s) => s.select);
   return (
     <div className={styles.centered}>
       <div className={local.empty}>
@@ -171,26 +174,15 @@ function DrawingsEmpty() {
         </svg>
         <h1 className={local.emptyTitle}>Build the drawing set</h1>
         <p className={local.emptyBody}>
-          Collect plans, sections and elevations with sheet numbers, scales and revisions. Drawings
-          can be placed on presentation boards.
+          Draw on a blank sheet or annotate exported plans, sections and elevations. Every drawing
+          has a paper size, a scale, a sheet number and revisions, and can be placed on boards.
         </p>
         <div className={local.emptyActions}>
-          <Button variant="primary" icon="import" onClick={() => void importDrawings()}>
-            Import drawing files
+          <Button variant="primary" icon="plus" onClick={() => newBlankDrawing("plan")}>
+            New blank sheet
           </Button>
-          <Button
-            icon="plus"
-            onClick={() => {
-              let id = "";
-              apply("New drawing", (p) => {
-                const [next, d] = addDrawing(p, "plan");
-                id = d.id;
-                return next;
-              });
-              select({ drawingId: id });
-            }}
-          >
-            Add empty plan
+          <Button icon="import" onClick={() => void importDrawings()}>
+            Import drawing files
           </Button>
         </div>
       </div>
@@ -198,34 +190,94 @@ function DrawingsEmpty() {
   );
 }
 
+function useDrawingShortcuts(drawing: Drawing | null) {
+  const setTool = useAppStore((s) => s.setDrawingTool);
+  const select = useAppStore((s) => s.select);
+  const apply = useAppStore((s) => s.apply);
+  const selectedIds = useAppStore((s) => s.selection.elementIds);
+
+  const nudge = (dx: number, dy: number) => {
+    if (!drawing || selectedIds.length === 0) return;
+    apply(selectedIds.length === 1 ? "Nudge element" : "Nudge elements", (p) =>
+      updateElements(p, drawing.id, selectedIds, (e) => translateElement(e, dx, dy)),
+    );
+  };
+
+  const remove = () => {
+    if (!drawing || selectedIds.length === 0) return;
+    apply(selectedIds.length === 1 ? "Delete element" : "Delete elements", (p) =>
+      removeElements(p, drawing.id, selectedIds),
+    );
+    select({ elementIds: [] });
+  };
+
+  useShortcuts(
+    {
+      V: () => setTool("select"),
+      H: () => setTool("hand"),
+      P: () => setTool("pen"),
+      E: () => setTool("eraser"),
+      L: () => setTool("line"),
+      R: () => setTool("rect"),
+      C: () => setTool("circle"),
+      Y: () => setTool("polyline"),
+      T: () => setTool("text"),
+      Escape: () => select({ elementIds: [] }),
+      Delete: remove,
+      Backspace: remove,
+      ArrowLeft: () => nudge(-1, 0),
+      ArrowRight: () => nudge(1, 0),
+      ArrowUp: () => nudge(0, -1),
+      ArrowDown: () => nudge(0, 1),
+      "Shift+ArrowLeft": () => nudge(-10, 0),
+      "Shift+ArrowRight": () => nudge(10, 0),
+      "Shift+ArrowUp": () => nudge(0, -10),
+      "Shift+ArrowDown": () => nudge(0, 10),
+    },
+    drawing !== null,
+  );
+}
+
 export function DrawingsWorkspace() {
   const drawing = useAppStore(selectDrawing);
   const count = useAppStore((s) => s.history.present.drawings.length);
+  const tool = useAppStore((s) => s.drawingTool);
+  const setTool = useAppStore((s) => s.setDrawingTool);
+  useDrawingShortcuts(drawing);
 
   return (
     <WorkspaceLayout
+      rail={
+        drawing ? (
+          <ToolRail label="Drawing tools" value={tool} tools={TOOLS} onChange={setTool} />
+        ) : undefined
+      }
       leftLabel="Drawing set"
       left={<DrawingSet />}
       context={
         <>
           {drawing ? (
-            <span className={local.contextTitle}>
-              <span className={`${local.sheetNo} num`}>{drawing.number}</span>
-              <span>{drawing.title}</span>
-              <span className={`${styles.contextLabel} num`}>1:{drawing.scale}</span>
-            </span>
+            <>
+              <span className={local.contextTitle}>
+                <span className={`${local.sheetNo} num`}>{drawing.number}</span>
+                <span>{drawing.title}</span>
+                <span className={`${styles.contextLabel} num`}>1:{drawing.scale}</span>
+              </span>
+              <span className={styles.contextRule} aria-hidden />
+              <span className={local.hint}>{TOOL_HINT[tool]}</span>
+            </>
           ) : (
             <span className={styles.contextLabel}>
               {count > 0 ? "Select a drawing from the set." : "No drawings yet."}
             </span>
           )}
           <span className={styles.contextSpacer} />
-          <ViewControls viewKey={drawing?.sourceAssetId ? drawingViewKey(drawing) : null} />
+          <ViewControls viewKey={drawing ? drawingViewKey(drawing) : null} />
         </>
       }
       center={
         drawing ? (
-          <DrawingSheet key={drawing.id} drawing={drawing} />
+          <SheetCanvas key={drawing.id} drawing={drawing} />
         ) : count > 0 ? (
           <div className={styles.centered}>
             <EmptyState icon="drawings" title="No drawing selected">

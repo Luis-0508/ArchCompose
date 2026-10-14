@@ -452,3 +452,40 @@ select option {
 .slider:focus-visible::-webkit-slider-thumb {
   box-shadow: var(--focus-ring);
 }
+
+/* ---------------------------------------------------------------- colour */
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.colorInput {
+  width: 36px;
+  height: var(--h-control-sm);
+  padding: 2px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-control);
+  background: var(--c-well);
+  cursor: pointer;
+}
+.colorInput:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--c-line-strong);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.swatch[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--c-app),
+    0 0 0 3.5px var(--c-accent);
+}
+.swatch:focus-visible {
+  box-shadow: var(--focus-ring);
+}

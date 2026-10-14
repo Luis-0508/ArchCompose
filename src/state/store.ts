@@ -9,7 +9,17 @@ import {
   type History,
 } from "../model/history";
 import { createProject } from "../model/project";
-import type { BoardId, ComposeDocId, DrawingId, FrameId, LayerId, Project } from "../model/types";
+import { DEFAULT_STROKE, normalizeStroke } from "../model/sheet";
+import type {
+  BoardId,
+  ComposeDocId,
+  DrawingId,
+  ElementId,
+  FrameId,
+  LayerId,
+  Project,
+  StrokeStyle,
+} from "../model/types";
 import {
   fitCamera,
   stepZoom,
@@ -21,11 +31,24 @@ import {
 
 export type WorkspaceId = "compose" | "drawings" | "boards";
 export type ComposeTool = "select" | "hand" | "zoom" | "horizon";
+export type DrawingTool =
+  "select" | "hand" | "pen" | "eraser" | "line" | "rect" | "circle" | "polyline" | "text";
+
+/** Settings the drawing tools use for new content. Not part of the document. */
+export interface DrawingToolSettings {
+  stroke: StrokeStyle;
+  /** Eraser radius in paper millimetres. */
+  eraserMm: number;
+  /** Font size for new text in paper millimetres. */
+  textMm: number;
+}
 
 export interface Selection {
   composeDocId: ComposeDocId | null;
   layerId: LayerId | null;
   drawingId: DrawingId | null;
+  /** Selected elements of the selected drawing. */
+  elementIds: ElementId[];
   boardId: BoardId | null;
   frameId: FrameId | null;
 }
@@ -68,6 +91,8 @@ interface AppState {
   workspace: WorkspaceId;
   selection: Selection;
   composeTool: ComposeTool;
+  drawingTool: DrawingTool;
+  drawingSettings: DrawingToolSettings;
   panels: { left: boolean; right: boolean };
   views: Record<string, ViewState>;
   cursor: Cursor | null;
@@ -89,6 +114,8 @@ interface AppActions {
   setWorkspace(workspace: WorkspaceId): void;
   select(patch: Partial<Selection>): void;
   setComposeTool(tool: ComposeTool): void;
+  setDrawingTool(tool: DrawingTool): void;
+  setDrawingSettings(patch: Partial<DrawingToolSettings>): void;
   togglePanel(side: "left" | "right"): void;
 
   syncView(key: string, view: Size, content: Size): void;
@@ -111,6 +138,7 @@ const emptySelection: Selection = {
   composeDocId: null,
   layerId: null,
   drawingId: null,
+  elementIds: [],
   boardId: null,
   frameId: null,
 };
@@ -126,6 +154,8 @@ export function initialState(project: Project = createProject()): AppState {
     workspace: "compose",
     selection: emptySelection,
     composeTool: "select",
+    drawingTool: "select",
+    drawingSettings: { stroke: DEFAULT_STROKE, eraserMm: 2, textMm: 5 },
     panels: { left: true, right: true },
     views: {},
     cursor: null,
@@ -197,11 +227,29 @@ export const useAppStore = create<AppStore>()((set, get) => ({
   },
 
   select(patch) {
-    set((s) => ({ selection: { ...s.selection, ...patch } }));
+    set((s) => {
+      const selection = { ...s.selection, ...patch };
+      // Element selection belongs to one drawing.
+      if (patch.drawingId !== undefined && patch.drawingId !== s.selection.drawingId) {
+        selection.elementIds = patch.elementIds ?? [];
+      }
+      return { selection };
+    });
   },
 
   setComposeTool(composeTool) {
     set({ composeTool });
+  },
+
+  setDrawingTool(drawingTool) {
+    set({ drawingTool });
+  },
+
+  setDrawingSettings(patch) {
+    set((s) => {
+      const next = { ...s.drawingSettings, ...patch };
+      return { drawingSettings: { ...next, stroke: normalizeStroke(next.stroke) } };
+    });
   },
 
   togglePanel(side) {

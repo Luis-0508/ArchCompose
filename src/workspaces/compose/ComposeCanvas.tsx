@@ -5,6 +5,7 @@ import { useAdjustedPreview } from "../../state/adjustedPreviews";
 import { useAssetSource } from "../../state/assetCache";
 import { useAppStore } from "../../state/store";
 import { contentToScreen, screenToContent, type Camera, type Point } from "../../viewport/camera";
+import { trackDrag } from "../../viewport/trackDrag";
 import { Viewport, type ViewportPointer } from "../../viewport/Viewport";
 import styles from "./compose.module.css";
 
@@ -34,25 +35,6 @@ export function hitTest(project: Project, doc: ComposeDoc, point: Point): Compos
     }
   }
   return null;
-}
-
-/** Tracks a pointer drag on the window until release; returns nothing. */
-function trackDrag(
-  start: ReactPointerEvent,
-  onMove: (event: PointerEvent) => void,
-  onEnd: () => void,
-) {
-  const move = (event: PointerEvent) => onMove(event);
-  const up = () => {
-    window.removeEventListener("pointermove", move);
-    window.removeEventListener("pointerup", up);
-    window.removeEventListener("pointercancel", up);
-    onEnd();
-  };
-  window.addEventListener("pointermove", move);
-  window.addEventListener("pointerup", up);
-  window.addEventListener("pointercancel", up);
-  start.preventDefault();
 }
 
 function LayerImage({ project, layer }: { project: Project; layer: ComposeLayer }) {

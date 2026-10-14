@@ -137,6 +137,12 @@
   min-height: 0;
 }
 
+.drawingSheet {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .drawingCaption {
   display: flex;
   gap: 2px;

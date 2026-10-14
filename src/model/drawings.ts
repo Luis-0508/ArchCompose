@@ -1,5 +1,6 @@
 import { createId } from "./ids";
 import { replaceById } from "./project";
+import { defaultSheet } from "./sheet";
 import type { Drawing, DrawingId, DrawingKind, Project, Revision } from "./types";
 
 export const DRAWING_KINDS: readonly { kind: DrawingKind; label: string; series: number }[] = [
@@ -69,13 +70,17 @@ export function addDrawing(
     kind,
     scale: init.scale ?? defaultScale(kind),
     level: init.level ?? "",
-    sourceAssetId: init.sourceAssetId ?? null,
+    sheet: init.sheet ?? defaultSheet(),
+    underlay: init.underlay ?? null,
+    elements: init.elements ?? [],
     revisions: init.revisions ?? [],
   };
   return [{ ...project, drawings: [...project.drawings, drawing] }, drawing];
 }
 
-export type DrawingPatch = Partial<Omit<Drawing, "id" | "revisions">>;
+export type DrawingPatch = Partial<
+  Omit<Drawing, "id" | "revisions" | "sheet" | "underlay" | "elements">
+>;
 
 export function updateDrawing(project: Project, id: DrawingId, patch: DrawingPatch): Project {
   const normalized = { ...patch };

@@ -159,3 +159,97 @@
   display: flex;
   gap: var(--s-2);
 }
+
+/* ---------------------------------------------------------------- sheet canvas */
+
+.canvasHost {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.sheetSvg {
+  display: block;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 30%),
+    0 14px 36px rgb(0 0 0 / 30%);
+  font-family: var(--font);
+  user-select: none;
+}
+
+.selection {
+  position: absolute;
+  outline: 1.5px solid var(--c-accent);
+  pointer-events: none;
+}
+
+.handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--c-app);
+  border: 1.5px solid var(--c-accent);
+  pointer-events: auto;
+}
+.nw {
+  left: -5px;
+  top: -5px;
+  cursor: nwse-resize;
+}
+.ne {
+  right: -5px;
+  top: -5px;
+  cursor: nesw-resize;
+}
+.sw {
+  left: -5px;
+  bottom: -5px;
+  cursor: nesw-resize;
+}
+.se {
+  right: -5px;
+  bottom: -5px;
+  cursor: nwse-resize;
+}
+
+.marquee {
+  position: absolute;
+  border: 1px dashed var(--c-accent);
+  background: var(--c-accent-soft);
+  pointer-events: none;
+}
+
+.eraser {
+  position: absolute;
+  border: 1.5px solid var(--c-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 45%);
+  pointer-events: none;
+}
+
+/* Inline text entry sits on the sheet, so it uses ink on transparent paper. */
+.textEditor {
+  position: absolute;
+  min-width: 4em;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: 1.5px dashed var(--c-accent);
+  background: rgb(255 255 255 / 70%);
+  font-family: inherit;
+  line-height: 1.25;
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+  pointer-events: auto;
+  field-sizing: content;
+}
+
+.hint {
+  min-width: 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -59,6 +59,14 @@ pub fn same_file(a: &str, b: &str) -> bool {
     }
 }
 
+/// Size of an image file in bytes, with the same checks as [`read_bytes`].
+pub fn image_size(path: &str) -> Result<u64, String> {
+    let path = checked_file(path, MAX_IMAGE_BYTES)?;
+    fs::metadata(&path)
+        .map(|m| m.len())
+        .map_err(|e| format!("“{}” could not be read: {e}.", file_name(&path)))
+}
+
 pub fn read_bytes(path: &str) -> Result<Vec<u8>, String> {
     let path = checked_file(path, MAX_IMAGE_BYTES)?;
     fs::read(&path).map_err(|e| format!("“{}” could not be read: {e}.", file_name(&path)))
@@ -135,6 +143,7 @@ mod tests {
         let p = path.to_str().unwrap();
         write_atomic_bytes(p, &[0, 159, 146, 150]).unwrap();
         assert_eq!(read_bytes(p).unwrap(), vec![0, 159, 146, 150]);
+        assert_eq!(image_size(p).unwrap(), 4);
         assert!(same_file(p, p));
         let other = dir.path().join("other.png");
         assert!(!same_file(p, other.to_str().unwrap()));

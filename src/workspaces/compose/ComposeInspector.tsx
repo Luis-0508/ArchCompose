@@ -1,5 +1,8 @@
+import { exportComposeDoc } from "../../app/commands";
+import { isAvailableIn } from "../../engine/capabilities";
 import { renameComposeDoc, setHorizon, updateLayer, type LayerPatch } from "../../model/compose";
 import type { ComposeDoc, ComposeLayer } from "../../model/types";
+import { platform } from "../../platform";
 import { useAppStore } from "../../state/store";
 import { Button } from "../../ui/Button";
 import { NumberField, Readout, SliderField, TextField } from "../../ui/Fields";
@@ -157,6 +160,37 @@ function DocumentSection({ doc }: { doc: ComposeDoc }) {
   );
 }
 
+function ExportSection({ doc }: { doc: ComposeDoc }) {
+  const available = isAvailableIn("compose.export", platform);
+  return (
+    <Section title="Export">
+      <div className={styles.buttonRow}>
+        <Button
+          size="sm"
+          icon="export"
+          disabled={!available}
+          onClick={() => void exportComposeDoc(doc.id, "png")}
+        >
+          Export PNG
+        </Button>
+        <Button
+          size="sm"
+          icon="layers"
+          disabled={!available}
+          onClick={() => void exportComposeDoc(doc.id, "psd")}
+        >
+          Export layered PSD
+        </Button>
+      </div>
+      <p className={styles.rowMeta} style={{ whiteSpace: "normal" }}>
+        {available
+          ? `${doc.width} × ${doc.height} px, rendered by the image engine with transparency.`
+          : "Exporting needs the desktop app, which includes the image engine."}
+      </p>
+    </Section>
+  );
+}
+
 export function ComposeInspector({
   doc,
   layer,
@@ -177,16 +211,11 @@ export function ComposeInspector({
     <div className={styles.scroll}>
       {layer ? <LayerSection doc={doc} layer={layer} /> : null}
       <DocumentSection doc={doc} />
+      <ExportSection doc={doc} />
       <Section title="Not available yet" collapsible defaultOpen={!layer}>
         <PlannedList
           title="Needs the image engine or calibration"
-          ids={[
-            "compose.perspective",
-            "compose.shadow",
-            "compose.mask",
-            "compose.adjust",
-            "compose.export",
-          ]}
+          ids={["compose.perspective", "compose.shadow", "compose.mask", "compose.adjust"]}
         />
       </Section>
     </div>

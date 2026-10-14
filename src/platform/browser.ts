@@ -87,4 +87,6 @@ export const browserPlatform: Platform = {
   async engineStatus() {
     return { renderer: "Browser preview", engineLinked: false, appVersion: __APP_VERSION__ };
   },
+
+  engine: null,
 };

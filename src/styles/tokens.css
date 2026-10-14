@@ -35,6 +35,8 @@
   --c-info: #79a8d0;
   --c-info-soft: rgb(121 168 208 / 14%);
   --c-success: #9cc59a;
+  /* Profile flair only (the heart for profiles named Finja); never a signal. */
+  --c-heart: #e8476a;
 
   /* Sheets */
   --c-paper: #f7f6f2;

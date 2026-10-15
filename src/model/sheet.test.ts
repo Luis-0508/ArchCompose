@@ -370,6 +370,32 @@ describe("schema migration", () => {
     expect(parseProject(serializeProject(p)).drawings[0]!.elements).toEqual(elements);
   });
 
+  it("rejects non-positive sheet sizes and grid spacing on project load", () => {
+    const { project } = projectWithDrawing();
+    const data = JSON.parse(serializeProject(project)) as {
+      drawings: {
+        sheet: {
+          format: { widthMm: number; heightMm: number };
+          grid: { spacingMm: number };
+        };
+      }[];
+    };
+    const sheet = data.drawings[0]!.sheet;
+    const originalWidth = sheet.format.widthMm;
+    const originalHeight = sheet.format.heightMm;
+
+    sheet.format.widthMm = 0;
+    expect(() => parseProject(JSON.stringify(data))).toThrow(/has no sheet/);
+    sheet.format.widthMm = originalWidth;
+    sheet.format.heightMm = -1;
+    expect(() => parseProject(JSON.stringify(data))).toThrow(/has no sheet/);
+    sheet.format.heightMm = originalHeight;
+    sheet.grid.spacingMm = 0;
+    expect(() => parseProject(JSON.stringify(data))).toThrow(/has no sheet/);
+    sheet.grid.spacingMm = -10;
+    expect(() => parseProject(JSON.stringify(data))).toThrow(/has no sheet/);
+  });
+
   it("rejects malformed elements", () => {
     const { project, drawing } = projectWithDrawing();
     const p = addElements(project, drawing.id, [makeLine([0, 0], [1, 1], ink)]);

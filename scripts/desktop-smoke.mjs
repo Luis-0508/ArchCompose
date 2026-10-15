@@ -121,7 +121,19 @@ const project = {
       ],
     },
   ],
-  drawings: [],
+  // A schema 1 drawing with a file: opening it must migrate it to a sheet with an underlay.
+  drawings: [
+    {
+      id: "drw_smoke",
+      number: "A-101",
+      title: "Smoke plan",
+      kind: "plan",
+      scale: 100,
+      level: "",
+      sourceAssetId: "ast_render",
+      revisions: [],
+    },
+  ],
   boards: [],
 };
 await invoke("write_project_file", { path: projectPath, contents: JSON.stringify(project) });
@@ -214,6 +226,7 @@ const previewPx = await page.evaluate(async (p) => {
   const bytes = await window.__TAURI_INTERNALS__.invoke("engine_layer_preview", {
     path: p,
     adjust: { exposure: 1, brightness: 0, contrast: 0, saturation: 0 },
+    layerScale: 1,
   });
   const bitmap = await createImageBitmap(new Blob([bytes], { type: "image/png" }));
   const c = new OffscreenCanvas(bitmap.width, bitmap.height).getContext("2d");
@@ -223,6 +236,30 @@ const previewPx = await page.evaluate(async (p) => {
 // Sky #8aa0b4 brightened by one stop.
 if (!(previewPx[0] > 0x8a + 20 && previewPx[3] === 255)) fail(`layer preview ${previewPx}`);
 ok(`engine_layer_preview applies exposure: sky ${previewPx.slice(0, 3)}`);
+
+const filtered = await page.evaluate(async (p) => {
+  const bytes = await window.__TAURI_INTERNALS__.invoke("engine_layer_preview", {
+    path: p,
+    adjust: {
+      exposure: 0,
+      brightness: 0,
+      contrast: 0,
+      saturation: 0,
+      vibrance: 30,
+      warmth: 40,
+      blur: 3,
+      sharpen: 50,
+    },
+    layerScale: 0.5,
+  });
+  const bitmap = await createImageBitmap(new Blob([bytes], { type: "image/png" }));
+  const c = new OffscreenCanvas(bitmap.width, bitmap.height).getContext("2d");
+  c.drawImage(bitmap, 0, 0);
+  return [...c.getImageData(600, 100, 1, 1).data];
+}, pngPath);
+// The sky turns warmer: more red than blue relative to #8aa0b4.
+if (!(filtered[0] - filtered[2] > 0x8a - 0xb4 + 10)) fail(`filtered preview ${filtered}`);
+ok(`engine_layer_preview applies warmth, vibrance, blur and sharpening: ${filtered.slice(0, 3)}`);
 
 await page.evaluate(async () => {
   const { setLayerAdjustments } = await import("/src/model/compose.ts");
@@ -286,6 +323,52 @@ await page.getByRole("button", { name: "Export PNG" }).waitFor();
 if (await page.getByRole("button", { name: "Export PNG" }).isDisabled())
   fail("Export PNG is disabled in the desktop app");
 ok("the compose inspector offers Export PNG and Export layered PSD");
+
+// Drawings: the schema 1 drawing became a sheet with the render as underlay. Draw on it,
+// save, reopen, and check that the content survived and is displayed.
+const migrated = await page.evaluate(async () => {
+  const { useAppStore } = await import("/src/state/store.ts");
+  const p = useAppStore.getState().history.present;
+  return { schema: p.schemaVersion, drawing: p.drawings[0] };
+});
+if (migrated.schema !== 2 || migrated.drawing?.underlay?.assetId !== "ast_render")
+  fail(`migrated drawing ${JSON.stringify(migrated)}`);
+ok(
+  `the schema 1 drawing opened as a ${migrated.drawing.sheet.format.preset} sheet with an underlay`,
+);
+await page.evaluate(async () => {
+  const { useAppStore } = await import("/src/state/store.ts");
+  const { addElements, makeLine, makeText, DEFAULT_STROKE } = await import("/src/model/sheet.ts");
+  const store = useAppStore.getState();
+  store.apply("Draw line", (p) =>
+    addElements(p, "drw_smoke", [
+      makeLine([20, 20], [200, 20], DEFAULT_STROKE),
+      makeText([20, 40], "Smoke", 6, DEFAULT_STROKE),
+    ]),
+  );
+  store.select({ drawingId: "drw_smoke" });
+  store.setWorkspace("drawings");
+});
+const drawingPath = join(dir, "Drawing.archcompose");
+const drawingText = await page.evaluate(async () => {
+  const { serializeProject } = await import("/src/model/serialization.ts");
+  const { useAppStore } = await import("/src/state/store.ts");
+  return serializeProject(useAppStore.getState().history.present);
+});
+await invoke("write_project_file", { path: drawingPath, contents: drawingText });
+await page.evaluate(async (p) => {
+  const { useAppStore } = await import("/src/state/store.ts");
+  useAppStore.getState().markSaved(null);
+  const { loadProjectFromPath } = await import("/src/app/commands.ts");
+  await loadProjectFromPath(p);
+  useAppStore.getState().setWorkspace("drawings");
+}, drawingPath);
+await page.waitForSelector("[data-testid='sheet-drw_smoke'] image[href^='blob:']", {
+  timeout: 10_000,
+});
+const shown = await page.locator("[data-testid='sheet-drw_smoke'] [data-element-id]").count();
+if (shown !== 2) fail(`reopened drawing shows ${shown} elements`);
+ok("drew on the sheet, saved, reopened: the underlay and both elements are displayed");
 
 await page.screenshot({ path: join(dir, "desktop.png") });
 ok(`screenshot: ${join(dir, "desktop.png")}`);

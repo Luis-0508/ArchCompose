@@ -88,16 +88,28 @@ pub const PREVIEW_SIDE: u32 = 2048;
 
 /// A layer's image with its adjustments applied by the engine, reduced to at most
 /// [`PREVIEW_SIDE`] pixels on its longest side, as an 8-bit PNG for the canvas.
-pub fn layer_preview(path: &str, adjust: &Adjust) -> Result<Vec<u8>, String> {
+/// `layer_scale` is the layer's scale on the canvas (canvas pixels per source pixel), so
+/// blur and sharpen radii, given in canvas pixels, look the same as in the export.
+pub fn layer_preview(path: &str, adjust: &Adjust, layer_scale: f64) -> Result<Vec<u8>, String> {
     use photocraft_codecs::{
         ChannelLayout, EncodeOptions, Format, Image, PngCompression, SampleType,
     };
     let name = path.rsplit(['/', '\\']).next().unwrap_or(path);
     adjust.validate(name)?;
+    if !(layer_scale.is_finite() && layer_scale > 0.0) {
+        return Err(format!("The layer “{name}” has an invalid scale."));
+    }
     let reduced = preview::reduced_source(path, name)?;
+    let reduction = f64::from(reduced.width) / f64::from(reduced.source_width.max(1));
     let rect = photocraft_doc::Rect::from_xywh(0, 0, reduced.width, reduced.height);
     let size = photocraft_doc::Size::new(reduced.width, reduced.height);
-    let adjusted = adjust::apply(reduced.surface.clone(), adjust, size, reduced.depth);
+    let adjusted = adjust::apply(
+        reduced.surface.clone(),
+        adjust,
+        size,
+        reduced.depth,
+        (reduction / layer_scale) as f32,
+    )?;
     let image = Image::from_raw(
         reduced.width,
         reduced.height,

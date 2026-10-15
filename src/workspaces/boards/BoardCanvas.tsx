@@ -14,6 +14,7 @@ import { useAssetSource } from "../../state/assetCache";
 import { useAppStore } from "../../state/store";
 import { contentToScreen, screenToContent, type Camera } from "../../viewport/camera";
 import { Viewport, type ViewportPointer } from "../../viewport/Viewport";
+import { SheetSvg } from "../drawings/SheetSvg";
 import styles from "./boards.module.css";
 
 export const boardViewKey = (board: Board) => `board:${board.id}`;
@@ -63,11 +64,7 @@ function FrameContentView({ project, frame }: { project: Project; frame: Frame }
       return (
         <div className={styles.drawingFrame}>
           <div className={styles.drawingArea}>
-            {drawing.sourceAssetId ? (
-              <AssetFill assetId={drawing.sourceAssetId} fit="contain" />
-            ) : (
-              <div className={styles.frameMissing}>No drawing file</div>
-            )}
+            <SheetSvg drawing={drawing} fit className={styles.drawingSheet} />
           </div>
           <div className={styles.drawingCaption} style={{ fontSize: TEXT_SIZE_MM.caption }}>
             <strong>{drawing.number}</strong>

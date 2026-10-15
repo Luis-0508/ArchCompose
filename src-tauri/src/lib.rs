@@ -45,8 +45,12 @@ async fn engine_decode_preview(path: String) -> Result<Response, String> {
 
 /// A layer's image with its adjustments applied, reduced for the canvas, as PNG.
 #[tauri::command]
-async fn engine_layer_preview(path: String, adjust: engine::Adjust) -> Result<Response, String> {
-    tauri::async_runtime::spawn_blocking(move || engine::layer_preview(&path, &adjust))
+async fn engine_layer_preview(
+    path: String,
+    adjust: engine::Adjust,
+    layer_scale: f64,
+) -> Result<Response, String> {
+    tauri::async_runtime::spawn_blocking(move || engine::layer_preview(&path, &adjust, layer_scale))
         .await
         .map_err(|e| format!("The preview was interrupted: {e}."))?
         .map(Response::new)

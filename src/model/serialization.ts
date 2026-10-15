@@ -1,3 +1,4 @@
+import { migrateProjectData } from "./migrations";
 import { PROJECT_SCHEMA_VERSION, type Project } from "./types";
 
 export const PROJECT_FILE_EXTENSION = "archcompose";
@@ -23,25 +24,71 @@ function expect(condition: boolean, what: string): asserts condition {
   if (!condition) throw new ProjectFileError(`The project file is damaged: ${what}.`);
 }
 
+function isNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isPoint(value: unknown): boolean {
+  return Array.isArray(value) && value.length === 2 && isNumber(value[0]) && isNumber(value[1]);
+}
+
+function isElement(value: unknown): boolean {
+  if (!isObject(value) || typeof value.id !== "string") return false;
+  const stroke = value.stroke;
+  if (
+    !isObject(stroke) ||
+    typeof stroke.color !== "string" ||
+    !isNumber(stroke.widthMm) ||
+    !isNumber(stroke.opacity)
+  ) {
+    return false;
+  }
+  const numbers = (...keys: string[]) => keys.every((k) => isNumber(value[k]));
+  const points = (min: number) =>
+    Array.isArray(value.points) && value.points.length >= min && value.points.every(isPoint);
+  switch (value.type) {
+    case "path":
+      return points(1);
+    case "polyline":
+      return points(2) && typeof value.closed === "boolean";
+    case "line":
+      return isPoint(value.from) && isPoint(value.to);
+    case "rect":
+      return numbers("x", "y", "w", "h");
+    case "ellipse":
+      return numbers("cx", "cy", "rx", "ry");
+    case "text":
+      return numbers("x", "y", "sizeMm") && typeof value.text === "string";
+    default:
+      return false;
+  }
+}
+
 /**
  * Parses and structurally validates a project file. The checks cover every field
  * the application dereferences, so a malformed file fails here with a clear message
  * instead of crashing a view later.
  */
 export function parseProject(text: string): Project {
-  let data: unknown;
+  let raw: unknown;
   try {
-    data = JSON.parse(text);
+    raw = JSON.parse(text);
   } catch {
     throw new ProjectFileError("This file is not an ArchCompose project (invalid JSON).");
   }
-  expect(isObject(data), "top level is not an object");
+  expect(isObject(raw), "top level is not an object");
+  let data: Json = raw;
   expect(typeof data.schemaVersion === "number", "missing schema version");
   if ((data.schemaVersion as number) > PROJECT_SCHEMA_VERSION) {
     throw new ProjectFileError(
       `This project was saved by a newer version of ArchCompose (schema ${String(data.schemaVersion)}). Update the app to open it.`,
     );
   }
+  expect(
+    Number.isInteger(data.schemaVersion) && (data.schemaVersion as number) >= 1,
+    "unsupported schema version",
+  );
+  data = migrateProjectData(data, PROJECT_SCHEMA_VERSION);
   expect(data.schemaVersion === PROJECT_SCHEMA_VERSION, "unsupported schema version");
   for (const key of ["id", "name", "createdAt", "modifiedAt"]) {
     expect(typeof data[key] === "string", `“${key}” is not text`);
@@ -81,9 +128,16 @@ export function parseProject(text: string): Project {
         const adjust = layer.adjust;
         expect(
           isObject(adjust) &&
-            ["exposure", "brightness", "contrast", "saturation"].every(
-              (k) => typeof adjust[k] === "number" && Number.isFinite(adjust[k]),
-            ),
+            [
+              "exposure",
+              "brightness",
+              "contrast",
+              "saturation",
+              "vibrance",
+              "warmth",
+              "blur",
+              "sharpen",
+            ].every((k) => typeof adjust[k] === "number" && Number.isFinite(adjust[k])),
           "a layer has malformed adjustments",
         );
       }
@@ -94,6 +148,33 @@ export function parseProject(text: string): Project {
       isObject(drawing) && typeof drawing.id === "string" && Array.isArray(drawing.revisions),
       "a drawing is malformed",
     );
+    const sheet = drawing.sheet;
+    expect(
+      isObject(sheet) &&
+        isObject(sheet.format) &&
+        isNumber(sheet.format.widthMm) &&
+        isNumber(sheet.format.heightMm) &&
+        (sheet.format.widthMm as number) > 0 &&
+        (sheet.format.heightMm as number) > 0 &&
+        isObject(sheet.grid) &&
+        isNumber(sheet.grid.spacingMm) &&
+        (sheet.grid.spacingMm as number) > 0,
+      `drawing ${String(drawing.id)} has no sheet`,
+    );
+    const underlay = drawing.underlay;
+    expect(
+      underlay === null ||
+        (isObject(underlay) &&
+          typeof underlay.assetId === "string" &&
+          underlay.assetId in assets &&
+          ["xMm", "yMm", "dpi", "opacity"].every((k) => isNumber(underlay[k])) &&
+          (underlay.dpi as number) > 0),
+      `drawing ${String(drawing.id)} has a malformed underlay`,
+    );
+    expect(Array.isArray(drawing.elements), `drawing ${String(drawing.id)} has no elements`);
+    for (const element of drawing.elements as unknown[]) {
+      expect(isElement(element), `drawing ${String(drawing.id)} has a malformed element`);
+    }
   }
   for (const board of data.boards as unknown[]) {
     expect(isObject(board) && typeof board.id === "string", "a board is malformed");

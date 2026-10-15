@@ -85,16 +85,40 @@ describe("compose documents", () => {
   it("stores clamped adjustments and drops neutral ones", () => {
     const { project, doc } = projectWithComposeDoc();
     const layerId = doc.layers[0]!.id;
-    const p1 = setLayerAdjustments(project, doc.id, layerId, { exposure: 9, saturation: -20 });
+    const p1 = setLayerAdjustments(project, doc.id, layerId, {
+      exposure: 9,
+      saturation: -20,
+      vibrance: 0,
+      warmth: 0,
+      blur: 300,
+    });
     const adjusted = p1.composeDocs[0]!.layers[0]!;
-    expect(adjusted.adjust).toEqual({ exposure: 5, brightness: 0, contrast: 0, saturation: -20 });
+    expect(adjusted.adjust).toEqual({
+      exposure: 5,
+      brightness: 0,
+      contrast: 0,
+      saturation: -20,
+      vibrance: 0,
+      warmth: 0,
+      blur: 100,
+      sharpen: 0,
+    });
     expect(hasAdjustments(adjusted)).toBe(true);
-    const p2 = setLayerAdjustments(p1, doc.id, layerId, { contrast: Number.NaN, exposure: 0 });
+    const p2 = setLayerAdjustments(p1, doc.id, layerId, {
+      contrast: Number.NaN,
+      exposure: 0,
+      blur: 0,
+      sharpen: 80,
+    });
     expect(p2.composeDocs[0]!.layers[0]!.adjust).toEqual({
       exposure: 0,
       brightness: 0,
       contrast: 0,
       saturation: -20,
+      vibrance: 0,
+      warmth: 0,
+      blur: 0,
+      sharpen: 80,
     });
     const reset = setLayerAdjustments(p2, doc.id, layerId, null);
     expect(reset.composeDocs[0]!.layers[0]!).not.toHaveProperty("adjust");

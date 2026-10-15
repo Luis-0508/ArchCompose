@@ -76,7 +76,14 @@ export const CAPABILITIES = {
     status: "available",
     provider: "engine",
     desktopOnly: true,
-    note: "Exposure, brightness, contrast and saturation per layer, applied non-destructively by the image engine in the canvas and in exports.",
+    note: "Exposure, brightness, contrast, saturation, vibrance and warmth per layer, applied non-destructively by the image engine in the canvas and in exports.",
+  },
+  "compose.filters": {
+    label: "Blur and sharpen",
+    status: "available",
+    provider: "engine",
+    desktopOnly: true,
+    note: "Gaussian blur and unsharp-mask sharpening per layer, from the image engine's filters, in the canvas and in exports.",
   },
   "compose.export": {
     label: "Export image",
@@ -91,6 +98,24 @@ export const CAPABILITIES = {
     provider: "engine",
     desktopOnly: true,
     note: "Opens the composite image of PSD and PSB files and exports views as layered PSD. Layers inside an imported PSD are not separated.",
+  },
+  "drawings.sheet": {
+    label: "Drawing sheets",
+    status: "available",
+    provider: "archcompose",
+    note: "Blank or annotated sheets in A0 to A4 or a custom size, with grid, snapping, rulers, scale and editable pen, line, shape and text content.",
+  },
+  "drawings.export": {
+    label: "Export drawing sheets",
+    status: "planned",
+    provider: "engine",
+    note: "Rendering sheets to PNG or PDF at a chosen resolution with the image engine's vector renderer is planned. Text needs the engine's font handling first.",
+  },
+  "compose.brush": {
+    label: "Brush and eraser on images",
+    status: "planned",
+    provider: "engine",
+    note: "Painting and erasing image layers with the image engine's brush engine is planned.",
   },
   "drawings.pdf": {
     label: "PDF and vector drawings",

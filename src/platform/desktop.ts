@@ -125,8 +125,8 @@ export const desktopPlatform: Platform = {
   engine: {
     formats: ENGINE_EXTENSIONS,
 
-    async layerPreview(path, adjust) {
-      const png = await call<ArrayBuffer>("engine_layer_preview", { path, adjust });
+    async layerPreview(path, adjust, layerScale) {
+      const png = await call<ArrayBuffer>("engine_layer_preview", { path, adjust, layerScale });
       return new Blob([png], { type: "image/png" });
     },
 

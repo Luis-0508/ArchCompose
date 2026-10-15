@@ -85,6 +85,39 @@ test("documentation screenshots", async ({ page }) => {
   await page.getByLabel("Level").first().press("Enter");
   await page.getByLabel("Revision description").fill("Issued for design review");
   await page.getByRole("button", { name: "Add revision" }).click();
+  // Annotate the imported plan: a red redline cloud and a room label.
+  const sheet = (await page.locator("[data-testid^='sheet-']").boundingBox())!;
+  const at = (fx: number, fy: number) => ({
+    x: sheet.x + sheet.width * fx,
+    y: sheet.y + sheet.height * fy,
+  });
+  await page.getByRole("button", { name: "Colour: Red" }).click();
+  await page.getByLabel("Width", { exact: true }).first().fill("0.7");
+  await page.getByLabel("Width", { exact: true }).first().press("Enter");
+  await page.keyboard.press("c");
+  let from = at(0.62, 0.36);
+  let to = at(0.7, 0.36);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(to.x, to.y, { steps: 6 });
+  await page.mouse.up();
+  await page.getByLabel("Text size").fill("14");
+  await page.getByLabel("Text size").press("Enter");
+  await page.keyboard.press("t");
+  from = at(0.21, 0.36);
+  await page.mouse.click(from.x, from.y);
+  await page.getByRole("textbox", { name: "New text" }).fill("Living room");
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("l");
+  from = at(0.56, 0.42);
+  to = at(0.46, 0.5);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(to.x, to.y, { steps: 6 });
+  await page.mouse.up();
+  await page.keyboard.press("v");
+  await page.keyboard.press("Escape");
+  await page.mouse.move(800, 500);
   await capture(page, "drawings");
 
   await page.keyboard.press("Control+3");

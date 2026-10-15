@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useId,
   useRef,
   useState,
@@ -351,5 +352,67 @@ export function Readout({ label, value }: { label: string; value: ReactNode }) {
       <span className={styles.fieldLabel}>{label}</span>
       <span className={`${styles.readout} num`}>{value}</span>
     </div>
+  );
+}
+
+interface ColorFieldProps {
+  label: string;
+  /** "#rrggbb" */
+  value: string;
+  onCommit: (value: string) => void;
+  /** Quick choices shown as swatches next to the picker. */
+  swatches?: readonly { value: string; label: string }[];
+  disabled?: boolean;
+}
+
+/**
+ * Colour picker with optional swatches. The system picker commits once when it closes
+ * (the native change event), so choosing a colour is one undo step.
+ */
+export function ColorField({ label, value, onCommit, swatches = [], disabled }: ColorFieldProps) {
+  const input = useRef<HTMLInputElement>(null);
+  const latest = useRef(onCommit);
+  useEffect(() => {
+    latest.current = onCommit;
+  });
+  useEffect(() => {
+    const node = input.current;
+    if (!node) return;
+    const commit = () => latest.current(node.value);
+    node.addEventListener("change", commit);
+    return () => node.removeEventListener("change", commit);
+  }, []);
+  useEffect(() => {
+    // Follow outside changes (undo, another selection).
+    if (input.current) input.current.value = value;
+  }, [value]);
+  return (
+    <FieldShell label={label}>
+      {(id) => (
+        <div className={styles.colorRow}>
+          <input
+            ref={input}
+            id={id}
+            type="color"
+            className={styles.colorInput}
+            defaultValue={value}
+            disabled={disabled}
+          />
+          {swatches.map((swatch) => (
+            <button
+              key={swatch.value}
+              type="button"
+              className={styles.swatch}
+              style={{ background: swatch.value }}
+              aria-label={`${label}: ${swatch.label}`}
+              aria-pressed={swatch.value.toLowerCase() === value.toLowerCase()}
+              title={swatch.label}
+              disabled={disabled}
+              onClick={() => onCommit(swatch.value)}
+            />
+          ))}
+        </div>
+      )}
+    </FieldShell>
   );
 }

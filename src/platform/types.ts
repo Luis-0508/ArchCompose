@@ -39,8 +39,11 @@ export interface EngineStatus {
 export interface ImageEngine {
   /** File extensions the engine decodes in addition to the web view's formats. */
   formats: readonly string[];
-  /** A reduced PNG of an image with adjustments applied, for the canvas. */
-  layerPreview(path: string, adjust: LayerAdjustments): Promise<Blob>;
+  /**
+   * A reduced PNG of an image with adjustments applied, for the canvas. `layerScale` is
+   * the layer's scale in the document, so blur and sharpening match the export.
+   */
+  layerPreview(path: string, adjust: LayerAdjustments, layerScale: number): Promise<Blob>;
   /** Asks where to save an export. Returns null when the user cancels. */
   chooseExportTarget(format: ExportFormat, suggestedName: string): Promise<string | null>;
   /** Renders the composition at full resolution and writes it to `path`. */

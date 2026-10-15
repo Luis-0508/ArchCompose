@@ -52,7 +52,7 @@ layer, scrubbing a field, moving a frame) call `beginGesture`, apply transient u
 commit one labelled step at `endGesture`. Every undo step has a human-readable label shown
 in the undo button tooltip. History is capped at 200 steps.
 
-**Pixels are not in the project.** A project file (`.archcompose`, JSON, schema version 1)
+**Pixels are not in the project.** A project file (`.archcompose`, JSON, schema version 2)
 references assets by absolute path. Pixel data lives in `state/assetCache.ts` as object
 URLs; on open, the cache reloads each asset through the platform and marks missing files,
 which the library, canvas and submission check then show.
@@ -61,8 +61,20 @@ which the library, canvas and submission check then show.
 512 MB images, 64 MB projects) and returns sentences the UI shows verbatim. Projects are
 written to a temporary file in the same folder, flushed, and renamed over the target, so a
 failure never leaves a truncated project. Parsing validates the structure and rejects files
-from newer schema versions with an explicit message. The app asks before discarding unsaved
+from newer schema versions with an explicit message. Older versions are upgraded step by step
+in `model/migrations.ts` before validation. The app asks before discarding unsaved
 changes, including when the window is closed.
+
+**Drawing sheets are vector data in paper millimetres.** A drawing has a sheet (paper format,
+grid, snapping, rulers, real-world unit), an optional image underlay placed at a resolution in
+dpi, and a list of elements (`path`, `line`, `polyline`, `rect`, `ellipse`, `text`) with a
+stroke colour, width in millimetres and opacity. `model/sheet.ts` holds the pure geometry:
+hit testing, bounds, transforms, snapping and the eraser, which cuts strokes into pieces.
+The canvas (`workspaces/drawings/SheetCanvas.tsx`) renders the sheet as SVG and keeps
+unfinished input (a stroke being drawn, an open polyline) in local state until it is
+committed as one undo step; moves, scaling and erasing are gestures. Paper size, drawing scale
+and image resolution are independent: the scale only converts paper lengths to real lengths
+for readouts. Boards show drawings with the same SVG renderer.
 
 **Visible capability state.** `engine/capabilities.ts` lists every planned feature with a
 one-sentence explanation. Planned tools appear in the tool rail as disabled buttons with
@@ -71,8 +83,8 @@ to work.
 
 **One viewport for three workspaces.** `viewport/Viewport.tsx` handles zoom (wheel at
 pointer, steps, fit, 100 %), pan (hand tool, Space, middle button), rulers and cursor
-reporting. Content units are pixels in Compose and Drawings and millimetres in Boards; a
-board is laid out directly in millimetres, so 1 content unit is 1 mm. Screen-space overlays
+reporting. Content units are pixels in Compose and millimetres in Drawings and Boards; sheets
+and boards are laid out directly in millimetres, so 1 content unit is 1 mm. Screen-space overlays
 (selection, handles, guides) keep constant stroke widths at any zoom.
 
 **Preview in the web view, export in the engine.** The canvas displays images and composes

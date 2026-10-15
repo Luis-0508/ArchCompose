@@ -27,19 +27,24 @@ compositor), `gpu`, `format`, L4 `io`, L5 `engine` (a `Session` and ~700 command
 
 ## What ArchCompose uses
 
-| Crate                | Used for                                                                                                   |
-| -------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `photocraft-codecs`  | Decoding PNG, JPEG, TIFF, WebP, OpenEXR, Radiance HDR, TGA, QOI and more, with decode limits; encoding PNG |
-| `photocraft-psd`     | Reading the merged composite of PSD and PSB files; writing layered PSD files                               |
-| `photocraft-cms`     | Converting embedded RGB and CMYK ICC profiles and linear float images to sRGB                              |
-| `photocraft-doc`     | The transient engine document: raster layers, opacity, visibility, clipped adjustment layers               |
-| `photocraft-algo`    | Placing layers: projective resampling (`transform::warp_surface_clipped`) and image resizing               |
-| `photocraft-compose` | Compositing (`render_bands`, `flatten_to_surface`) and the adjustment implementations                      |
-| `photocraft-raster`  | Tiled surfaces (also pulled in by the crates above, with `geom`, `color` and `vector`)                     |
+| Crate                | Used for                                                                                                    |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `photocraft-codecs`  | Decoding PNG, JPEG, TIFF, WebP, OpenEXR, Radiance HDR, TGA, QOI and more, with decode limits; encoding PNG  |
+| `photocraft-psd`     | Reading the merged composite of PSD and PSB files; writing layered PSD files                                |
+| `photocraft-cms`     | Converting embedded RGB and CMYK ICC profiles and linear float images to sRGB                               |
+| `photocraft-doc`     | The transient engine document: raster layers, opacity, visibility, clipped adjustment layers                |
+| `photocraft-algo`    | Placing layers (`transform::warp_surface_clipped`), resizing, and filters (Gaussian blur, unsharp mask)     |
+| `photocraft-compose` | Compositing (`render_bands`, `flatten_to_surface`) and the adjustments, including vibrance and photo filter |
+| `photocraft-raster`  | Tiled surfaces (also pulled in by the crates above, with `geom`, `color` and `vector`)                      |
 
 Not used: `engine`, `ops`, `io`, `text`, `paint`, `format`, `gpu`, `plugins`, `ui-egui`,
 `automation`, and the apps. In particular ArchCompose does not link PhotoCraft's user
 interface or any crate that embeds fonts, icons or dictionaries.
+
+An inventory of further PhotoCraft tools, their APIs and how they fit, is in
+[PHOTOCRAFT_TOOLS.md](PHOTOCRAFT_TOOLS.md). PhotoCraft's command registry is not exposed:
+its commands need a `Session` with its own history, so each reused tool is a typed operation
+whose parameters live in the ArchCompose document.
 
 ## How it is integrated
 
@@ -65,7 +70,7 @@ src/platform/desktop.ts ── Tauri IPC ──► src-tauri/src/lib.rs (spawn_b
 2. **Placement.** Each layer becomes a raster layer. A layer at 100 % on whole pixels is
    copied exactly; anything else is resampled with PhotoCraft's bicubic warp, clipped to the
    canvas, with premultiplied alpha.
-3. **Adjustments** (exposure, brightness, contrast, saturation) become PhotoCraft adjustment
+3. **Adjustments** (exposure, brightness, contrast, saturation, vibrance and warmth via Photo Filter) become PhotoCraft adjustment
    layers clipped to the layer and composited in isolation, so they change only that layer.
    The canvas preview of an adjusted layer is rendered by the same code (reduced to 2048 px),
    so preview and export agree. Source files are never modified.
@@ -118,7 +123,8 @@ ICC profiles are not applied. Exports are untagged sRGB.
   a way to reference a layer inside a file from an ArchCompose layer.
 - Masks and selections need painting or selection tools in ArchCompose's own interface; the
   engine side (`LayerMask`, `photocraft-algo::selection`) exists.
-- Filters (blur, sharpen) from `photocraft-algo` fit the same per-layer pattern as adjustments.
+- Exporting drawing sheets can use `photocraft-vector` for strokes and shapes; text needs
+  `photocraft-text`, its bundled fonts, and a font that matches the web view's preview.
 - Wide-gamut and HDR output (tagged exports, tone mapping) are not designed yet.
 
 ## Updating the pin

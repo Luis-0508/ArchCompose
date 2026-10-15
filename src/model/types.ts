@@ -6,7 +6,8 @@
  * assets are referenced by id and resolved at runtime (see state/assetCache).
  */
 
-export const PROJECT_SCHEMA_VERSION = 1;
+/** Version 2 replaced a drawing's `sourceAssetId` with a sheet, an underlay and elements. */
+export const PROJECT_SCHEMA_VERSION = 2;
 
 export type AssetId = string;
 export type ComposeDocId = string;
@@ -46,6 +47,14 @@ export interface LayerAdjustments {
   contrast: number;
   /** -100 to 100. */
   saturation: number;
+  /** -100 to 100. Raises the saturation of muted colours more than of saturated ones. */
+  vibrance: number;
+  /** -100 to 100. Positive warms (Warming Filter 85), negative cools (Cooling Filter 80). */
+  warmth: number;
+  /** Gaussian blur radius in document pixels, 0 to 100. */
+  blur: number;
+  /** Unsharp mask amount in percent at a 1 px radius, 0 to 500. */
+  sharpen: number;
 }
 
 export interface ComposeLayer {
@@ -86,6 +95,75 @@ export interface Revision {
   note: string;
 }
 
+export type ElementId = string;
+
+/** Real-world unit used to report lengths at the drawing's scale. */
+export type DrawingUnit = "mm" | "cm" | "m";
+
+/**
+ * The physical sheet of a drawing. Three measures stay separate: the paper size in
+ * millimetres, the drawing scale (paper millimetres to real-world length) and, for an
+ * attached image, its resolution on the sheet in dots per inch.
+ */
+export interface DrawingSheet {
+  format: PaperFormat;
+  grid: {
+    visible: boolean;
+    /** Grid spacing in paper millimetres. */
+    spacingMm: number;
+    snap: boolean;
+  };
+  rulers: boolean;
+  unit: DrawingUnit;
+}
+
+/**
+ * An image file placed on the sheet as an underlay, for example an exported plan to
+ * annotate. Position is the image's top-left corner in paper millimetres.
+ */
+export interface DrawingUnderlay {
+  assetId: AssetId;
+  xMm: number;
+  yMm: number;
+  /** Image pixels per inch of paper; sets the printed size of the image. */
+  dpi: number;
+  opacity: number;
+}
+
+/** Stroke appearance. Widths are paper millimetres, so they print at the same weight. */
+export interface StrokeStyle {
+  /** sRGB hex colour, "#rrggbb". */
+  color: string;
+  widthMm: number;
+  opacity: number;
+}
+
+/** A point in paper millimetres, origin at the sheet's top-left corner. */
+export type SheetPoint = [x: number, y: number];
+
+interface ElementBase {
+  id: ElementId;
+  stroke: StrokeStyle;
+}
+
+export type DrawingElement =
+  | (ElementBase & { type: "path"; points: SheetPoint[] })
+  | (ElementBase & { type: "line"; from: SheetPoint; to: SheetPoint })
+  | (ElementBase & { type: "polyline"; points: SheetPoint[]; closed: boolean })
+  | (ElementBase & { type: "rect"; x: number; y: number; w: number; h: number })
+  | (ElementBase & { type: "ellipse"; cx: number; cy: number; rx: number; ry: number })
+  | (ElementBase & {
+      type: "text";
+      /** Left end of the first line's baseline. */
+      x: number;
+      y: number;
+      text: string;
+      /** Font size (em height) in paper millimetres. */
+      sizeMm: number;
+    });
+
+export type DrawingElementType = DrawingElement["type"];
+
 export interface Drawing {
   id: DrawingId;
   /** Sheet number such as "A-101". */
@@ -95,7 +173,10 @@ export interface Drawing {
   /** Scale denominator: 100 means 1:100. */
   scale: number;
   level: string;
-  sourceAssetId: AssetId | null;
+  sheet: DrawingSheet;
+  underlay: DrawingUnderlay | null;
+  /** Bottom-to-top drawing order. */
+  elements: DrawingElement[];
   revisions: Revision[];
 }
 
@@ -104,13 +185,15 @@ export interface Drawing {
 export type PaperPreset = "A0" | "A1" | "A2" | "A3" | "A4" | "custom";
 export type Orientation = "portrait" | "landscape";
 
-export interface BoardFormat {
+export interface PaperFormat {
   preset: PaperPreset;
   orientation: Orientation;
   /** Effective sheet size in millimetres, orientation already applied. */
   widthMm: number;
   heightMm: number;
 }
+
+export type BoardFormat = PaperFormat;
 
 export interface LayoutGrid {
   columns: number;

@@ -9,6 +9,7 @@ import { addLayer, createComposeDoc } from "../model/compose";
 import { addDrawing } from "../model/drawings";
 import { addAsset, createProject, type NewAsset } from "../model/project";
 import { parseProject, serializeProject } from "../model/serialization";
+import { defaultSheet, fitUnderlay, sheetForImage } from "../model/sheet";
 import type { AssetKind, AssetRef, ComposeDocId, DrawingId, DrawingKind } from "../model/types";
 import { platform, type PickedFile } from "../platform";
 import { assetCache } from "../state/assetCache";
@@ -130,9 +131,11 @@ export function placeAssetInCompose(docId: ComposeDocId, asset: AssetRef): void 
 export function createDrawingFromAsset(asset: AssetRef, kind: DrawingKind = "plan"): DrawingId {
   let drawingId = "";
   store().apply("New drawing", (p) => {
+    const format = sheetForImage(asset);
     const [next, drawing] = addDrawing(p, kind, {
       title: asset.name.replace(/\.[^.]+$/, ""),
-      sourceAssetId: asset.id,
+      sheet: defaultSheet(format),
+      underlay: fitUnderlay(format, asset),
     });
     drawingId = drawing.id;
     return next;

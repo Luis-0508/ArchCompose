@@ -110,7 +110,7 @@ export function TitleBlock() {
     format = `${composeDoc.width} × ${composeDoc.height} px`;
   } else if (workspace === "drawings" && drawing) {
     sheet = `${drawing.number} ${drawing.title}`;
-    format = `1:${drawing.scale}`;
+    format = `${formatLabel(drawing.sheet.format)}, 1:${drawing.scale}`;
   } else if (workspace === "boards" && board) {
     sheet = board.name;
     format = formatLabel(board.format);
@@ -128,7 +128,7 @@ export function TitleBlock() {
       <Cell caption="Sheet" grow testId="tb-sheet">
         {sheet}
       </Cell>
-      <Cell caption={workspace === "drawings" ? "Scale" : "Format"} testId="tb-format">
+      <Cell caption={workspace === "drawings" ? "Paper and scale" : "Format"} testId="tb-format">
         {format}
       </Cell>
       <Cell caption="Zoom" testId="tb-zoom">

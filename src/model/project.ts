@@ -50,7 +50,7 @@ export function updateAsset(
 export function assetUsage(project: Project, id: AssetId): number {
   let count = 0;
   for (const doc of project.composeDocs) count += doc.layers.filter((l) => l.assetId === id).length;
-  count += project.drawings.filter((d) => d.sourceAssetId === id).length;
+  count += project.drawings.filter((d) => d.underlay?.assetId === id).length;
   for (const board of project.boards) {
     count += board.frames.filter(
       (f) => f.content.type === "asset" && f.content.assetId === id,
@@ -73,7 +73,7 @@ export function removeAsset(project: Project, id: AssetId): Project {
       layers: doc.layers.filter((l) => l.assetId !== id),
     })),
     drawings: project.drawings.map((d) =>
-      d.sourceAssetId === id ? { ...d, sourceAssetId: null } : d,
+      d.underlay?.assetId === id ? { ...d, underlay: null } : d,
     ),
     boards: project.boards.map((b) => ({
       ...b,

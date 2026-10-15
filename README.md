@@ -36,8 +36,8 @@ that are not available yet are listed in the app as such, never as buttons that 
 
 **Compose.** Import a render, place cut-outs of people, trees and objects as layers, move and
 scale them on the canvas, set opacity, order, visibility and locks, and place a horizon guide
-at eye level. Adjust exposure, brightness, contrast and saturation per layer without touching
-the image file.
+at eye level. Adjust exposure, brightness, contrast, saturation, vibrance and warmth, and
+apply blur and sharpening per layer without touching the image file.
 
 **Export.** Render a compose view at full resolution as PNG with transparency (16-bit when a
 source is 16-bit) or as a layered PSD, in the desktop app.
@@ -47,7 +47,12 @@ also TIFF, PSD and PSB (composite image), OpenEXR, Radiance HDR, TGA and QOI, co
 sRGB from their colour profiles.
 
 **Drawings.** Keep the drawing set: plans, sections, elevations, site plans and details, each
-with a sheet number (A-101, A-201 …), scale, level, attached drawing file and a revision log.
+with a sheet number (A-101, A-201 …), scale, level and a revision log. Every drawing is a
+paper sheet (A0 to A4 or custom, portrait or landscape) with a grid, snapping and rulers. Draw
+on a blank sheet or annotate an imported plan with pen, eraser, line, rectangle, circle,
+polyline and text, then select, move and scale what you drew. Paper size, drawing scale and
+image resolution stay separate: content is drawn in paper millimetres, the scale reports real
+lengths, and an underlay image's resolution sets its printed size.
 
 **Boards.** Lay out presentation sheets in ISO A0 to A4 or custom sizes on a layout grid with
 margins and gutters. Frames hold images, drawings and text. A submission check reports
@@ -66,11 +71,11 @@ actions (press `?` in the app). Drop image files on the window to import them.
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/drawings.webp" alt="Drawings workspace with a ground floor plan, its sheet number, scale, level and revision log"></td>
+    <td width="50%"><img src="docs/screenshots/drawings.webp" alt="Drawings workspace with a ground floor plan on an A1 sheet, annotated with a red circle, a line and a room label, and the drawing tools"></td>
     <td width="50%"><img src="docs/screenshots/boards.webp" alt="Boards workspace with an A1 board holding a title, a render and a plan, and the submission check"></td>
   </tr>
   <tr>
-    <td><b>Drawings.</b> Sheet numbers, scales, levels and revisions for every drawing.</td>
+    <td><b>Drawings.</b> Paper sheets with scale, grid and drawing tools to draw or annotate.</td>
     <td><b>Boards.</b> Grid-based sheet layout with a print resolution check.</td>
   </tr>
 </table>
@@ -85,13 +90,16 @@ actions (press `?` in the app). Drop image files on the window to import them.
 - Canvas preview through the system web view.
 - Desktop app, with the PhotoCraft crates: full-resolution PNG and layered PSD export,
   import of TIFF, PSD/PSB composites, OpenEXR, HDR, TGA and QOI, and per-layer exposure,
-  brightness, contrast and saturation previewed by the engine.
+  brightness, contrast, saturation, vibrance, warmth, Gaussian blur and unsharp-mask
+  sharpening previewed by the engine.
 
 ### Planned with the PhotoCraft engine
 
 Not implemented yet; see [docs/UPSTREAM.md](docs/UPSTREAM.md).
 
-- Layer masks and selections, filters such as blur and sharpen.
+- Layer masks and selections (rectangle, ellipse, lasso).
+- Brush and eraser on image layers.
+- Exporting drawing sheets at a chosen resolution with the engine's vector renderer.
 - Importing the individual layers of a PSD (today its composite image is imported).
 - Contact and directional shadows, segmentation.
 

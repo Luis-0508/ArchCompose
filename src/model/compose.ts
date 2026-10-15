@@ -93,6 +93,10 @@ export const NEUTRAL_ADJUSTMENTS: LayerAdjustments = {
   brightness: 0,
   contrast: 0,
   saturation: 0,
+  vibrance: 0,
+  warmth: 0,
+  blur: 0,
+  sharpen: 0,
 };
 
 /** Allowed range of each adjustment; mirrored by the engine adapter. */
@@ -101,6 +105,10 @@ export const ADJUSTMENT_RANGES: Record<keyof LayerAdjustments, readonly [number,
   brightness: [-150, 150],
   contrast: [-50, 100],
   saturation: [-100, 100],
+  vibrance: [-100, 100],
+  warmth: [-100, 100],
+  blur: [0, 100],
+  sharpen: [0, 500],
 };
 
 export function hasAdjustments(layer: ComposeLayer): boolean {

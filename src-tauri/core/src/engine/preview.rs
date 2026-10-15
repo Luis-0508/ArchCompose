@@ -20,6 +20,8 @@ pub struct Reduced {
     pub width: u32,
     pub height: u32,
     pub depth: Depth,
+    /// Width of the full-size source, to convert pixel distances to the reduced copy.
+    pub source_width: u32,
 }
 
 type Key = (String, u64, Option<SystemTime>);
@@ -65,6 +67,7 @@ fn reduce(surface: Surface, width: u32, height: u32, depth: Depth) -> Reduced {
             width,
             height,
             depth,
+            source_width: width,
         };
     }
     let f = f64::from(PREVIEW_SIDE) / f64::from(longest);
@@ -83,6 +86,7 @@ fn reduce(surface: Surface, width: u32, height: u32, depth: Depth) -> Reduced {
         width: w,
         height: h,
         depth,
+        source_width: width,
     }
 }
 

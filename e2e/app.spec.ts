@@ -116,7 +116,7 @@ test("builds a board, adds a frame, and reports it in the submission check", asy
 
 test("adds drawings with sheet numbers and revisions", async ({ page }) => {
   await page.keyboard.press("Control+2");
-  await page.getByRole("button", { name: "Add empty plan" }).click();
+  await page.getByRole("button", { name: "New blank sheet" }).click();
   await expect(page.getByTestId("tb-sheet")).toContainText("A-101");
   await page.getByLabel("Kind of drawing to add").selectOption("section");
   await page.getByRole("button", { name: "Add drawing" }).click();

@@ -70,7 +70,7 @@ src/platform/desktop.ts ── Tauri IPC ──► src-tauri/src/lib.rs (spawn_b
 2. **Placement.** Each layer becomes a raster layer. A layer at 100 % on whole pixels is
    copied exactly; anything else is resampled with PhotoCraft's bicubic warp, clipped to the
    canvas, with premultiplied alpha.
-3. **Adjustments** (exposure, brightness, contrast, saturation) become PhotoCraft adjustment
+3. **Adjustments** (exposure, brightness, contrast, saturation, vibrance and warmth via Photo Filter) become PhotoCraft adjustment
    layers clipped to the layer and composited in isolation, so they change only that layer.
    The canvas preview of an adjusted layer is rendered by the same code (reduced to 2048 px),
    so preview and export agree. Source files are never modified.

@@ -437,6 +437,13 @@ export function SheetCanvas({ drawing }: { drawing: Drawing }) {
     if (!polyline) return;
     const handler = (event: KeyboardEvent) => {
       if (!["Enter", "Escape", "Backspace"].includes(event.key)) return;
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        target.closest("input, textarea, select, [contenteditable]")
+      ) {
+        return;
+      }
       event.preventDefault();
       event.stopImmediatePropagation();
       if (event.key === "Enter") finishPolyline(polyline);

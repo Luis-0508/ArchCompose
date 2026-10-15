@@ -154,8 +154,11 @@ export function parseProject(text: string): Project {
         isObject(sheet.format) &&
         isNumber(sheet.format.widthMm) &&
         isNumber(sheet.format.heightMm) &&
+        (sheet.format.widthMm as number) > 0 &&
+        (sheet.format.heightMm as number) > 0 &&
         isObject(sheet.grid) &&
-        isNumber(sheet.grid.spacingMm),
+        isNumber(sheet.grid.spacingMm) &&
+        (sheet.grid.spacingMm as number) > 0,
       `drawing ${String(drawing.id)} has no sheet`,
     );
     const underlay = drawing.underlay;

@@ -15,7 +15,7 @@ const WORKSPACE_OPTIONS: readonly ChoiceOption<WorkspaceId>[] = [
 /** The section/elevation callout, drawn as the ArchCompose mark. */
 export function BrandMark() {
   return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden className={styles.mark}>
+    <svg width="26" height="26" viewBox="0 0 22 22" aria-hidden className={styles.mark}>
       <circle cx="11" cy="11" r="9.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
       <path d="M1.75 11a9.25 9.25 0 0 1 18.5 0Z" fill="var(--c-accent)" />
       <path d="M1 11h20" stroke="currentColor" strokeWidth="1.5" />

@@ -37,6 +37,11 @@
   --c-success: #9cc59a;
   /* Profile flair only (the heart for profiles named Finja); never a signal. */
   --c-heart: #e8476a;
+  --c-heart-light: #ff9bb5;
+  --c-heart-sparkle: #fff4f7;
+  --c-heart-blush: #ffe3eb;
+  --c-heart-blush-deep: #ffc4d4;
+  --c-heart-ink: #7d1a38;
 
   /* Sheets */
   --c-paper: #f7f6f2;

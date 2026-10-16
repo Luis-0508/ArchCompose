@@ -22,15 +22,17 @@ import controls from "../ui/controls.module.css";
 import styles from "./ProfileMenu.module.css";
 
 const HEART = "M10 17S3 12.6 3 7.8a3.8 3.8 0 0 1 7-2.2 3.8 3.8 0 0 1 7 2.2C17 12.6 10 17 10 17Z";
-const HEART_SPACING = 9;
-const HEART_SIZE = 6;
+const SPARKLE = "M10 2 11.8 8.2 18 10 11.8 11.8 10 18 8.2 11.8 2 10 8.2 8.2Z";
+const HEART_SPACING = 8;
+const HEART_SIZE = 7;
+const HEART_SIZE_SMALL = 5;
 
 /** Evenly spaced points on a stadium (a pill; a circle when square), centred on 0,0. */
-function stadiumPoints(width: number, height: number): [number, number][] {
+function stadiumPoints(width: number, height: number, spacing: number): [number, number][] {
   const r = Math.min(width, height) / 2;
   const straight = Math.max(width, height) - 2 * r;
   const perimeter = 2 * straight + 2 * Math.PI * r;
-  const count = Math.max(8, Math.round(perimeter / HEART_SPACING));
+  const count = Math.max(8, Math.round(perimeter / spacing));
   const arc = Math.PI * r;
   return Array.from({ length: count }, (_, i) => {
     let d = (i / count) * perimeter;
@@ -48,7 +50,10 @@ function stadiumPoints(width: number, height: number): [number, number][] {
   });
 }
 
-/** A frame of small hearts around a round or pill-shaped element of the given size. */
+/**
+ * A garland around a round or pill-shaped element of the given size: big and small hearts
+ * in two pinks, each tilted a little, with a sparkle every fifth place.
+ */
 function HeartFrame({
   width,
   height,
@@ -58,10 +63,12 @@ function HeartFrame({
   height: number;
   testId?: string;
 }) {
-  const w = width + 7;
-  const h = height + 7;
-  const boxW = w + HEART_SIZE + 2;
-  const boxH = h + HEART_SIZE + 2;
+  // Hearts grow a little with the element, up to the size that still fits the top bar.
+  const k = Math.min(1.2, Math.max(1, Math.min(width, height) / 30));
+  const w = width + 6;
+  const h = height + 6;
+  const boxW = w + HEART_SIZE * k + 2;
+  const boxH = h + HEART_SIZE * k + 2;
   return (
     <svg
       className={styles.frame}
@@ -71,13 +78,24 @@ function HeartFrame({
       aria-hidden
       data-testid={testId}
     >
-      {stadiumPoints(w, h).map(([x, y], i) => (
-        <path
-          key={i}
-          d={HEART}
-          transform={`translate(${x} ${y}) scale(${HEART_SIZE / 20}) translate(-10 -10)`}
-        />
-      ))}
+      {stadiumPoints(w, h, HEART_SPACING * k).map(([x, y], i) => {
+        const sparkle = i % 5 === 4;
+        const small = i % 2 === 1;
+        const size = (sparkle || small ? HEART_SIZE_SMALL : HEART_SIZE) * k;
+        const tilt = sparkle ? 0 : small ? -14 : 10;
+        return (
+          <g
+            key={i}
+            transform={`translate(${x} ${y}) rotate(${tilt}) scale(${size / 20}) translate(-10 -10)`}
+          >
+            <path
+              className={sparkle ? styles.sparkle : small ? styles.heartLight : undefined}
+              d={sparkle ? SPARKLE : HEART}
+              style={{ animationDelay: `${i * 45}ms` }}
+            />
+          </g>
+        );
+      })}
     </svg>
   );
 }

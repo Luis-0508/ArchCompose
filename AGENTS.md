@@ -4,6 +4,30 @@ Guidance for coding agents and contributors working on ArchCompose. Read
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing structure, and
 [docs/UPSTREAM.md](docs/UPSTREAM.md) before touching anything engine-related.
 
+## Project knowledge
+
+The repository is the source of truth. Short documents in `docs/` record what the code alone
+cannot tell:
+
+| File                    | Purpose                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `docs/PROJECT_STATE.md` | What exists, active work, blockers, next priorities. A snapshot that may be stale. |
+| `docs/ARCHITECTURE.md`  | Modules, boundaries, data flow and the key decisions made so far.                  |
+| `docs/DECISIONS/`       | Numbered decision records for decisions made from now on.                          |
+| `docs/ROADMAP.md`       | Planned milestones, ordered by dependency.                                         |
+
+- Read `PROJECT_STATE.md` before larger work, and the architecture or decision records only
+  when the task touches that area.
+- When a document disagrees with git or the code, trust the repository and correct the
+  document.
+- Update `ARCHITECTURE.md` when modules, boundaries or data flow change. Add a decision record
+  when choosing between real alternatives a future maintainer might question (new dependency,
+  architecture boundary, data format, workflow). Do not rewrite accepted records; supersede
+  them with a new one.
+- Keep these documents short and factual. Do not document unimplemented features.
+- `docs/WORKFLOW.md` explains how these documents, the maintainer's task board (not required
+  for contributors) and the workflow checks fit together.
+
 ## Ground rules
 
 1. **The document model is pure.** All edits are functions in `src/model/` that take a

@@ -140,3 +140,7 @@ See [UPSTREAM.md](UPSTREAM.md) for the integrated crates, limits and open questi
 | Documentation screenshots                                                                                                  | Playwright (opt-in) | `e2e/screenshots.spec.ts`   |
 | Backend file I/O and the engine adapter (real PhotoCraft crates: decode, placement, blending, adjustments, PNG/PSD export) | `cargo test`        | `src-tauri/core`            |
 | Real desktop runtime (IPC, disk, WebView2, engine import, export, adjustments, save/reopen)                                | Playwright over CDP | `scripts/desktop-smoke.mjs` |
+| Development workflow only: session hook, Kanban board merge driver, Claude Code configuration                              | `node --test`       | `scripts/workflow/`         |
+
+The workflow tests do not touch the app; `.github/workflows/workflow-checks.yml` runs them
+when workflow files change (see [WORKFLOW.md](WORKFLOW.md)).

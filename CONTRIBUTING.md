@@ -38,6 +38,14 @@ npx playwright install chromium
 4. Run the checks below.
 5. Open a pull request with a clear English summary and validation notes.
 
+## Optional tooling
+
+The maintainer's default workflow uses Claude Code with a local Kanban board (`CLAUDE.md`,
+`.claude/`, `.kanban/`) and the project memory in `docs/`.
+None of it is required to contribute: the board is plain JSON you can read, and these files
+do not affect building or testing the project. Please do not edit `.kanban/` in your pull
+requests. See [docs/WORKFLOW.md](docs/WORKFLOW.md) for how the pieces fit together.
+
 ## Checks
 
 ```bash

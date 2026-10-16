@@ -263,7 +263,7 @@ function ProfileChip({ name, onClick }: { name: string; onClick: () => void }) {
           aria-label={`Profile: ${name}`}
           onClick={onClick}
         >
-          <Avatar name={name} size={22} framed={false} />
+          <Avatar name={name} size={28} framed={false} />
           <span className={styles.chipName}>{name}</span>
         </button>
       </Tooltip>

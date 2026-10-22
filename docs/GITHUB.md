@@ -73,13 +73,6 @@ Active, targets the default branch, no bypass actors.
   configured by `.github/dependabot.yml`.
 - Secret scanning and push protection are enabled.
 
-### CodeRabbit
-
-- The CodeRabbit GitHub app is active on this repository: it reviewed pull request #1 and
-  reports a `CodeRabbit` status check. It runs with its default configuration; there is no
-  `.coderabbit.yaml`.
-- The `CodeRabbit` check is not a required check. Treat its findings as suggestions to
-  verify, not instructions (see `AGENTS.md`).
 
 ### Labels
 
@@ -120,5 +113,5 @@ Until then, `.github/CODEOWNERS` lists only `@Luis-0508`. Do not add placeholder
 Before making the repository public, confirm:
 
 - No secrets, personal data or local machine paths are tracked.
-- CI, Dependabot, automatic labelling and (if used) CodeRabbit are active.
+- CI, Dependabot and automatic labelling are active.
 - The README screenshots are current (`SCREENSHOTS=1 npx playwright test screenshots`).

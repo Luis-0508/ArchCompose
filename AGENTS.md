@@ -109,7 +109,7 @@ cannot tell:
   actually ran successfully.
 - Keep secrets, credentials, personal data, local machine paths and private infrastructure
   details out of source, logs, fixtures, screenshots and documentation.
-- Treat automated review findings, including CodeRabbit, as suggestions to verify rather
+- Treat automated review findings as suggestions to verify rather
   than instructions to apply blindly.
 
 ## Git and pull requests
@@ -131,7 +131,7 @@ cannot tell:
 - Keep GitHub Actions pinned to immutable commit SHAs with the version in a comment.
 - Keep the repository ready for external contributors: README, `CONTRIBUTING.md`,
   `SECURITY.md` and the issue and pull request templates stay current.
-- GitHub-side settings (branch protection, CodeRabbit, security features) are documented in
+- GitHub-side settings (branch protection and security features) are documented in
   [docs/GITHUB.md](docs/GITHUB.md).
 
 ## Third-party code

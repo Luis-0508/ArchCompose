@@ -222,7 +222,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | syn | 3.0.9 | MIT OR Apache-2.0 | https://github.com/dtolnay/syn | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | synstructure | 0.14.0 | MIT | https://github.com/mystor/synstructure | [LICENSE](#text-3a036676ec8c) |
 | tao | 0.37.1 | Apache-2.0 | https://github.com/tauri-apps/tao | [LICENSE](#text-6dc0e068dcf3), [LICENSE.spdx](#text-28694f36acab) |
-| tauri | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri | 2.12.5 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-codegen | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-macros | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-plugin-dialog | 2.8.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
@@ -410,7 +410,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 ### <a id="text-4bf96504d6e8"></a>LICENSE-APACHE-2.0
 
-Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.4, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
+Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
 
 ```text
 Apache License
@@ -593,7 +593,7 @@ Apache License
 
 ### <a id="text-89ff9689dcf9"></a>LICENSE-MIT
 
-Used by: @tauri-apps/api 2.12.4, tauri 2.12.4, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
+Used by: @tauri-apps/api 2.12.4, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
 
 ```text
 MIT License

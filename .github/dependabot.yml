@@ -1,5 +1,5 @@
 # Dependabot checks every ecosystem every calendar day, including weekends, and keeps up to
-# 100 update pull requests open per ecosystem so updates stay visible. Add one update block
+# 10 update pull requests open per ecosystem so updates stay visible. Add one update block
 # per package ecosystem as soon as it is introduced.
 version: 2
 
@@ -10,7 +10,13 @@ updates:
       interval: cron
       cronjob: "0 6 * * *"
       timezone: Europe/Berlin
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 10
+    groups:
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - patch
     commit-message:
       prefix: ci
 
@@ -21,7 +27,13 @@ updates:
       interval: cron
       cronjob: "0 6 * * *"
       timezone: Europe/Berlin
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 10
+    groups:
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - patch
     commit-message:
       prefix: deps
       prefix-development: deps-dev
@@ -33,6 +45,12 @@ updates:
       interval: cron
       cronjob: "0 6 * * *"
       timezone: Europe/Berlin
-    open-pull-requests-limit: 100
+    open-pull-requests-limit: 10
+    groups:
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - patch
     commit-message:
       prefix: deps

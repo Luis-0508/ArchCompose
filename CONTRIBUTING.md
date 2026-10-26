@@ -65,9 +65,8 @@ behaviour changes, testing, and any remaining limitations. Include a screenshot 
 changes visibly, and regenerate the README screenshots if they are affected
 (`SCREENSHOTS=1 npx playwright test screenshots`).
 
-Pull requests are labelled automatically from the changed paths. Automated review tools such
-as CodeRabbit provide suggestions. Verify findings against the actual code before applying
-them.
+Pull requests are labelled automatically from the changed paths. Verify automated review
+findings against the actual code before applying them.
 
 ## Documentation
 

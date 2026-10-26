@@ -73,7 +73,6 @@ Active, targets the default branch, no bypass actors.
   configured by `.github/dependabot.yml`.
 - Secret scanning and push protection are enabled.
 
-
 ### Labels
 
 The labeler workflow creates its labels on every pull request run. Dependabot adds its own

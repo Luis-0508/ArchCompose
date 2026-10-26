@@ -14,12 +14,12 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | Component | Version | License | Source | License text |
 | --- | --- | --- | --- | --- |
 | @fontsource-variable/archivo | 5.3.0 | OFL-1.1 | https://github.com/fontsource/font-files.git | [LICENSE](#text-082affb06bbe) |
-| @tauri-apps/api | 2.12.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri.git | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9), [LICENSE.spdx](#text-7c667b0cf986) |
-| @tauri-apps/plugin-dialog | 2.8.2 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
-| react | 19.3.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
-| react-dom | 19.3.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
+| @tauri-apps/api | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri.git | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9), [LICENSE.spdx](#text-7c667b0cf986) |
+| @tauri-apps/plugin-dialog | 2.8.3 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
+| react | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
+| react-dom | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | scheduler | 0.28.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
-| zustand | 5.0.15 | MIT | https://github.com/pmndrs/zustand.git | [LICENSE](#text-384a8fa756d4) |
+| zustand | 5.0.16 | MIT | https://github.com/pmndrs/zustand.git | [LICENSE](#text-384a8fa756d4) |
 | adler2 | 2.0.1 | 0BSD OR MIT OR Apache-2.0 | https://github.com/oyvindln/adler2 | [LICENSE-0BSD](#text-a21c914647d3), [LICENSE-APACHE](#text-1bc86297d032), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | aho-corasick | 1.1.5 | Unlicense OR MIT | https://github.com/BurntSushi/aho-corasick | [COPYING](#text-65314a6c9668), [LICENSE-MIT](#text-154c1af2b38e), [UNLICENSE](#text-ca2abdf69588) |
 | alloc-no-stdlib | 3.0.0 | BSD-3-Clause | https://github.com/dropbox/rust-alloc-no-stdlib | [LICENSE](#text-6c91ec82929f) |
@@ -97,7 +97,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | hex | 0.4.3 | MIT OR Apache-2.0 | https://github.com/KokaKiwi/rust-hex | [LICENSE-APACHE](#text-6dc0e068dcf3), [LICENSE-MIT](#text-9dde4a6ad496) |
 | html5ever | 0.39.0 | MIT OR Apache-2.0 | https://github.com/servo/html5ever | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-35af0fd88338) |
 | http | 1.5.0 | MIT OR Apache-2.0 | https://github.com/hyperium/http | [LICENSE-APACHE](#text-881c9fe2d29b), [LICENSE-MIT](#text-f47894ff9c86) |
-| ico | 0.5.0 | MIT | https://github.com/mdsteele/rust-ico | [LICENSE](#text-95573f040b56) |
+| ico | 0.6.0 | MIT | https://github.com/mdsteele/rust-ico | [LICENSE](#text-95573f040b56) |
 | icu_collections | 2.3.0 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
 | icu_locale_core | 2.3.0 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
 | icu_normalizer | 2.3.0 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
@@ -163,7 +163,6 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | photocraft-vector | 0.9.0 | MIT OR Apache-2.0 | https://github.com/storytold/photocraft/tree/c699e3cda69f4852b43c0b191ab0091aaeff9d6a | [LICENSE-APACHE](#text-4bf96504d6e8), [LICENSE-MIT](#text-6a68f0bf5e0c), [NOTICE](#text-8c3a87c32b37) |
 | pin-project-lite | 0.2.17 | Apache-2.0 OR MIT | https://github.com/taiki-e/pin-project-lite | [LICENSE-APACHE](#text-4bf96504d6e8), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | plist | 1.10.1 | MIT | https://github.com/ebarnard/rust-plist/ | [LICENCE](#text-5b0ae40d1a35) |
-| png | 0.17.16 | MIT OR Apache-2.0 | https://github.com/image-rs/image-png | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-80cdd90699e4) |
 | png | 0.18.1 | MIT OR Apache-2.0 | https://github.com/image-rs/image-png | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-80cdd90699e4) |
 | potential_utf | 0.1.6 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
 | powerfmt | 0.2.1 | MIT OR Apache-2.0 | https://github.com/jhpratt/powerfmt | [LICENSE-Apache](#text-4b05c4b43039), [LICENSE-MIT](#text-6e972f314e81) |
@@ -223,14 +222,14 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | syn | 3.0.9 | MIT OR Apache-2.0 | https://github.com/dtolnay/syn | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | synstructure | 0.14.0 | MIT | https://github.com/mystor/synstructure | [LICENSE](#text-3a036676ec8c) |
 | tao | 0.37.1 | Apache-2.0 | https://github.com/tauri-apps/tao | [LICENSE](#text-6dc0e068dcf3), [LICENSE.spdx](#text-28694f36acab) |
-| tauri | 2.12.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-codegen | 2.7.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-macros | 2.7.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-plugin-dialog | 2.8.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
-| tauri-plugin-fs | 2.7.0 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
-| tauri-runtime | 2.12.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-runtime-wry | 2.12.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-utils | 2.10.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-codegen | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-macros | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-plugin-dialog | 2.8.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
+| tauri-plugin-fs | 2.7.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
+| tauri-runtime | 2.12.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-runtime-wry | 2.12.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-utils | 2.10.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tendril | 0.5.1 | MIT OR Apache-2.0 | https://github.com/servo/html5ever | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-dfa7fbad0178) |
 | thiserror | 2.0.21 | MIT OR Apache-2.0 | https://github.com/dtolnay/thiserror | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | thiserror-impl | 2.0.21 | MIT OR Apache-2.0 | https://github.com/dtolnay/thiserror | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
@@ -411,7 +410,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 ### <a id="text-4bf96504d6e8"></a>LICENSE-APACHE-2.0
 
-Used by: @tauri-apps/api 2.12.3, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.3, tauri-codegen 2.7.2, tauri-macros 2.7.2, tauri-plugin-dialog 2.8.2, tauri-plugin-fs 2.7.0, tauri-runtime 2.12.1, tauri-runtime-wry 2.12.1, tauri-utils 2.10.1, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
+Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.4, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
 
 ```text
 Apache License
@@ -594,7 +593,7 @@ Apache License
 
 ### <a id="text-89ff9689dcf9"></a>LICENSE-MIT
 
-Used by: @tauri-apps/api 2.12.3, tauri 2.12.3, tauri-codegen 2.7.2, tauri-macros 2.7.2, tauri-plugin-dialog 2.8.2, tauri-plugin-fs 2.7.0, tauri-runtime 2.12.1, tauri-runtime-wry 2.12.1, tauri-utils 2.10.1
+Used by: @tauri-apps/api 2.12.4, tauri 2.12.4, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
 
 ```text
 MIT License
@@ -622,7 +621,7 @@ SOFTWARE.
 
 ### <a id="text-7c667b0cf986"></a>LICENSE.spdx
 
-Used by: @tauri-apps/api 2.12.3
+Used by: @tauri-apps/api 2.12.4
 
 ```text
 SPDXVersion: SPDX-2.1
@@ -649,7 +648,7 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ### <a id="text-eb8a6c846304"></a>LICENSE.spdx
 
-Used by: @tauri-apps/plugin-dialog 2.8.2, tauri-plugin-dialog 2.8.2, tauri-plugin-fs 2.7.0
+Used by: @tauri-apps/plugin-dialog 2.8.3, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1
 
 ```text
 SPDXVersion: SPDX-2.1
@@ -676,7 +675,7 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ### <a id="text-cf9b17822d1f"></a>LICENSE
 
-Used by: react 19.3.0, react-dom 19.3.0, scheduler 0.28.0
+Used by: react 19.3.1, react-dom 19.3.1, scheduler 0.28.0
 
 ```text
 MIT License
@@ -704,7 +703,7 @@ SOFTWARE.
 
 ### <a id="text-384a8fa756d4"></a>LICENSE
 
-Used by: zustand 5.0.15
+Used by: zustand 5.0.16
 
 ```text
 MIT License
@@ -1260,7 +1259,7 @@ END OF TERMS AND CONDITIONS
 
 ### <a id="text-954f335b8baf"></a>LICENSE-APACHE
 
-Used by: base64 0.23.1, bitflags 1.3.2, bitflags 2.13.2, bs58 0.5.1, camino 1.2.6, cfg-if 1.0.5, crossbeam-channel 0.5.17, crossbeam-deque 0.8.8, crossbeam-epoch 0.9.21, crossbeam-utils 0.8.23, displaydoc 0.2.7, either 1.19.0, equivalent 1.0.3, fastrand 2.5.0, flate2 1.1.10, fnv 1.0.7, form_urlencoded 1.2.2, gif 0.14.2, glob 0.3.4, hashbrown 0.12.3, hashbrown 0.17.1, heck 0.5.0, html5ever 0.39.0, idna 1.1.0, idna_adapter 1.2.2, indexmap 1.9.3, indexmap 2.14.2, keyboard-types 0.8.3, lock_api 0.4.14, log 0.4.34, markup5ever 0.39.0, mime 0.3.17, muda 0.20.0, num-complex 0.4.6, num-integer 0.1.47, num-traits 0.2.19, once_cell 1.21.4, parking_lot 0.12.5, parking_lot_core 0.9.12, percent-encoding 2.3.2, png 0.17.16, png 0.18.1, primal-check 0.3.4, rayon 1.12.0, rayon-core 1.13.0, regex 1.13.1, regex-automata 0.4.18, regex-syntax 0.8.11, scopeguard 1.2.0, serde_with 3.24.0, serde_with_macros 3.24.0, servo_arc 0.4.3, smallvec 1.16.3, stable_deref_trait 1.2.1, string_cache 0.9.0, tendril 0.5.1, tray-icon 0.25.1, unicode-segmentation 1.13.3, url 2.5.8, uuid 1.28.0, web_atoms 0.2.6, weezl 0.1.12, window-vibrancy 0.8.1, wry 0.57.0
+Used by: base64 0.23.1, bitflags 1.3.2, bitflags 2.13.2, bs58 0.5.1, camino 1.2.6, cfg-if 1.0.5, crossbeam-channel 0.5.17, crossbeam-deque 0.8.8, crossbeam-epoch 0.9.21, crossbeam-utils 0.8.23, displaydoc 0.2.7, either 1.19.0, equivalent 1.0.3, fastrand 2.5.0, flate2 1.1.10, fnv 1.0.7, form_urlencoded 1.2.2, gif 0.14.2, glob 0.3.4, hashbrown 0.12.3, hashbrown 0.17.1, heck 0.5.0, html5ever 0.39.0, idna 1.1.0, idna_adapter 1.2.2, indexmap 1.9.3, indexmap 2.14.2, keyboard-types 0.8.3, lock_api 0.4.14, log 0.4.34, markup5ever 0.39.0, mime 0.3.17, muda 0.20.0, num-complex 0.4.6, num-integer 0.1.47, num-traits 0.2.19, once_cell 1.21.4, parking_lot 0.12.5, parking_lot_core 0.9.12, percent-encoding 2.3.2, png 0.18.1, primal-check 0.3.4, rayon 1.12.0, rayon-core 1.13.0, regex 1.13.1, regex-automata 0.4.18, regex-syntax 0.8.11, scopeguard 1.2.0, serde_with 3.24.0, serde_with_macros 3.24.0, servo_arc 0.4.3, smallvec 1.16.3, stable_deref_trait 1.2.1, string_cache 0.9.0, tendril 0.5.1, tray-icon 0.25.1, unicode-segmentation 1.13.3, url 2.5.8, uuid 1.28.0, web_atoms 0.2.6, weezl 0.1.12, window-vibrancy 0.8.1, wry 0.57.0
 
 ```text
 Apache License
@@ -6212,7 +6211,7 @@ DEALINGS IN THE SOFTWARE.
 
 ### <a id="text-95573f040b56"></a>LICENSE
 
-Used by: ico 0.5.0
+Used by: ico 0.6.0
 
 ```text
 MIT License
@@ -8289,7 +8288,7 @@ SOFTWARE.
 
 ### <a id="text-80cdd90699e4"></a>LICENSE-MIT
 
-Used by: png 0.17.16, png 0.18.1
+Used by: png 0.18.1
 
 ```text
 Copyright (c) 2015 nwin

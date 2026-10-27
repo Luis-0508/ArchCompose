@@ -11,9 +11,10 @@ are described under "Key decisions" in [ARCHITECTURE.md](../ARCHITECTURE.md) and
 
 Name files `NNNN-short-title.md`, numbered in order, and add each record to the table.
 
-| #                                                     | Decision                                              | Status   |
-| ----------------------------------------------------- | ----------------------------------------------------- | -------- |
-| [0001](0001-local-kanban-board-and-project-memory.md) | Local Kanban board and project memory for development | Accepted |
+| #                                                     | Decision                                              | Status             |
+| ----------------------------------------------------- | ----------------------------------------------------- | ------------------ |
+| [0001](0001-local-kanban-board-and-project-memory.md) | Local Kanban board and project memory for development | Superseded by 0002 |
+| [0002](0002-github-issues-for-planned-work.md)        | GitHub issues for planned work                        | Accepted           |
 
 ## Template
 

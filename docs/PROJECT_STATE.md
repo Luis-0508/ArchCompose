@@ -1,7 +1,7 @@
 # Project state
 
 Narrative snapshot of where ArchCompose stands. **The repository is authoritative:** if git,
-the code, the task board or GitHub disagree with this file, trust them and correct this file.
+the code or GitHub issues disagree with this file, trust them and correct this file.
 
 - Last updated: 2026-10-16
 - Verified against: `main` at `cd504cf`
@@ -24,17 +24,17 @@ the code, the task board or GitHub disagree with this file, trust them and corre
   missing-file marking; snapshot undo for every edit; local user profiles (PR #2).
 - CI on Linux and Windows (format, lint, typecheck, Vitest, build, Playwright, Rust fmt,
   clippy, tests, third-party licence check), PR labeler, daily Dependabot.
-- Development workflow: local Kanban board, this project memory, SessionStart hook and
-  workflow tests (decision 0001).
+- Development workflow: planned work in GitHub issues and milestones (decision 0002), this
+  project memory, SessionStart hook and workflow tests (decision 0001).
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for how it fits together, [DECISIONS/](DECISIONS/README.md)
 for why, and [ROADMAP.md](ROADMAP.md) for the milestone plan.
 
 ## Active work
 
-- No tickets in Doing or Review.
+- No issue in progress.
 - Workflow migration on `chore/unified-claude-workflow`; PR open for review. Maintenance
-  work, no ticket.
+  work, no issue.
 - Open Dependabot PR #5 (TypeScript 7.0.2).
 
 ## Blockers
@@ -43,15 +43,15 @@ for why, and [ROADMAP.md](ROADMAP.md) for the milestone plan.
 
 ## Next priorities
 
-The board order (To do, top first) is the priority. All tickets are `stub`s from
+This order is the priority. All issues are stubs from
 `docs/ROADMAP.md` whose specs need refining and approval before implementation; the
 maintainer decides whether milestone 2 or the next PhotoCraft increments come first.
 
-1. **EP-1 Milestone 2: Everyday reliability**: K-1 recent projects, K-2 relink and relative
-   paths, K-3 autosave, K-4 duplicate and multi-select, K-5 asset kinds and search, K-6
+1. **Milestone 2: Everyday reliability**: #29 recent projects, #30 relink and relative
+   paths, #31 autosave, #32 duplicate and multi-select, #33 asset kinds and search, #34
    review messages with users.
-2. **EP-2 Milestone 3: Next PhotoCraft increments**: K-7 drawing sheet export through
-   `photocraft-vector`, K-8 masks, K-9 brush and eraser (depends on K-8), K-10 layered PSD
+2. **Milestone 3: Next PhotoCraft increments**: #35 drawing sheet export through
+   `photocraft-vector`, #36 masks, #37 brush and eraser (depends on #36), #38 layered PSD
    import.
 
 Milestones 4 to 6 stay in `ROADMAP.md` until they are planned in detail.

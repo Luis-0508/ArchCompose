@@ -1,6 +1,6 @@
 ## Summary
 
-<!-- What changed and why? Link the issue (Closes #N) and the board ticket (K-N) if there is one. -->
+<!-- What changed and why? Link the issue (Closes #N). -->
 
 ## Validation
 

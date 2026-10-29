@@ -37,6 +37,11 @@ updates:
     commit-message:
       prefix: deps
       prefix-development: deps-dev
+    ignore:
+      # typescript-eslint does not support TypeScript 7 yet
+      # (typescript-eslint/typescript-eslint#10940).
+      - dependency-name: typescript
+        versions: [">= 7"]
 
   # Desktop backend: the Cargo workspace in src-tauri (archcompose and archcompose-core).
   - package-ecosystem: cargo

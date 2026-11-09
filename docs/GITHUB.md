@@ -21,6 +21,10 @@ The README badges, issue template links and clone instructions assume the reposi
 
 All actions are pinned to commit SHAs with the version in a comment. Dependabot updates both.
 
+`.github/workflows/dependabot-licenses.yml` commits the regenerated third-party license files
+to Dependabot branches that change a lockfile, then restarts CI through `workflow_dispatch`
+because pushes made with `GITHUB_TOKEN` start no workflows.
+
 ## Active settings
 
 These settings were read back from the GitHub API on 2026-10-14. Only values that were

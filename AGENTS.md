@@ -139,7 +139,8 @@ cannot tell:
 - Do not copy PhotoCraft or ArtCraft logos, wordmarks, icons, splash screens or other brand
   assets into ArchCompose. Keep legally required notices (`THIRD_PARTY_NOTICES.md`).
 - After changing Rust or npm dependencies, run `node scripts/third-party-licenses.mjs`;
-  CI checks that `THIRD_PARTY_LICENSES.md` is current.
+  CI checks that `THIRD_PARTY_LICENSES.md` is current. On Dependabot branches
+  `.github/workflows/dependabot-licenses.yml` does this automatically.
 
 ## Before you finish
 

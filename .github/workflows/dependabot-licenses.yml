@@ -1,0 +1,63 @@
+name: Dependabot licenses
+
+# Dependabot updates the lockfiles but not the generated license files, so CI would fail on
+# every update of a shipped dependency. This commits the regenerated files to its branch.
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - "package-lock.json"
+      - "src-tauri/Cargo.lock"
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    if: >-
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    # Same platform as the --check step in ci.yml.
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      # This job holds a write token, so the updated packages must not run any code.
+      - run: npm ci --ignore-scripts
+      - name: Regenerate license files
+        run: node scripts/third-party-licenses.mjs
+      - name: Commit, push and restart CI
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- THIRD_PARTY_LICENSES.md src/app/thirdPartyComponents.json; then
+            echo "License files are up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add THIRD_PARTY_LICENSES.md src/app/thirdPartyComponents.json
+          git commit -m "chore: regenerate third-party licenses"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "HEAD:refs/heads/${HEAD_REF}"
+
+          # Pushes with GITHUB_TOKEN start no workflows; workflow_dispatch is the exception.
+          gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref "$HEAD_REF"

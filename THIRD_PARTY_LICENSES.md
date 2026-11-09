@@ -15,7 +15,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | --- | --- | --- | --- | --- |
 | @fontsource-variable/archivo | 5.3.0 | OFL-1.1 | https://github.com/fontsource/font-files.git | [LICENSE](#text-082affb06bbe) |
 | @tauri-apps/api | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri.git | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9), [LICENSE.spdx](#text-7c667b0cf986) |
-| @tauri-apps/plugin-dialog | 2.8.3 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
+| @tauri-apps/plugin-dialog | 2.8.4 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
 | react | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | react-dom | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | scheduler | 0.28.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
@@ -185,7 +185,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | regex | 1.13.1 | MIT OR Apache-2.0 | https://github.com/rust-lang/regex | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
 | regex-automata | 0.4.18 | MIT OR Apache-2.0 | https://github.com/rust-lang/regex | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
 | regex-syntax | 0.8.11 | MIT OR Apache-2.0 | https://github.com/rust-lang/regex | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
-| rfd | 0.16.0 | MIT | https://github.com/PolyMeilex/rfd | [LICENSE](#text-1a6dd9555214) |
+| rfd | 0.17.2 | MIT | https://github.com/PolyMeilex/rfd | [LICENSE](#text-1a6dd9555214) |
 | rustc-hash | 2.1.3 | Apache-2.0 OR MIT | https://github.com/rust-lang/rustc-hash | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | rustfft | 6.4.1 | MIT OR Apache-2.0 | https://github.com/ejmahler/RustFFT | [LICENSE-APACHE](#text-6dc0e068dcf3), [LICENSE-MIT](#text-c79d4b24c568) |
 | same-file | 1.0.6 | Unlicense/MIT | https://github.com/BurntSushi/same-file | [COPYING](#text-65314a6c9668), [LICENSE-MIT](#text-739620ea44ad), [UNLICENSE](#text-ca2abdf69588) |
@@ -225,7 +225,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | tauri | 2.12.5 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-codegen | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-macros | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-plugin-dialog | 2.8.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
+| tauri-plugin-dialog | 2.8.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
 | tauri-plugin-fs | 2.7.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
 | tauri-runtime | 2.12.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-runtime-wry | 2.12.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
@@ -266,14 +266,6 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | winapi-util | 0.1.11 | Unlicense OR MIT | https://github.com/BurntSushi/winapi-util | [COPYING](#text-65314a6c9668), [LICENSE-MIT](#text-739620ea44ad), [UNLICENSE](#text-ca2abdf69588) |
 | window-vibrancy | 0.8.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri-plugin-vibrancy | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-b46700117441), [LICENSE.spdx](#text-bb8278137f73) |
 | windows | 0.62.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_aarch64_gnullvm | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_aarch64_msvc | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_i686_gnu | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_i686_gnullvm | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_i686_msvc | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_x86_64_gnu | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_x86_64_gnullvm | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows_x86_64_msvc | 0.53.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-collections | 0.3.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-core | 0.62.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-future | 0.3.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
@@ -283,9 +275,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | windows-numerics | 0.3.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-result | 0.4.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-strings | 0.5.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows-sys | 0.60.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-sys | 0.61.2 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
-| windows-targets | 0.53.5 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-threading | 0.2.1 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | windows-version | 0.1.7 | MIT OR Apache-2.0 | https://github.com/microsoft/windows-rs | [license-apache-2.0](#text-783829b43aac), [license-mit](#text-ff82c90f8494) |
 | winnow | 1.0.4 | MIT | https://github.com/winnow-rs/winnow | [LICENSE-MIT](#text-8793aa4141de) |
@@ -410,7 +400,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 ### <a id="text-4bf96504d6e8"></a>LICENSE-APACHE-2.0
 
-Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
+Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
 
 ```text
 Apache License
@@ -593,7 +583,7 @@ Apache License
 
 ### <a id="text-89ff9689dcf9"></a>LICENSE-MIT
 
-Used by: @tauri-apps/api 2.12.4, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
+Used by: @tauri-apps/api 2.12.4, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
 
 ```text
 MIT License
@@ -648,7 +638,7 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ### <a id="text-eb8a6c846304"></a>LICENSE.spdx
 
-Used by: @tauri-apps/plugin-dialog 2.8.3, tauri-plugin-dialog 2.8.3, tauri-plugin-fs 2.7.1
+Used by: @tauri-apps/plugin-dialog 2.8.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1
 
 ```text
 SPDXVersion: SPDX-2.1
@@ -8836,7 +8826,7 @@ SOFTWARE.
 
 ### <a id="text-1a6dd9555214"></a>LICENSE
 
-Used by: rfd 0.16.0
+Used by: rfd 0.17.2
 
 ```text
 MIT License
@@ -11123,7 +11113,7 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ### <a id="text-783829b43aac"></a>license-apache-2.0
 
-Used by: windows 0.62.2, windows_aarch64_gnullvm 0.53.1, windows_aarch64_msvc 0.53.1, windows_i686_gnu 0.53.1, windows_i686_gnullvm 0.53.1, windows_i686_msvc 0.53.1, windows_x86_64_gnu 0.53.1, windows_x86_64_gnullvm 0.53.1, windows_x86_64_msvc 0.53.1, windows-collections 0.3.2, windows-core 0.62.2, windows-future 0.3.2, windows-implement 0.60.2, windows-interface 0.59.3, windows-link 0.2.1, windows-numerics 0.3.1, windows-result 0.4.1, windows-strings 0.5.1, windows-sys 0.60.2, windows-sys 0.61.2, windows-targets 0.53.5, windows-threading 0.2.1, windows-version 0.1.7
+Used by: windows 0.62.2, windows-collections 0.3.2, windows-core 0.62.2, windows-future 0.3.2, windows-implement 0.60.2, windows-interface 0.59.3, windows-link 0.2.1, windows-numerics 0.3.1, windows-result 0.4.1, windows-strings 0.5.1, windows-sys 0.61.2, windows-threading 0.2.1, windows-version 0.1.7
 
 ```text
 Apache License
@@ -11331,7 +11321,7 @@ Apache License
 
 ### <a id="text-ff82c90f8494"></a>license-mit
 
-Used by: windows 0.62.2, windows_aarch64_gnullvm 0.53.1, windows_aarch64_msvc 0.53.1, windows_i686_gnu 0.53.1, windows_i686_gnullvm 0.53.1, windows_i686_msvc 0.53.1, windows_x86_64_gnu 0.53.1, windows_x86_64_gnullvm 0.53.1, windows_x86_64_msvc 0.53.1, windows-collections 0.3.2, windows-core 0.62.2, windows-future 0.3.2, windows-implement 0.60.2, windows-interface 0.59.3, windows-link 0.2.1, windows-numerics 0.3.1, windows-result 0.4.1, windows-strings 0.5.1, windows-sys 0.60.2, windows-sys 0.61.2, windows-targets 0.53.5, windows-threading 0.2.1, windows-version 0.1.7
+Used by: windows 0.62.2, windows-collections 0.3.2, windows-core 0.62.2, windows-future 0.3.2, windows-implement 0.60.2, windows-interface 0.59.3, windows-link 0.2.1, windows-numerics 0.3.1, windows-result 0.4.1, windows-strings 0.5.1, windows-sys 0.61.2, windows-threading 0.2.1, windows-version 0.1.7
 
 ```text
 MIT License

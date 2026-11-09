@@ -11,7 +11,7 @@
   },
   {
     "name": "@tauri-apps/plugin-dialog",
-    "version": "2.8.3",
+    "version": "2.8.4",
     "license": "MIT OR Apache-2.0"
   },
   {
@@ -861,7 +861,7 @@
   },
   {
     "name": "rfd",
-    "version": "0.16.0",
+    "version": "0.17.2",
     "license": "MIT"
   },
   {
@@ -1061,7 +1061,7 @@
   },
   {
     "name": "tauri-plugin-dialog",
-    "version": "2.8.3",
+    "version": "2.8.4",
     "license": "Apache-2.0 OR MIT"
   },
   {
@@ -1265,46 +1265,6 @@
     "license": "MIT OR Apache-2.0"
   },
   {
-    "name": "windows_aarch64_gnullvm",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_aarch64_msvc",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_i686_gnu",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_i686_gnullvm",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_i686_msvc",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_x86_64_gnu",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_x86_64_gnullvm",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows_x86_64_msvc",
-    "version": "0.53.1",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
     "name": "windows-collections",
     "version": "0.3.2",
     "license": "MIT OR Apache-2.0"
@@ -1351,17 +1311,7 @@
   },
   {
     "name": "windows-sys",
-    "version": "0.60.2",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows-sys",
     "version": "0.61.2",
-    "license": "MIT OR Apache-2.0"
-  },
-  {
-    "name": "windows-targets",
-    "version": "0.53.5",
     "license": "MIT OR Apache-2.0"
   },
   {

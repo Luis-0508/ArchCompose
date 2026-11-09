@@ -15,7 +15,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | --- | --- | --- | --- | --- |
 | @fontsource-variable/archivo | 5.3.0 | OFL-1.1 | https://github.com/fontsource/font-files.git | [LICENSE](#text-082affb06bbe) |
 | @tauri-apps/api | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri.git | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9), [LICENSE.spdx](#text-7c667b0cf986) |
-| @tauri-apps/plugin-dialog | 2.8.3 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
+| @tauri-apps/plugin-dialog | 2.8.4 | MIT OR Apache-2.0 | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304) |
 | react | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | react-dom | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | scheduler | 0.28.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
@@ -638,7 +638,7 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ### <a id="text-eb8a6c846304"></a>LICENSE.spdx
 
-Used by: @tauri-apps/plugin-dialog 2.8.3, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1
+Used by: @tauri-apps/plugin-dialog 2.8.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1
 
 ```text
 SPDXVersion: SPDX-2.1

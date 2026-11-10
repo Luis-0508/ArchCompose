@@ -19,7 +19,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | react | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | react-dom | 19.3.1 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
 | scheduler | 0.28.0 | MIT | https://github.com/react/react.git | [LICENSE](#text-cf9b17822d1f) |
-| zustand | 5.0.16 | MIT | https://github.com/pmndrs/zustand.git | [LICENSE](#text-384a8fa756d4) |
+| zustand | 5.1.0 | MIT | https://github.com/pmndrs/zustand.git | [LICENSE](#text-384a8fa756d4) |
 | adler2 | 2.0.1 | 0BSD OR MIT OR Apache-2.0 | https://github.com/oyvindln/adler2 | [LICENSE-0BSD](#text-a21c914647d3), [LICENSE-APACHE](#text-1bc86297d032), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | aho-corasick | 1.1.5 | Unlicense OR MIT | https://github.com/BurntSushi/aho-corasick | [COPYING](#text-65314a6c9668), [LICENSE-MIT](#text-154c1af2b38e), [UNLICENSE](#text-ca2abdf69588) |
 | alloc-no-stdlib | 3.0.0 | BSD-3-Clause | https://github.com/dropbox/rust-alloc-no-stdlib | [LICENSE](#text-6c91ec82929f) |
@@ -693,7 +693,7 @@ SOFTWARE.
 
 ### <a id="text-384a8fa756d4"></a>LICENSE
 
-Used by: zustand 5.0.16
+Used by: zustand 5.1.0
 
 ```text
 MIT License

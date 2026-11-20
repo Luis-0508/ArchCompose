@@ -31,7 +31,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | bit-vec | 0.8.0 | Apache-2.0 OR MIT | https://github.com/contain-rs/bit-vec | [LICENSE-APACHE](#text-7e1b38c60796), [LICENSE-MIT](#text-4c4e6eed8b86) |
 | bitflags | 1.3.2 | MIT/Apache-2.0 | https://github.com/bitflags/bitflags | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
 | bitflags | 2.13.2 | MIT OR Apache-2.0 | https://github.com/bitflags/bitflags | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
-| block-buffer | 0.10.4 | MIT OR Apache-2.0 | https://github.com/RustCrypto/utils | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-5ff5253f2cb9) |
+| block-buffer | 0.12.1 | MIT OR Apache-2.0 | https://github.com/RustCrypto/utils | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-775a3e20a9af) |
 | brotli | 9.0.0 | BSD-3-Clause AND MIT | https://github.com/dropbox/rust-brotli | [LICENSE.BSD-3-Clause](#text-6c91ec82929f), [LICENSE.MIT](#text-2a57418d6b10) |
 | brotli-decompressor | 6.0.1 | BSD-3-Clause/MIT | https://github.com/dropbox/rust-brotli-decompressor | [LICENSE](#text-6c91ec82929f) |
 | bs58 | 0.5.1 | MIT/Apache-2.0 | https://github.com/Nullus157/bs58-rs | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-67047503c71f) |
@@ -46,13 +46,14 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | cfg-if | 1.0.5 | MIT OR Apache-2.0 | https://github.com/rust-lang/cfg-if | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-84e1bbfebd74) |
 | chrono | 0.4.45 | MIT OR Apache-2.0 | https://github.com/chronotope/chrono | [LICENSE.txt](#text-ce4a94c006fa) |
 | color_quant | 1.1.0 | MIT | https://github.com/image-rs/color_quant.git | [LICENSE](#text-a24abca538cd) |
+| const-oid | 0.10.3 | Apache-2.0 OR MIT | https://github.com/RustCrypto/formats | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-ea753cf1e3ec) |
 | cookie | 0.18.2 | MIT OR Apache-2.0 | https://github.com/SergioBenitez/cookie-rs | [LICENSE-APACHE](#text-c859d211879e), [LICENSE-MIT](#text-47c8d25246e6) |
 | crc32fast | 1.5.2 | MIT OR Apache-2.0 | https://github.com/srijs/rust-crc32fast | [LICENSE-APACHE](#text-6dc0e068dcf3), [LICENSE-MIT](#text-9599127e421e) |
 | crossbeam-channel | 0.5.17 | MIT OR Apache-2.0 | https://github.com/crossbeam-rs/crossbeam | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-5a7d13c6710c), [LICENSE-THIRD-PARTY](#text-d10fa7c720bc) |
 | crossbeam-deque | 0.8.8 | MIT OR Apache-2.0 | https://github.com/crossbeam-rs/crossbeam | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-5a7d13c6710c) |
 | crossbeam-epoch | 0.9.21 | MIT OR Apache-2.0 | https://github.com/crossbeam-rs/crossbeam | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-5a7d13c6710c) |
 | crossbeam-utils | 0.8.23 | MIT OR Apache-2.0 | https://github.com/crossbeam-rs/crossbeam | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-5a7d13c6710c) |
-| crypto-common | 0.1.7 | MIT OR Apache-2.0 | https://github.com/RustCrypto/traits | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-692b1604961d) |
+| crypto-common | 0.2.2 | MIT OR Apache-2.0 | https://github.com/RustCrypto/traits | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-dec912e37f88) |
 | cssparser | 0.37.0 | MPL-2.0 | https://github.com/servo/rust-cssparser | [LICENSE](#text-c76f740d1521) |
 | cssparser-macros | 0.7.1 | MPL-2.0 | https://github.com/servo/rust-cssparser | [LICENSE](#text-c76f740d1521) |
 | ctor | 1.0.13 | Apache-2.0 OR MIT | https://github.com/mmastrac/linktime | [LICENSE-APACHE](#text-6dc0e068dcf3), [LICENSE-MIT](#text-bccaa8b6c09f) |
@@ -65,7 +66,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | deranged | 0.5.9 | MIT OR Apache-2.0 | https://github.com/jhpratt/deranged | [LICENSE-Apache](#text-b4839ecf405b), [LICENSE-MIT](#text-1b66e3be6894) |
 | derive_more | 2.1.1 | MIT | https://github.com/JelteF/derive_more | [LICENSE](#text-4a4d43f3f90d) |
 | derive_more-impl | 2.1.1 | MIT | https://github.com/JelteF/derive_more | [LICENSE](#text-4a4d43f3f90d) |
-| digest | 0.10.7 | MIT OR Apache-2.0 | https://github.com/RustCrypto/traits | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-9c5127ab88e8) |
+| digest | 0.11.3 | MIT OR Apache-2.0 | https://github.com/RustCrypto/traits | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-c8d7f4fd612a) |
 | dirs | 7.0.0 | MIT OR Apache-2.0 | https://codeberg.org/dirs/dirs-rs | [LICENSE-APACHE](#text-74f1c9127a52), [LICENSE-MIT](#text-f25a5b606859) |
 | dirs-sys | 0.5.0 | MIT OR Apache-2.0 | https://github.com/dirs-dev/dirs-sys-rs | [LICENSE-APACHE](#text-74f1c9127a52), [LICENSE-MIT](#text-f25a5b606859) |
 | displaydoc | 0.2.7 | MIT OR Apache-2.0 | https://github.com/yaahc/displaydoc | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-30fefc3a7d6a) |
@@ -86,7 +87,6 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | fnv | 1.0.7 | Apache-2.0 / MIT | https://github.com/servo/rust-fnv | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-c48b7333c00b) |
 | foldhash | 0.2.0 | Zlib | https://github.com/orlp/foldhash | [LICENSE](#text-b1181a40b2a7) |
 | form_urlencoded | 1.2.2 | MIT OR Apache-2.0 | https://github.com/servo/rust-url | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-33ed9a8ecf55) |
-| generic-array | 0.14.7 | MIT | https://github.com/fizyk20/generic-array.git | [LICENSE](#text-ad4fcfaf8d5b) |
 | getrandom | 0.3.4 | MIT OR Apache-2.0 | https://github.com/rust-random/getrandom | [LICENSE-APACHE](#text-e7330bf53074), [LICENSE-MIT](#text-73af2019a565) |
 | gif | 0.14.2 | MIT OR Apache-2.0 | https://github.com/image-rs/image-gif | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-1b6f7ab81ae2) |
 | glob | 0.3.4 | MIT OR Apache-2.0 | https://github.com/rust-lang/glob | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-14435fbcd271) |
@@ -97,6 +97,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | hex | 0.4.3 | MIT OR Apache-2.0 | https://github.com/KokaKiwi/rust-hex | [LICENSE-APACHE](#text-6dc0e068dcf3), [LICENSE-MIT](#text-9dde4a6ad496) |
 | html5ever | 0.39.0 | MIT OR Apache-2.0 | https://github.com/servo/html5ever | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-35af0fd88338) |
 | http | 1.5.0 | MIT OR Apache-2.0 | https://github.com/hyperium/http | [LICENSE-APACHE](#text-881c9fe2d29b), [LICENSE-MIT](#text-f47894ff9c86) |
+| hybrid-array | 0.4.15 | MIT OR Apache-2.0 | https://github.com/RustCrypto/hybrid-array | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-a1aa15c3898d) |
 | ico | 0.6.0 | MIT | https://github.com/mdsteele/rust-ico | [LICENSE](#text-95573f040b56) |
 | icu_collections | 2.3.0 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
 | icu_locale_core | 2.3.0 | Unicode-3.0 | https://github.com/unicode-org/icu4x | [LICENSE](#text-cde87abe221f) |
@@ -209,7 +210,7 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | serialize-to-javascript | 0.1.2 | MIT OR Apache-2.0 | https://github.com/chippers/serialize-to-javascript | [LICENSE-APACHE](#text-283ea6cc2997), [LICENSE-MIT](#text-777eb7417541) |
 | serialize-to-javascript-impl | 0.1.2 | MIT OR Apache-2.0 | https://github.com/chippers/serialize-to-javascript | [LICENSE-APACHE](#text-283ea6cc2997), [LICENSE-MIT](#text-777eb7417541) |
 | servo_arc | 0.4.3 | MIT OR Apache-2.0 | https://github.com/servo/stylo | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-30fefc3a7d6a) |
-| sha2 | 0.10.9 | MIT OR Apache-2.0 | https://github.com/RustCrypto/hashes | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-4031faf6212e) |
+| sha2 | 0.11.1 | MIT OR Apache-2.0 | https://github.com/RustCrypto/hashes | [LICENSE-APACHE](#text-e8541ea93f02), [LICENSE-MIT](#text-535a6aa345e8) |
 | simd-adler32 | 0.3.10 | MIT | https://github.com/mcountryman/simd-adler32 | [LICENSE.md](#text-627eff66d6c4) |
 | siphasher | 1.0.4 | MIT OR Apache-2.0 | https://github.com/jedisct1/rust-siphash | [COPYING](#text-24e26e8fb783), [LICENSE-APACHE](#text-283ea6cc2997), [LICENSE-MIT](#text-21a2121221d2) |
 | smallvec | 1.16.3 | MIT OR Apache-2.0 | https://github.com/servo/rust-smallvec | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-7f194ae45c25) |
@@ -222,14 +223,14 @@ contributes is in `THIRD_PARTY_NOTICES.md`.
 | syn | 3.0.9 | MIT OR Apache-2.0 | https://github.com/dtolnay/syn | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | synstructure | 0.14.0 | MIT | https://github.com/mystor/synstructure | [LICENSE](#text-3a036676ec8c) |
 | tao | 0.37.1 | Apache-2.0 | https://github.com/tauri-apps/tao | [LICENSE](#text-6dc0e068dcf3), [LICENSE.spdx](#text-28694f36acab) |
-| tauri | 2.12.5 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-codegen | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-macros | 2.7.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri | 2.12.6 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-codegen | 2.7.6 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-macros | 2.7.6 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tauri-plugin-dialog | 2.8.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
 | tauri-plugin-fs | 2.7.1 | Apache-2.0 OR MIT | https://github.com/tauri-apps/plugins-workspace | [LICENSE.spdx](#text-eb8a6c846304), [LICENSE_APACHE-2.0](#text-4bf96504d6e8), [LICENSE_MIT](#text-89ff9689dcf9) |
-| tauri-runtime | 2.12.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-runtime-wry | 2.12.3 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
-| tauri-utils | 2.10.2 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-runtime | 2.12.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-runtime-wry | 2.12.5 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
+| tauri-utils | 2.10.4 | Apache-2.0 OR MIT | https://github.com/tauri-apps/tauri | [LICENSE-APACHE-2.0](#text-4bf96504d6e8), [LICENSE-MIT](#text-89ff9689dcf9) |
 | tendril | 0.5.1 | MIT OR Apache-2.0 | https://github.com/servo/html5ever | [LICENSE-APACHE](#text-954f335b8baf), [LICENSE-MIT](#text-dfa7fbad0178) |
 | thiserror | 2.0.21 | MIT OR Apache-2.0 | https://github.com/dtolnay/thiserror | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
 | thiserror-impl | 2.0.21 | MIT OR Apache-2.0 | https://github.com/dtolnay/thiserror | [LICENSE-APACHE](#text-85ad950cce87), [LICENSE-MIT](#text-30fefc3a7d6a) |
@@ -400,7 +401,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 ### <a id="text-4bf96504d6e8"></a>LICENSE-APACHE-2.0
 
-Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
+Used by: @tauri-apps/api 2.12.4, fdeflate 0.3.7, half 2.7.1, image 0.25.10, image-webp 0.2.4, miniz_oxide 0.8.9, miniz_oxide 0.9.1, num-conv 0.2.2, photocraft-algo 0.9.0, photocraft-cms 0.9.0, photocraft-codecs 0.9.0, photocraft-color 0.9.0, photocraft-compose 0.9.0, photocraft-doc 0.9.0, photocraft-geom 0.9.0, photocraft-psd 0.9.0, photocraft-raster 0.9.0, photocraft-vector 0.9.0, pin-project-lite 0.2.17, raw-window-handle 0.6.2, tauri 2.12.6, tauri-codegen 2.7.6, tauri-macros 2.7.6, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.4, tauri-runtime-wry 2.12.5, tauri-utils 2.10.4, time 0.3.55, time-core 0.1.9, time-macros 0.2.32
 
 ```text
 Apache License
@@ -583,7 +584,7 @@ Apache License
 
 ### <a id="text-89ff9689dcf9"></a>LICENSE-MIT
 
-Used by: @tauri-apps/api 2.12.4, tauri 2.12.5, tauri-codegen 2.7.4, tauri-macros 2.7.4, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.2, tauri-runtime-wry 2.12.3, tauri-utils 2.10.2
+Used by: @tauri-apps/api 2.12.4, tauri 2.12.6, tauri-codegen 2.7.6, tauri-macros 2.7.6, tauri-plugin-dialog 2.8.4, tauri-plugin-fs 2.7.1, tauri-runtime 2.12.4, tauri-runtime-wry 2.12.5, tauri-utils 2.10.4
 
 ```text
 MIT License
@@ -1993,7 +1994,7 @@ DEALINGS IN THE SOFTWARE.
 
 ### <a id="text-e8541ea93f02"></a>LICENSE-APACHE
 
-Used by: block-buffer 0.10.4, crypto-common 0.1.7, digest 0.10.7, sha2 0.10.9
+Used by: block-buffer 0.12.1, const-oid 0.10.3, crypto-common 0.2.2, digest 0.11.3, hybrid-array 0.4.15, sha2 0.11.1
 
 ```text
 Apache License
@@ -2199,12 +2200,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-### <a id="text-5ff5253f2cb9"></a>LICENSE-MIT
+### <a id="text-775a3e20a9af"></a>LICENSE-MIT
 
-Used by: block-buffer 0.10.4
+Used by: block-buffer 0.12.1
 
 ```text
-Copyright (c) 2018-2019 The RustCrypto Project Developers
+Copyright (c) 2018-2025 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -2750,6 +2751,38 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+### <a id="text-ea753cf1e3ec"></a>LICENSE-MIT
+
+Used by: const-oid 0.10.3
+
+```text
+Copyright (c) 2020-2026 The RustCrypto Project Developers
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
 ```
 
 ### <a id="text-c859d211879e"></a>LICENSE-APACHE
@@ -3656,12 +3689,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-### <a id="text-692b1604961d"></a>LICENSE-MIT
+### <a id="text-dec912e37f88"></a>LICENSE-MIT
 
-Used by: crypto-common 0.1.7
+Used by: crypto-common 0.2.2
 
 ```text
-Copyright (c) 2021 RustCrypto Developers
+Copyright (c) 2021-2026 RustCrypto Developers
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -4402,11 +4435,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### <a id="text-9c5127ab88e8"></a>LICENSE-MIT
+### <a id="text-c8d7f4fd612a"></a>LICENSE-MIT
 
-Used by: digest 0.10.7
+Used by: digest 0.11.3
 
 ```text
+Copyright (c) 2017-2025 RustCrypto Developers
 Copyright (c) 2017 Artyom Pavlov
 
 Permission is hereby granted, free of charge, to any
@@ -5513,34 +5547,6 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 ```
 
-### <a id="text-ad4fcfaf8d5b"></a>LICENSE
-
-Used by: generic-array 0.14.7
-
-```text
-The MIT License (MIT)
-
-Copyright (c) 2015 Bartłomiej Kamiński
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
 ### <a id="text-e7330bf53074"></a>LICENSE-APACHE
 
 Used by: getrandom 0.3.4
@@ -6173,6 +6179,38 @@ Used by: http 1.5.0
 
 ```text
 Copyright (c) 2017 http-rs authors
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+```
+
+### <a id="text-a1aa15c3898d"></a>LICENSE-MIT
+
+Used by: hybrid-array 0.4.15
+
+```text
+Copyright (c) 2022-2026 The RustCrypto Project Developers
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -9436,14 +9474,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### <a id="text-4031faf6212e"></a>LICENSE-MIT
+### <a id="text-535a6aa345e8"></a>LICENSE-MIT
 
-Used by: sha2 0.10.9
+Used by: sha2 0.11.1
 
 ```text
-Copyright (c) 2006-2009 Graydon Hoare
-Copyright (c) 2009-2013 Mozilla Foundation
+Copyright (c) 2016-2026 The RustCrypto Project Developers
 Copyright (c) 2016 Artyom Pavlov
+Copyright (c) 2009-2013 Mozilla Foundation
+Copyright (c) 2006-2009 Graydon Hoare
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
